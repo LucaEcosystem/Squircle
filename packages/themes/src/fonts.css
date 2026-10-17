@@ -1,0 +1,27 @@
+/**
+ * Squircle default font loading — Luca Ecosystem Theme typography.
+ *
+ * Titles/headers: Manrope ExtraBold (800). All other text: DM Sans 500,
+ * with 700 available for strong emphasis.
+ *
+ * Delivery options (do not assume fonts are present):
+ *  A. (Preferred for performance) Preconnect + <link> in your HTML:
+ *
+ *       <link rel="preconnect" href="https://fonts.googleapis.com">
+ *       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ *       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+ *
+ *     …and skip importing this file.
+ *  B. Import this file from `squircle.css` (default): one @import, simpler
+ *     setup, slightly later font discovery. `display=swap` guarantees text
+ *     renders immediately in the fallback stack.
+ *  C. Self-host: download the woff2 files, serve them yourself, and replace
+ *     this import with your own @font-face rules. Required for offline /
+ *     file:// usage without network access.
+ *
+ * Fallbacks are part of the type tokens themselves
+ * (`--sq-font-family-display/body`), so text is always styled even when
+ * webfonts fail: the stack degrades to Avenir Next / Segoe UI / system-ui.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,700&family=Manrope:wght@700;800&display=swap");

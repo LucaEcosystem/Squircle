@@ -1,0 +1,516 @@
+/**
+ * Squircle components layer — foundational components (Stage 3).
+ *
+ * Buttons (all variants/sizes/states), links, panels, cards, dividers,
+ * and explicit typography classes. Layout primitives live in `layout.css`;
+ * single-purpose helpers live in `utilities.css`.
+ *
+ * Contract: packages/components/CONTRACT.md. Every color, space, radius,
+ * shadow, and duration below is a token reference — no hardcoded values.
+ */
+
+/* -- Buttons -------------------------------------------------------------------
+ * Semantic HTML: <button type="button|submit|reset"> for actions,
+ * <a class="sq-button"> ONLY for navigation that looks like a button
+ * (same surface, anchor semantics retained).
+ */
+
+.sq-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sq-button-gap);
+  min-height: var(--sq-button-min-height);
+  padding: var(--sq-button-padding-y) var(--sq-button-padding-x);
+  border-radius: var(--sq-button-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: var(--sq-font-weight-strong);
+  line-height: var(--sq-font-line-snug);
+  text-decoration: none;
+  text-align: center;
+  transition:
+    transform var(--sq-motion-duration-instant) var(--sq-motion-easing-out),
+    background-color var(--sq-motion-duration-quick) var(--sq-motion-easing-out),
+    border-color var(--sq-motion-duration-quick) var(--sq-motion-easing-out),
+    box-shadow var(--sq-motion-duration-quick) var(--sq-motion-easing-out);
+}
+
+.sq-button:hover {
+  text-decoration: none;
+}
+
+.sq-button:active {
+  transform: scale(0.97);
+}
+
+.sq-button--primary {
+  background-color: var(--sq-button-primary-background);
+  color: var(--sq-button-primary-text);
+}
+
+.sq-button--primary:hover {
+  filter: brightness(1.08);
+}
+
+.sq-button--secondary {
+  background-color: var(--sq-button-secondary-background);
+  color: var(--sq-button-secondary-text);
+  border-color: var(--sq-button-secondary-border);
+}
+
+.sq-button--secondary:hover {
+  border-color: var(--sq-color-accent);
+}
+
+.sq-button--tertiary {
+  background-color: transparent;
+  color: var(--sq-button-tertiary-text);
+  border-color: transparent;
+}
+
+.sq-button--tertiary:hover {
+  background-color: var(--sq-button-tertiary-hover-background);
+}
+
+.sq-button--danger {
+  background-color: var(--sq-button-danger-background);
+  color: var(--sq-button-danger-text);
+}
+
+.sq-button--danger:hover {
+  filter: brightness(1.1);
+}
+
+.sq-button--small {
+  min-height: var(--sq-button-min-height-small);
+  padding: var(--sq-button-padding-y-small) var(--sq-button-padding-x-small);
+  font-size: var(--sq-font-size-sm);
+}
+
+.sq-button--large {
+  min-height: var(--sq-button-min-height-large);
+  padding: var(--sq-button-padding-y-large) var(--sq-button-padding-x-large);
+  font-size: var(--sq-font-size-lg);
+}
+
+.sq-button--block {
+  display: flex;
+  width: 100%;
+}
+
+.sq-button:disabled,
+.sq-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+  filter: none;
+}
+
+/* Icon slots: decorative SVGs sized to the label; the gap comes from the
+ * button. Icon-only buttons are square and REQUIRE an accessible name
+ * (aria-label) — see BUTTONS.md. Stage 5 provides the icon set; any
+ * inline SVG works today. */
+.sq-button__icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+}
+
+.sq-button__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sq-button--icon-only {
+  aspect-ratio: 1 / 1;
+  padding-inline: 0;
+}
+
+/* Loading: HTML sets `disabled` + `aria-busy="true"` + swapping the label
+ * to "Loading…" or "Saving…" — the spinner alone is never the whole story.
+ * Reduced motion freezes the spin; the busy label still communicates. */
+.sq-button__spinner {
+  width: 1.125em;
+  height: 1.125em;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  animation: sq-spin var(--sq-motion-duration-slower)
+    var(--sq-motion-easing-linear) infinite;
+}
+
+@keyframes sq-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-button__spinner {
+    animation: none;
+    border-color: currentColor;
+    opacity: 0.6;
+  }
+  .sq-button:active {
+    transform: none;
+  }
+}
+
+/* -- Links -----------------------------------------------------------------------
+ * Inline links inherit the base anchor treatment; .sq-link makes the
+ * contract explicit and adds icon-gap support for action links.
+ */
+
+.sq-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sq-space-2xs);
+  font-weight: var(--sq-font-weight-strong);
+}
+
+.sq-link:visited {
+  color: var(--sq-color-link-visited);
+}
+
+.sq-link--subtle {
+  color: var(--sq-color-text-secondary);
+  font-weight: var(--sq-font-weight-body);
+  text-decoration-color: var(--sq-color-border-strong);
+}
+
+.sq-link--subtle:hover {
+  color: var(--sq-color-link-hover);
+}
+
+.sq-link--action::after {
+  content: "→";
+  transition: transform var(--sq-motion-duration-quick)
+    var(--sq-motion-easing-out);
+}
+
+.sq-link--action:hover::after {
+  transform: translateX(4px);
+}
+
+/* Disabled-like anchors: anchors cannot be disabled. Use `aria-disabled`,
+ * remove the href target (keep href for semantics or use a <span>), and
+ * take it out of the tab order in HTML. The class is presentation only. */
+.sq-link--disabled,
+.sq-link[aria-disabled="true"] {
+  color: var(--sq-color-text-muted);
+  cursor: not-allowed;
+  text-decoration: none;
+  pointer-events: none;
+}
+
+/* Navigation links: padded, squirclish, current-page aware. Full
+ * navigation components arrive in Stage 5; this primitive covers
+ * header/footer link rows today. */
+.sq-nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--sq-space-2xs) var(--sq-space-sm);
+  border-radius: var(--sq-radius-sm);
+  color: var(--sq-color-text-secondary);
+  text-decoration: none;
+  font-weight: var(--sq-font-weight-strong);
+}
+
+.sq-nav-link:hover {
+  color: var(--sq-color-text-primary);
+  background-color: var(--sq-color-surface-elevated);
+}
+
+.sq-nav-link[aria-current="page"] {
+  color: var(--sq-color-text-primary);
+  background-color: var(--sq-color-surface-elevated);
+  box-shadow: inset 0 0 0 1px var(--sq-color-border);
+}
+
+/* -- Panels and cards ---------------------------------------------------------------
+ * Panel: flat bordered surface. Card: elevated + shadow for peer groups.
+ * Sections (header/body/footer) are optional and composable; nesting steps
+ * down one radius grade and one elevation automatically.
+ */
+
+.sq-panel {
+  background-color: var(--sq-panel-background);
+  border: 1px solid var(--sq-panel-border-color);
+  border-radius: var(--sq-panel-radius);
+  padding: var(--sq-panel-padding);
+}
+
+.sq-panel--elevated {
+  background-color: var(--sq-panel-background-elevated);
+  box-shadow: var(--sq-shadow-md);
+}
+
+.sq-panel--sunken {
+  background-color: var(--sq-color-background-sunken);
+}
+
+.sq-panel--large {
+  padding: var(--sq-panel-padding-large);
+}
+
+.sq-panel__header {
+  display: grid;
+  gap: var(--sq-space-2xs);
+  padding-block-end: var(--sq-space-md);
+  margin-block-end: var(--sq-space-md);
+  border-bottom: 1px solid var(--sq-color-divider);
+}
+
+.sq-panel__header > :last-child {
+  margin-block-end: 0;
+}
+
+.sq-panel__body {
+  display: grid;
+  gap: var(--sq-panel-gap);
+  align-content: start;
+}
+
+.sq-panel__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-sm);
+  align-items: center;
+  padding-block-start: var(--sq-space-md);
+  margin-block-start: var(--sq-space-md);
+  border-top: 1px solid var(--sq-color-divider);
+}
+
+/* Nested surfaces: carved, not stamped. */
+.sq-panel .sq-panel {
+  background-color: var(--sq-color-surface-elevated);
+  border-radius: var(--sq-panel-radius-nested);
+  padding: var(--sq-space-md);
+}
+
+.sq-card {
+  background-color: var(--sq-color-surface-elevated);
+  border: 1px solid var(--sq-color-border);
+  border-radius: var(--sq-panel-radius);
+  padding: var(--sq-panel-padding);
+  box-shadow: var(--sq-shadow-md);
+}
+
+.sq-card--interactive {
+  position: relative;
+  transition:
+    transform var(--sq-motion-duration-quick) var(--sq-motion-easing-out),
+    box-shadow var(--sq-motion-duration-quick) var(--sq-motion-easing-out),
+    border-color var(--sq-motion-duration-quick) var(--sq-motion-easing-out);
+}
+
+.sq-card--interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sq-shadow-lg);
+  border-color: var(--sq-color-border-strong);
+}
+
+/* Stretched link: one link makes the whole card clickable while keeping
+ * a single tab stop. The link text stays the accessible name. */
+.sq-stretched-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-card--interactive:hover {
+    transform: none;
+  }
+}
+
+/* -- Dividers -------------------------------------------------------------------------- */
+
+.sq-divider {
+  border: none;
+  border-top: 1px solid var(--sq-color-divider);
+  margin-block: var(--sq-space-md);
+}
+
+.sq-divider--spacious {
+  margin-block: var(--sq-space-xl);
+}
+
+.sq-divider--vertical {
+  border-top: none;
+  border-inline-start: 1px solid var(--sq-color-divider);
+  align-self: stretch;
+  margin-inline: var(--sq-space-sm);
+  margin-block: 0;
+}
+
+/* -- Typography classes -------------------------------------------------------------------
+ * Bare h1–h6/p/label/code carry these treatments natively. The classes
+ * apply the same voice to other elements (e.g. a <div role="heading"> in
+ * third-party markup, or a <span> that must read as a label).
+ */
+
+.sq-heading {
+  font-family: var(--sq-font-family-display);
+  font-weight: var(--sq-font-weight-display);
+  line-height: var(--sq-font-line-tight);
+  text-wrap: balance;
+}
+
+.sq-heading--1 {
+  font-size: var(--sq-font-fluid-4xl);
+  margin-block: 0 var(--sq-space-md);
+}
+
+.sq-heading--2 {
+  font-size: var(--sq-font-fluid-3xl);
+  margin-block: var(--sq-space-xl) var(--sq-space-sm);
+}
+
+.sq-heading--3 {
+  font-size: var(--sq-font-fluid-2xl);
+  margin-block: var(--sq-space-lg) var(--sq-space-xs);
+}
+
+.sq-heading--4 {
+  font-size: var(--sq-font-fluid-xl);
+  margin-block: var(--sq-space-md) var(--sq-space-2xs);
+}
+
+.sq-text {
+  max-width: var(--sq-font-measure);
+  margin-block: 0 var(--sq-space-sm);
+}
+
+.sq-label {
+  display: block;
+  font-weight: var(--sq-font-weight-strong);
+  margin-block-end: var(--sq-space-2xs);
+}
+
+.sq-code {
+  font-family: var(--sq-font-family-mono);
+  font-size: 0.9em;
+  background-color: var(--sq-color-background-sunken);
+  border: 1px solid var(--sq-color-border);
+  border-radius: var(--sq-radius-xs);
+  padding: 0.125em 0.375em;
+  white-space: nowrap;
+}
+
+/* -- Tabs --------------------------------------------------------------------------------
+ * Automatic activation: arrows move AND select; Home/End jump; the
+ * tablist scrolls horizontally when labels overflow. Panels are plain
+ * sections associated via aria-controls/labelledby (runtime wires the
+ * ids if authors omit them — explicit ids preferred, see TABS.md).
+ */
+
+.sq-tablist {
+  display: flex;
+  gap: var(--sq-tab-gap);
+  min-width: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--sq-color-divider);
+  padding-block-end: var(--sq-space-2xs);
+}
+
+.sq-tab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--sq-tab-padding-y) var(--sq-tab-padding-x);
+  background: none;
+  border: none;
+  border-radius: var(--sq-radius-sm) var(--sq-radius-sm) 0 0;
+  color: var(--sq-color-text-secondary);
+  font-weight: var(--sq-font-weight-strong);
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: inset 0 -3px 0 transparent;
+}
+
+.sq-tab:hover {
+  color: var(--sq-color-text-primary);
+  background-color: var(--sq-color-surface-elevated);
+}
+
+.sq-tab[aria-selected="true"] {
+  color: var(--sq-color-text-primary);
+  background-color: var(--sq-color-surface-elevated);
+  box-shadow: inset 0 -3px 0 var(--sq-tab-indicator-color);
+}
+
+.sq-tabpanel {
+  padding-block-start: var(--sq-space-lg);
+}
+
+/* -- Disclosure ----------------------------------------------------------------------------
+ * Native <details>/<summary>: no JavaScript, full keyboard support from
+ * the platform, state in the `open` attribute (synced by definition).
+ * One pattern covers accordions-by-composition; single-open accordion
+ * groups are out of 1.0 scope (documented in OVERLAYS.md).
+ */
+
+.sq-disclosure {
+  border: 1px solid var(--sq-color-border);
+  border-radius: var(--sq-disclosure-radius);
+  background-color: var(--sq-color-surface);
+  padding-inline: var(--sq-disclosure-padding-x);
+}
+
+.sq-disclosure + .sq-disclosure {
+  margin-block-start: var(--sq-space-sm);
+}
+
+.sq-disclosure > summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-disclosure-gap);
+  padding-block: var(--sq-disclosure-padding-y);
+  font-weight: var(--sq-font-weight-strong);
+  color: var(--sq-color-text-primary);
+  cursor: pointer;
+  list-style: none;
+  min-height: 3rem;
+}
+
+.sq-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.sq-disclosure > summary::before {
+  content: "";
+  flex: none;
+  width: 0.625em;
+  height: 0.625em;
+  border-inline-end: 2px solid var(--sq-color-accent);
+  border-block-end: 2px solid var(--sq-color-accent);
+  transform: translateY(-0.125em) rotate(45deg);
+  transition: transform var(--sq-motion-duration-quick)
+    var(--sq-motion-easing-out);
+}
+
+.sq-disclosure[open] > summary::before {
+  transform: translateY(0.125em) rotate(225deg);
+}
+
+.sq-disclosure > summary:hover {
+  color: var(--sq-color-accent-bright);
+}
+
+.sq-disclosure__content {
+  padding-block-end: var(--sq-disclosure-content-padding);
+  display: grid;
+  gap: var(--sq-space-sm);
+  align-content: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-disclosure > summary::before {
+    transition: none;
+  }
+}

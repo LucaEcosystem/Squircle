@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The 64-pixel rule — Harbor Journal</title>
+    <meta
+      name="description"
+      content="Why section rhythm should be a token, not a feeling. A content-heavy Squircle template."
+    />
+    <script src="../../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../../packages/css/dist/squircle.css" />
+    <link rel="stylesheet" href="../ocean.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#article-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="landing.html">Harbor</a>
+        <nav aria-label="Primary">
+          <details class="sq-nav-menu" open>
+            <summary>Menu</summary>
+            <ul class="sq-nav">
+              <li>
+                <a class="sq-nav__link" href="article.html" aria-current="page"
+                  >Journal</a
+                >
+              </li>
+              <li>
+                <a class="sq-nav__link" href="dashboard.html">Dashboard</a>
+              </li>
+              <li><a class="sq-nav__link" href="docs.html">Docs</a></li>
+            </ul>
+          </details>
+        </nav>
+      </div>
+    </header>
+
+    <main id="article-main">
+      <article class="sq-section">
+        <div class="sq-container--narrow sq-stack--loose sq-stack">
+          <nav aria-label="Breadcrumb">
+            <ol class="sq-breadcrumbs">
+              <li><a href="landing.html">Home</a></li>
+              <li><a href="article.html">Journal</a></li>
+              <li aria-current="page">The 64-pixel rule</li>
+            </ol>
+          </nav>
+
+          <header class="sq-stack">
+            <p class="sq-small sq-muted">
+              Whitespace · 8 min · Sunday letter № 42
+            </p>
+            <h1>The 64-pixel rule</h1>
+            <p class="sq-lead">
+              Section rhythm should be a token, not a feeling — and what happens
+              when every team invents its own.
+            </p>
+            <p class="sq-status">
+              <span class="sq-status__dot" aria-hidden="true"></span>Reviewed
+              for accuracy
+            </p>
+          </header>
+
+          <figure class="sq-figure">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900'%3E%3Crect width='1600' height='900' fill='%23243655'/%3E%3Crect x='120' y='120' width='1360' height='240' rx='32' fill='%231d2d44'/%3E%3Crect x='120' y='540' width='1360' height='240' rx='32' fill='%231d2d44'/%3E%3C/svg%3E"
+              alt="Two navy panels separated by a wide band of empty page"
+              width="1600"
+              height="900"
+            />
+            <figcaption>
+              Two sections, one rhythm: the gap is the design.
+            </figcaption>
+          </figure>
+
+          <h2>Every team invents its own</h2>
+          <p>
+            Ask five teams how far apart two sections sit and you get five
+            answers, three of them "it depends". The page pays for every
+            disagreement in a currency readers feel but cannot name: unease.
+            Rhythm is infrastructure. Tokenize it the way you tokenize color,
+            and the arguments end — the way arguments about the brand blue ended
+            years ago.
+          </p>
+          <blockquote>
+            Whitespace establishes hierarchy — it never merely fills gaps.
+          </blockquote>
+          <p>
+            Our rule is simple: sections breathe at a fluid
+            <code>clamp(4rem, 8vw, 7rem)</code>. Narrow screens get the minimum,
+            wide screens the maximum, and nobody measures anything by hand. The
+            full scale lives in the
+            <a href="docs.html">spacing documentation</a>.
+          </p>
+
+          <h2>What the numbers bought us</h2>
+          <div
+            class="sq-table-scroll"
+            role="region"
+            aria-labelledby="rhythm-caption"
+            tabindex="0"
+          >
+            <table class="sq-table">
+              <caption id="rhythm-caption">
+                Support tickets mentioning crowding, by quarter
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Quarter</th>
+                  <th scope="col">Tickets</th>
+                  <th scope="col" class="sq-table__number">Change</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Q1 (before)</th>
+                  <td>Before tokens</td>
+                  <td class="sq-table__number">—</td>
+                </tr>
+                <tr>
+                  <th scope="row">Q2</th>
+                  <td>Spacing tokens land</td>
+                  <td class="sq-table__number">−31%</td>
+                </tr>
+                <tr>
+                  <th scope="row">Q3</th>
+                  <td>Density gate enforced</td>
+                  <td class="sq-table__number">−18%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Questions we still get</h2>
+          <details class="sq-disclosure" open>
+            <summary>Doesn't all that space waste the fold?</summary>
+            <div class="sq-disclosure__content">
+              <p class="sq-text">
+                The fold is not a container to fill. Readers scroll; what they
+                will not do is decode a wall.
+              </p>
+            </div>
+          </details>
+          <details class="sq-disclosure">
+            <summary>What about data-dense screens?</summary>
+            <div class="sq-disclosure__content">
+              <p class="sq-text">
+                Density belongs inside components (tables, rows), never between
+                sections. Group tightly, separate generously.
+              </p>
+            </div>
+          </details>
+
+          <hr class="sq-divider sq-divider--spacious" />
+
+          <nav aria-label="More essays">
+            <ul class="sq-pagination">
+              <li><a href="article.html" rel="prev">← Newer</a></li>
+              <li><a href="article.html">1</a></li>
+              <li aria-current="page">2</li>
+              <li><a href="article.html">3</a></li>
+              <li><a href="article.html" rel="next">Older →</a></li>
+            </ul>
+          </nav>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      <div class="sq-container sq-py-xl">
+        <hr class="sq-divider" />
+        <p class="sq-small sq-muted">Harbor Journal · a Squircle template</p>
+      </div>
+    </footer>
+  </body>
+</html>

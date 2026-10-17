@@ -1,0 +1,122 @@
+/**
+ * Squircle typography layer — element defaults and reading rhythm.
+ *
+ * Titles/headers: Manrope ExtraBold, fluid sizes, tight leading, generous
+ * space above (headings need arrival room) and clear space below.
+ * All other text: DM Sans 500, 1.65 line height, 68ch measure.
+ * Whitespace establishes hierarchy here — not decoration.
+ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--sq-font-family-display);
+  font-weight: var(--sq-font-weight-display);
+  line-height: var(--sq-font-line-tight);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--sq-font-fluid-4xl);
+  margin-block: 0 var(--sq-space-md);
+}
+
+h2 {
+  font-size: var(--sq-font-fluid-3xl);
+  margin-block: var(--sq-space-xl) var(--sq-space-sm);
+}
+
+h3 {
+  font-size: var(--sq-font-fluid-2xl);
+  margin-block: var(--sq-space-lg) var(--sq-space-xs);
+}
+
+h4 {
+  font-size: var(--sq-font-fluid-xl);
+  margin-block: var(--sq-space-md) var(--sq-space-2xs);
+}
+
+h5,
+h6 {
+  font-size: var(--sq-font-size-lg);
+  line-height: var(--sq-font-line-snug);
+  margin-block: var(--sq-space-md) var(--sq-space-2xs);
+}
+
+p {
+  max-width: var(--sq-font-measure);
+  margin-block: 0 var(--sq-space-sm);
+}
+
+p:last-child {
+  margin-block-end: 0;
+}
+
+.sq-lead {
+  font-size: var(--sq-font-size-lg);
+  line-height: var(--sq-font-line-loose);
+  color: var(--sq-color-text-secondary);
+  max-width: var(--sq-font-measure);
+  margin-block: 0 var(--sq-space-md);
+}
+
+small,
+.sq-small {
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-secondary);
+}
+
+.sq-muted {
+  color: var(--sq-color-text-muted);
+}
+
+strong,
+b {
+  font-weight: var(--sq-font-weight-strong);
+}
+
+ul,
+ol {
+  padding-inline-start: var(--sq-space-md);
+  margin-block: 0 var(--sq-space-sm);
+  max-width: var(--sq-font-measure);
+}
+
+li {
+  margin-block-end: var(--sq-space-2xs);
+}
+
+li::marker {
+  color: var(--sq-color-accent);
+}
+
+blockquote {
+  border-inline-start: 3px solid var(--sq-color-accent);
+  padding-inline-start: var(--sq-space-md);
+  padding-block: var(--sq-space-2xs);
+  margin-block: 0 var(--sq-space-md);
+  color: var(--sq-color-text-secondary);
+  font-size: var(--sq-font-size-lg);
+  max-width: var(--sq-font-measure);
+}
+
+code,
+kbd {
+  font-family: var(--sq-font-family-mono);
+  font-size: 0.9em;
+}
+
+pre {
+  font-family: var(--sq-font-family-mono);
+  font-size: var(--sq-font-size-sm);
+  line-height: var(--sq-font-line-snug);
+  background-color: var(--sq-color-background-sunken);
+  border: 1px solid var(--sq-color-border);
+  border-radius: var(--sq-radius-sm);
+  padding: var(--sq-space-md);
+  overflow-x: auto;
+  margin-block: 0 var(--sq-space-md);
+}

@@ -1,0 +1,328 @@
+/**
+ * Squircle forms layer — native controls, dressed in tokens.
+ *
+ * CSS styles the box; the BROWSER owns the behavior (constraint
+ * validation, pickers, keyboard, AT mappings). JavaScript in
+ * `@squircle/runtime` only adds what CSS cannot: error association
+ * helpers and submit-time focus management. See FORMS.md.
+ *
+ * Contract: packages/components/CONTRACT.md. Touch targets honor the
+ * 48px default (3rem inputs); checks are 24px boxes in generously
+ * padded rows; switches and ranges are larger by platform necessity.
+ */
+
+/* -- Text fields ------------------------------------------------------------
+ * All text-like inputs, textarea, and select share one surface. The
+ * native arrow/calendar/picker indicators are kept — restyling them
+ * would trade platform behavior for decoration.
+ */
+
+.sq-input {
+  display: block;
+  width: 100%;
+  min-height: var(--sq-input-min-height);
+  padding: var(--sq-input-padding-y) var(--sq-input-padding-x);
+  background-color: var(--sq-input-background);
+  border: 1px solid var(--sq-input-border-color);
+  border-radius: var(--sq-input-radius);
+  color: var(--sq-input-text-color);
+}
+
+.sq-input::placeholder {
+  color: var(--sq-input-placeholder-color);
+  opacity: 1;
+}
+
+.sq-input:hover {
+  border-color: var(--sq-color-border-strong);
+}
+
+.sq-input:focus {
+  border-color: var(--sq-color-accent);
+  /* The global :focus-visible ring still applies for keyboard focus —
+   * components never remove it (CONTRACT.md §3). */
+}
+
+.sq-input:disabled,
+.sq-input[readonly] {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.sq-input:disabled {
+  background-color: var(--sq-color-disabled-background);
+}
+
+.sq-input[readonly] {
+  background-color: var(--sq-color-surface);
+}
+
+textarea.sq-input {
+  min-height: 8rem;
+  line-height: var(--sq-font-line-body);
+  resize: vertical;
+}
+
+select.sq-input {
+  padding-inline-end: var(--sq-space-xl);
+}
+
+select.sq-input:has(option:checked:disabled) {
+  color: var(--sq-input-placeholder-color);
+}
+
+.sq-input--small {
+  min-height: var(--sq-input-min-height-small);
+  padding: var(--sq-input-padding-y-small) var(--sq-input-padding-x-small);
+  font-size: var(--sq-font-size-sm);
+}
+
+.sq-input--large {
+  min-height: var(--sq-input-min-height-large);
+  padding: var(--sq-input-padding-y-large) var(--sq-input-padding-x-large);
+}
+
+/* Invalid: error border PLUS an associated message (never color alone —
+ * the message element carries the meaning; see .sq-field__error). Both
+ * the class and the attribute work; the runtime sets both. */
+.sq-input--invalid,
+.sq-input[aria-invalid="true"] {
+  border-color: var(--sq-input-border-color-invalid);
+  border-width: 2px;
+  /* Widening the border shifts layout by 1px; compensate the padding so
+   * fields never jump when they become invalid. */
+  padding: calc(var(--sq-input-padding-y) - 1px)
+    calc(var(--sq-input-padding-x) - 1px);
+}
+
+/* The error border persists under focus (same specificity as
+ * `.sq-input:focus`, later in source): users fixing the field keep
+ * seeing which one failed. The keyboard ring still shows — outline and
+ * border are separate properties. */
+.sq-input--invalid:focus,
+.sq-input[aria-invalid="true"]:focus {
+  border-color: var(--sq-input-border-color-invalid);
+}
+
+/* -- Field rows ------------------------------------------------------------------
+ * Label above, control in the middle, help and error below. The label is
+ * close to its field; fields sit far from each other (margin-block-end).
+ */
+
+.sq-field {
+  display: grid;
+  gap: var(--sq-space-2xs);
+  margin-block-end: var(--sq-space-md);
+  align-content: start;
+}
+
+.sq-field > label {
+  font-weight: var(--sq-font-weight-strong);
+}
+
+.sq-field__help {
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-muted);
+}
+
+.sq-field__error {
+  display: flex;
+  gap: var(--sq-space-2xs);
+  align-items: flex-start;
+  font-size: var(--sq-font-size-sm);
+  font-weight: var(--sq-font-weight-strong);
+  color: var(--sq-color-error-text);
+}
+
+.sq-field__error::before {
+  content: "";
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  margin-block-start: 0.45em;
+  border-radius: 50%;
+  background-color: var(--sq-color-error);
+}
+
+/* Required marker: decorative asterisk (AT reads `required` natively). */
+.sq-required-mark {
+  color: var(--sq-color-accent-bright);
+  font-weight: var(--sq-font-weight-strong);
+  margin-inline-start: var(--sq-space-3xs);
+}
+
+/* Fieldset groups (checkbox/radio sets): no browser chrome, legend reads
+ * as the group label. */
+.sq-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--sq-space-md);
+  min-width: 0;
+}
+
+.sq-fieldset > legend {
+  font-weight: var(--sq-font-weight-strong);
+  padding: 0;
+  margin-block-end: var(--sq-space-xs);
+}
+
+.sq-fieldset__help {
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-muted);
+  margin-block: 0 var(--sq-space-sm);
+  max-width: var(--sq-font-measure);
+}
+
+/* -- Checks and radios ---------------------------------------------------------------
+ * Native inputs with a themed accent-color; rows (not boxes) are the
+ * touch target — padded, wrapping, never cramped.
+ */
+
+.sq-check,
+.sq-radio {
+  display: flex;
+  gap: var(--sq-check-gap);
+  align-items: flex-start;
+  padding-block: var(--sq-check-row-padding-y);
+  cursor: pointer;
+  max-width: var(--sq-font-measure);
+}
+
+.sq-check > input,
+.sq-radio > input {
+  flex: none;
+  width: var(--sq-check-size);
+  height: var(--sq-check-size);
+  margin: 0;
+  margin-block-start: 0.2em;
+  accent-color: var(--sq-check-accent-color);
+  cursor: inherit;
+}
+
+.sq-check > input:disabled,
+.sq-radio > input:disabled {
+  cursor: not-allowed;
+}
+
+.sq-check:has(> input:disabled),
+.sq-radio:has(> input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.sq-check__text,
+.sq-radio__text {
+  display: grid;
+  gap: var(--sq-space-3xs);
+  align-content: start;
+}
+
+.sq-check__description,
+.sq-radio__description {
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-muted);
+}
+
+/* -- Switches --------------------------------------------------------------------------------
+ * Checkbox with role="switch" + a visual track. The input stays in the
+ * tab order and carries state; the track is pure presentation.
+ */
+
+.sq-switch {
+  display: flex;
+  gap: var(--sq-check-gap);
+  align-items: flex-start;
+  padding-block: var(--sq-space-xs);
+  cursor: pointer;
+  max-width: var(--sq-font-measure);
+}
+
+.sq-switch > input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.sq-switch__track {
+  position: relative;
+  flex: none;
+  width: var(--sq-switch-width);
+  height: var(--sq-switch-height);
+  margin-block-start: 0.1em;
+  border-radius: 999px;
+  background-color: var(--sq-switch-track-background);
+  border: 1px solid var(--sq-color-border-strong);
+  transition: background-color var(--sq-motion-duration-quick)
+    var(--sq-motion-easing-out);
+}
+
+.sq-switch__track::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc((var(--sq-switch-height) - var(--sq-switch-knob)) / 2 - 1px);
+  width: var(--sq-switch-knob);
+  height: var(--sq-switch-knob);
+  border-radius: 50%;
+  background-color: var(--sq-switch-knob-background);
+  transform: translateY(-50%);
+  transition: left var(--sq-motion-duration-quick) var(--sq-motion-easing-out);
+}
+
+.sq-switch > input:checked + .sq-switch__track {
+  background-color: var(--sq-switch-track-checked-background);
+  border-color: transparent;
+}
+
+.sq-switch > input:checked + .sq-switch__track::after {
+  left: calc(
+    var(--sq-switch-width) - var(--sq-switch-knob) -
+      ((var(--sq-switch-height) - var(--sq-switch-knob)) / 2 - 1px)
+  );
+  background-color: var(--sq-switch-knob-checked-background);
+}
+
+.sq-switch > input:focus-visible + .sq-switch__track {
+  outline: var(--sq-focus-width) solid var(--sq-color-focus);
+  outline-offset: var(--sq-focus-offset);
+}
+
+.sq-switch > input:disabled ~ .sq-switch__text,
+.sq-switch:has(> input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-switch__track,
+  .sq-switch__track::after {
+    transition: none;
+  }
+}
+
+/* -- Range --------------------------------------------------------------------------------------
+ * Native slider, themed accent, full-width with room to grab. Ticks and
+ * fill styling stay native — cross-browser custom tracks are decoration
+ * that risks behavior.
+ */
+
+.sq-range {
+  display: block;
+  width: 100%;
+  min-height: var(--sq-input-min-height);
+  margin: 0;
+  accent-color: var(--sq-check-accent-color);
+  cursor: pointer;
+}
+
+.sq-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.sq-range__value {
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}

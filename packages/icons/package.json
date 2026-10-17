@@ -1,0 +1,13 @@
+{
+  "name": "@squircle/icons",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Squircle custom-drawn icon library (original work, MIT): SVG sprite, per-icon files, manifest",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ./build.mjs",
+    "check": "node ./check-separation.mjs",
+    "clean": "rm -rf dist"
+  }
+}

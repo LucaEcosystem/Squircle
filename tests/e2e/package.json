@@ -1,0 +1,14 @@
+{
+  "name": "squircle-e2e",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "description": "Squircle browser end-to-end tests (Playwright, served over local HTTP)",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5"
+  }
+}

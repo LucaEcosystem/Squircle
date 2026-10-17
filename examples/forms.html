@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Squircle Stage 4 — Forms and validation</title>
+    <meta
+      name="description"
+      content="Every Stage 4 form control and validation pattern: native-first, generously spaced."
+    />
+    <script src="../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../packages/css/dist/squircle.css" />
+    <link rel="stylesheet" href="ocean.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#forms-main">Skip to content</a>
+    <main id="forms-main">
+      <section class="sq-section">
+        <div class="sq-container--narrow sq-stack--loose sq-stack">
+          <div class="sq-stack">
+            <p class="sq-small sq-muted">Squircle · forms and validation</p>
+            <h1>Forms that explain themselves.</h1>
+            <p class="sq-lead">
+              Native controls, native validation, generous room. Submit the form
+              empty to meet every error at once — each one names its fix.
+            </p>
+          </div>
+
+          <form class="sq-panel" id="signup-form" action="#" method="get">
+            <div class="sq-stack">
+              <h2 class="sq-heading--3">Create your account</h2>
+
+              <div class="sq-field">
+                <label for="f-name">Full name</label>
+                <input
+                  class="sq-input"
+                  id="f-name"
+                  name="name"
+                  type="text"
+                  placeholder="Ada Lovelace"
+                  autocomplete="name"
+                />
+                <p class="sq-field__help">
+                  Shown on confirmations and receipts.
+                </p>
+              </div>
+
+              <div class="sq-field">
+                <label for="f-email"
+                  >Email address
+                  <span class="sq-required-mark" aria-hidden="true">*</span>
+                </label>
+                <input
+                  class="sq-input"
+                  id="f-email"
+                  name="email"
+                  type="email"
+                  placeholder="ada@example.com"
+                  autocomplete="email"
+                  required
+                  aria-describedby="f-email-help f-email-error"
+                />
+                <p class="sq-field__help" id="f-email-help">
+                  We never share it.
+                </p>
+                <p class="sq-field__error" id="f-email-error" hidden>
+                  Enter an address like ada@example.com.
+                </p>
+              </div>
+
+              <div class="sq-field">
+                <label for="f-password"
+                  >Password
+                  <span class="sq-required-mark" aria-hidden="true">*</span>
+                </label>
+                <input
+                  class="sq-input"
+                  id="f-password"
+                  name="password"
+                  type="password"
+                  required
+                  minlength="12"
+                  autocomplete="new-password"
+                  aria-describedby="f-password-help f-password-error"
+                />
+                <p class="sq-field__help" id="f-password-help">
+                  At least 12 characters. A passphrase beats a puzzle.
+                </p>
+                <p class="sq-field__error" id="f-password-error" hidden>
+                  Use at least 12 characters — try four uncommon words.
+                </p>
+              </div>
+
+              <div class="sq-field">
+                <label for="f-role">Primary role</label>
+                <select class="sq-input" id="f-role" name="role">
+                  <option value="" disabled selected>
+                    Choose the closest fit…
+                  </option>
+                  <option value="design">Product designer</option>
+                  <option value="frontend">
+                    Frontend engineer with an extremely long job title that must
+                    wrap or truncate gracefully inside the select control
+                  </option>
+                  <option value="backend">Backend engineer</option>
+                  <option value="other">Something else entirely</option>
+                </select>
+              </div>
+
+              <div class="sq-field">
+                <label for="f-bio">Project notes</label>
+                <textarea
+                  class="sq-input"
+                  id="f-bio"
+                  name="bio"
+                  placeholder="What should we know before getting started?"
+                ></textarea>
+              </div>
+
+              <fieldset class="sq-fieldset" id="contact-group">
+                <legend>How should we reach you?</legend>
+                <p class="sq-fieldset__help">
+                  Choose every channel you actually read. Email is required for
+                  receipts regardless.
+                </p>
+                <label class="sq-check">
+                  <input type="checkbox" name="channel" value="email" checked />
+                  <span class="sq-check__text"
+                    >Email
+                    <span class="sq-check__description"
+                      >Receipts, security notices, and the Sunday letter.</span
+                    >
+                  </span>
+                </label>
+                <label class="sq-check">
+                  <input type="checkbox" name="channel" value="sms" />
+                  <span class="sq-check__text"
+                    >Text message
+                    <span class="sq-check__description"
+                      >Only for time-sensitive security alerts.</span
+                    >
+                  </span>
+                </label>
+                <label class="sq-check">
+                  <input type="checkbox" name="channel" value="none" disabled />
+                  <span class="sq-check__text"
+                    >Carrier pigeon
+                    <span class="sq-check__description"
+                      >Retired in 2024. Kept here to show the disabled
+                      state.</span
+                    >
+                  </span>
+                </label>
+              </fieldset>
+
+              <fieldset class="sq-fieldset" id="plan-group">
+                <legend>Workspace plan</legend>
+                <label class="sq-radio">
+                  <input type="radio" name="plan" value="harbor" checked />
+                  <span class="sq-radio__text"
+                    >Harbor
+                    <span class="sq-radio__description"
+                      >For side projects and experiments.</span
+                    >
+                  </span>
+                </label>
+                <label class="sq-radio">
+                  <input type="radio" name="plan" value="fleet" />
+                  <span class="sq-radio__text"
+                    >Fleet
+                    <span class="sq-radio__description"
+                      >For teams with review workflows and audit trails.</span
+                    >
+                  </span>
+                </label>
+              </fieldset>
+
+              <div class="sq-field">
+                <label class="sq-switch" for="f-notify">
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    id="f-notify"
+                    name="notify"
+                    checked
+                  />
+                  <span class="sq-switch__track" aria-hidden="true"></span>
+                  <span class="sq-check__text"
+                    >Weekly digest
+                    <span class="sq-check__description"
+                      >One email, every Monday. Off means truly off.</span
+                    >
+                  </span>
+                </label>
+              </div>
+
+              <div class="sq-field">
+                <label for="f-seats"
+                  >Team seats:
+                  <span
+                    class="sq-range__value"
+                    id="f-seats-value"
+                    aria-live="polite"
+                    >12</span
+                  ></label
+                >
+                <input
+                  class="sq-range"
+                  id="f-seats"
+                  name="seats"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value="12"
+                  aria-describedby="f-seats-value"
+                />
+              </div>
+
+              <div class="sq-field">
+                <label for="f-code">Invite code</label>
+                <input
+                  class="sq-input"
+                  id="f-code"
+                  name="code"
+                  type="text"
+                  value="HARBOR-2026"
+                  readonly
+                />
+                <p class="sq-field__help">
+                  Provided by your workspace admin; not editable.
+                </p>
+              </div>
+
+              <div class="sq-field">
+                <label for="f-size">Company size</label>
+                <input
+                  class="sq-input sq-input--small"
+                  id="f-size"
+                  name="size"
+                  type="text"
+                  placeholder="Small-density example (40px)"
+                />
+              </div>
+
+              <div class="sq-cluster">
+                <button
+                  class="sq-button sq-button--primary"
+                  type="submit"
+                  id="signup-submit"
+                >
+                  Create account
+                </button>
+                <button class="sq-button sq-button--tertiary" type="reset">
+                  Start over
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <section
+            class="sq-panel sq-panel--sunken"
+            aria-labelledby="server-errors-title"
+          >
+            <div class="sq-stack">
+              <h2 class="sq-heading--3" id="server-errors-title">
+                Server-side errors, associated
+              </h2>
+              <p class="sq-text sq-muted">
+                When the server rejects a value,
+                <code class="sq-code">setFieldError</code>
+                wires the message exactly like a native one. Try it:
+              </p>
+              <div class="sq-cluster">
+                <button
+                  class="sq-button sq-button--secondary"
+                  type="button"
+                  id="server-error-demo"
+                >
+                  Simulate taken email
+                </button>
+                <button
+                  class="sq-button sq-button--tertiary"
+                  type="button"
+                  id="server-error-clear"
+                >
+                  Clear it
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script>
+      (function () {
+        var form = document.getElementById("signup-form");
+        Squircle.enhanceForm(form);
+        // Reveal pre-rendered messages when native validation fires, so the
+        // associated text (not just the bubble) carries the meaning. The
+        // `submit` event does NOT fire while validation blocks submission,
+        // so this listens for `invalid` (capture — it does not bubble) and
+        // hides messages again as fields become valid.
+        function syncMessage(input) {
+          var described = (input.getAttribute("aria-describedby") || "").split(
+            /\s+/,
+          );
+          var valid = input.checkValidity();
+          input.classList.toggle("sq-input--invalid", !valid);
+          for (const id of described) {
+            if (!id.endsWith("-error")) continue;
+            var message = document.getElementById(id);
+            if (!message) continue;
+            message.hidden = valid;
+          }
+        }
+        form.addEventListener(
+          "invalid",
+          function (event) {
+            if (event.target instanceof HTMLElement) syncMessage(event.target);
+          },
+          true,
+        );
+        form.addEventListener("input", function (event) {
+          if (event.target instanceof HTMLElement) syncMessage(event.target);
+        });
+        var seats = document.getElementById("f-seats");
+        var seatsValue = document.getElementById("f-seats-value");
+        seats.addEventListener("input", function () {
+          seatsValue.textContent = seats.value;
+        });
+        document
+          .getElementById("server-error-demo")
+          .addEventListener("click", function () {
+            Squircle.setFieldError(
+              document.getElementById("f-email"),
+              "That address already has an account — try signing in instead.",
+            );
+            document.getElementById("f-email-error").hidden = false;
+            document.getElementById("f-email").focus();
+          });
+        document
+          .getElementById("server-error-clear")
+          .addEventListener("click", function () {
+            Squircle.clearFieldError(document.getElementById("f-email"));
+            document.getElementById("f-email-error").hidden = true;
+          });
+      })();
+    </script>
+  </body>
+</html>

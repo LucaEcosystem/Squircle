@@ -1,0 +1,7 @@
+{
+  "css": "packages/css/dist/squircle.css",
+  "sources": ["fixtures/blog/**/*.{html,js}"],
+  "out": "fixtures/blog/squircle.trimmed.css",
+  "report": "fixtures/blog/trim-report.json",
+  "safelist": []
+}

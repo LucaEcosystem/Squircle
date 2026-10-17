@@ -1,0 +1,81 @@
+/**
+ * Squircle layout layer — content-first primitives.
+ *
+ * - Sections grow naturally with generous vertical rhythm; pages scroll.
+ * - Containers cap line length and center content; gutters breathe.
+ * - `.sq-stack` spaces FLOW content evenly (any children, one gap rule).
+ * - `.sq-cluster` lines controls up in a wrapping row with real gaps, so
+ *   buttons and inputs never collide — on any viewport.
+ */
+
+.sq-container {
+  width: min(100% - 2 * var(--sq-space-page-gutter), var(--sq-container-base));
+  margin-inline: auto;
+}
+
+.sq-container--narrow {
+  width: min(
+    100% - 2 * var(--sq-space-page-gutter),
+    var(--sq-container-narrow)
+  );
+  margin-inline: auto;
+}
+
+.sq-container--wide {
+  width: min(100% - 2 * var(--sq-space-page-gutter), var(--sq-container-wide));
+  margin-inline: auto;
+}
+
+.sq-section {
+  padding-block: var(--sq-space-section);
+}
+
+.sq-section + .sq-section {
+  padding-block-start: 0;
+}
+
+.sq-stack {
+  display: grid;
+  gap: var(--sq-stack-gap, var(--sq-space-md));
+  align-content: start;
+}
+
+.sq-stack--tight {
+  --sq-stack-gap: var(--sq-space-xs);
+}
+
+.sq-stack--loose {
+  --sq-stack-gap: var(--sq-space-lg);
+}
+
+/* Grid blowout guard: stack/grid children default to min-width:auto,
+ * letting one wide descendant (a tablist, a long unbroken string)
+ * force every ancestor wide. Zero lets children shrink to their
+ * container while inner scrollers (tablists, code blocks) scroll.
+ * Content still wraps and reflows — nothing clips that shouldn't. */
+.sq-stack > *,
+.sq-panel__body > *,
+.sq-grid-auto > * {
+  min-width: 0;
+}
+
+.sq-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-sm);
+  align-items: center;
+}
+
+.sq-split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-md);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sq-grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+  gap: var(--sq-space-lg);
+}

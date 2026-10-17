@@ -1,0 +1,25 @@
+{
+  "name": "@squircle/css",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Squircle CSS foundation, geometry, and (from Stage 2+) component styles and utilities",
+  "type": "module",
+  "style": "./dist/squircle.css",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "node ./build.mjs",
+    "check": "node ./build.mjs --check",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "lightningcss": "^1.30.1"
+  },
+  "dependencies": {
+    "@squircle/themes": "workspace:*",
+    "@squircle/tokens": "workspace:*"
+  }
+}

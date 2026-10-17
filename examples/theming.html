@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Squircle Stage 2 — Theme switching (classic bundle)</title>
+    <meta
+      name="description"
+      content="Runtime theme switching with the classic Squircle browser bundle. No build step, no modules."
+    />
+    <!-- __RUNTIME_LOADER__ -->
+    <script src="../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../packages/css/dist/squircle.css" />
+    <link rel="stylesheet" href="ocean.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#theme-main">Skip to content</a>
+    <main id="theme-main">
+      <section class="sq-section">
+        <div class="sq-container sq-stack--loose sq-stack">
+          <div class="sq-stack">
+            <p class="sq-small sq-muted" id="loader-note">
+              Squircle · runtime theme switching
+            </p>
+            <h1>One markup, many themes.</h1>
+            <p class="sq-lead">
+              Switching themes changes a single attribute. Every surface,
+              utility, and control follows — nothing re-renders, nothing
+              hardcodes Luca colors.
+            </p>
+            <div
+              class="sq-cluster"
+              role="group"
+              aria-label="Choose a theme"
+              id="theme-switcher"
+            >
+              <button
+                class="sq-button sq-button--primary"
+                type="button"
+                data-theme="luca"
+              >
+                Luca (default)
+              </button>
+              <button
+                class="sq-button sq-button--secondary"
+                type="button"
+                data-theme="ocean"
+              >
+                Ocean (custom)
+              </button>
+              <button
+                class="sq-button sq-button--secondary"
+                type="button"
+                id="theme-reset"
+              >
+                Reset
+              </button>
+            </div>
+            <p class="sq-small sq-muted" id="theme-status" role="status">
+              Active theme: luca
+            </p>
+          </div>
+
+          <div class="sq-grid sq-grid-cols-1 sq-md-grid-cols-2 sq-gap-lg">
+            <article class="sq-card sq-hover-lift">
+              <div class="sq-stack">
+                <h2 class="sq-text-xl">Utilities follow themes</h2>
+                <p>
+                  This card mixes component classes with utilities:
+                  <code>sq-text-muted</code>, <code>sq-bg-selected</code>,
+                  <code>sq-rounded-lg</code>. All resolve through tokens.
+                </p>
+                <p class="sq-text-muted sq-bg-selected sq-rounded-md sq-p-sm">
+                  Muted text on the selected background — legible in Luca and
+                  Ocean alike.
+                </p>
+              </div>
+            </article>
+            <article class="sq-panel">
+              <div class="sq-stack">
+                <h2 class="sq-text-xl">Accent voice</h2>
+                <p>
+                  Gold speaks for Luca; warm sand speaks for Ocean. The semantic
+                  name stays <code>accent</code> either way.
+                </p>
+                <div class="sq-cluster">
+                  <span
+                    class="sq-bg-accent sq-rounded-full sq-px-md sq-py-2xs sq-weight-strong sq-text-sm"
+                    >Accent fill</span
+                  >
+                  <a class="sq-text-link" href="#theme-main">Themed link</a>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="sq-cq">
+            <div class="sq-panel">
+              <div class="sq-stack">
+                <h2 class="sq-text-xl">Container-aware split</h2>
+                <p class="sq-muted">
+                  This row responds to its container, not the viewport. Narrow
+                  the window past the panel and it stacks.
+                </p>
+                <div class="sq-cq-split">
+                  <div class="sq-bg-sunken sq-rounded-md sq-p-md sq-flex-1">
+                    <p class="sq-m-0">
+                      <strong>First</strong> in container order.
+                    </p>
+                  </div>
+                  <div class="sq-bg-sunken sq-rounded-md sq-p-md sq-flex-1">
+                    <p class="sq-m-0">
+                      <strong>Second</strong> in container order.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- __RUNTIME_INIT__ -->
+    <script>
+      (function () {
+        var status = document.getElementById("theme-status");
+        function render() {
+          status.textContent = "Active theme: " + Squircle.getTheme();
+        }
+        Squircle.onThemeChange(render);
+        document
+          .getElementById("theme-switcher")
+          .addEventListener("click", function (event) {
+            var target = event.target;
+            if (target instanceof HTMLButtonElement && target.dataset.theme) {
+              Squircle.setTheme(target.dataset.theme);
+            }
+          });
+        document
+          .getElementById("theme-reset")
+          .addEventListener("click", function () {
+            Squircle.resetTheme();
+          });
+        render();
+      })();
+    </script>
+  </body>
+</html>

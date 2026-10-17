@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fleet overview — Harbor dashboard</title>
+    <meta
+      name="description"
+      content="A data-heavy Squircle template: sidebar navigation, metrics, schedule table, and status."
+    />
+    <script src="../../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../../packages/css/dist/squircle.css" />
+    <link rel="stylesheet" href="../ocean.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#dashboard-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container--wide sq-px-md sq-navbar__inner">
+        <a class="sq-navbar__brand" href="landing.html">Harbor</a>
+        <p class="sq-status sq-status--success">
+          <span class="sq-status__dot" aria-hidden="true"></span>All systems
+          normal
+        </p>
+        <span class="sq-avatar" role="img" aria-label="Ada Lovelace">AL</span>
+      </div>
+    </header>
+
+    <div class="sq-container--wide sq-px-md sq-py-lg">
+      <div class="sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Dashboard">
+          <p class="sq-sidebar__title">Fleet</p>
+          <ul class="sq-nav sq-nav--vertical">
+            <li>
+              <a class="sq-nav__link" href="dashboard.html" aria-current="page"
+                >Overview</a
+              >
+            </li>
+            <li><a class="sq-nav__link" href="dashboard.html">Berths</a></li>
+            <li><a class="sq-nav__link" href="dashboard.html">Crews</a></li>
+            <li><a class="sq-nav__link" href="dashboard.html">Ledger</a></li>
+          </ul>
+          <p class="sq-sidebar__title">Workspace</p>
+          <ul class="sq-nav sq-nav--vertical">
+            <li><a class="sq-nav__link" href="settings.html">Settings</a></li>
+            <li><a class="sq-nav__link" href="docs.html">Docs</a></li>
+          </ul>
+        </nav>
+
+        <main id="dashboard-main" class="sq-stack--loose sq-stack">
+          <div class="sq-split">
+            <div>
+              <p class="sq-small sq-muted sq-m-0">
+                Week 42 · tide windows green
+              </p>
+              <h1 class="sq-text-3xl">Fleet overview</h1>
+            </div>
+            <div class="sq-cluster">
+              <span class="sq-badge sq-badge--success">On schedule</span>
+              <button
+                class="sq-button sq-button--secondary"
+                type="button"
+                data-sq-menu
+                aria-controls="dash-export"
+                id="dash-export-trigger"
+              >
+                Export
+              </button>
+              <ul
+                class="sq-menu"
+                id="dash-export"
+                role="menu"
+                aria-label="Export options"
+                hidden
+              >
+                <li role="none">
+                  <button class="sq-menu__item" role="menuitem" type="button">
+                    PDF report
+                  </button>
+                </li>
+                <li role="none">
+                  <button class="sq-menu__item" role="menuitem" type="button">
+                    CSV data
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="sq-alert sq-alert--warning" role="status">
+            <span class="sq-alert__icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                focusable="false"
+              >
+                <path d="M12 4 2.5 20h19L12 4Z" />
+                <path d="M12 10v4" />
+              </svg>
+            </span>
+            <div class="sq-alert__body">
+              <p class="sq-alert__title">Fog window Thursday 04:00–07:00</p>
+              <p class="sq-alert__text">
+                Two arrivals move to standby. Nothing else changes.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="sq-grid sq-grid-cols-1 sq-md-grid-cols-2 sq-lg-grid-cols-4 sq-gap-md"
+          >
+            <article class="sq-card">
+              <div class="sq-metric">
+                <p class="sq-metric__value">128</p>
+                <p class="sq-metric__label">Vessels active</p>
+                <p class="sq-metric__delta sq-metric__delta--up">
+                  ↑ 6 vs last week
+                </p>
+              </div>
+            </article>
+            <article class="sq-card">
+              <div class="sq-metric">
+                <p class="sq-metric__value">94%</p>
+                <p class="sq-metric__label">On schedule</p>
+                <p class="sq-metric__delta sq-metric__delta--up">↑ 2 points</p>
+              </div>
+            </article>
+            <article class="sq-card">
+              <div class="sq-metric">
+                <p class="sq-metric__value">3</p>
+                <p class="sq-metric__label">Open alerts</p>
+                <p class="sq-metric__delta sq-metric__delta--down">
+                  ↓ 1 resolved today
+                </p>
+              </div>
+            </article>
+            <article class="sq-card">
+              <div class="sq-metric">
+                <p class="sq-metric__value">6.2h</p>
+                <p class="sq-metric__label">Avg. turnaround</p>
+              </div>
+            </article>
+          </div>
+
+          <section class="sq-panel" aria-labelledby="schedule-title">
+            <div class="sq-panel__header">
+              <h2 class="sq-heading--3" id="schedule-title">Berth schedule</h2>
+              <p class="sq-text sq-muted">
+                Scrolls horizontally on narrow screens — never squeezes.
+              </p>
+            </div>
+            <div class="sq-panel__body">
+              <div
+                class="sq-table-scroll"
+                role="region"
+                aria-labelledby="schedule-title"
+                tabindex="0"
+              >
+                <table class="sq-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Vessel</th>
+                      <th scope="col">Berth</th>
+                      <th scope="col">Window</th>
+                      <th scope="col" class="sq-table__number">TEU</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Meridian Star</th>
+                      <td>07</td>
+                      <td>02:00–08:00</td>
+                      <td class="sq-table__number">4,200</td>
+                      <td>
+                        <span class="sq-badge sq-badge--success"
+                          >Alongside</span
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Cape Laurel</th>
+                      <td>12</td>
+                      <td>06:30–14:00</td>
+                      <td class="sq-table__number">8,150</td>
+                      <td>
+                        <span class="sq-badge sq-badge--info">Inbound</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Northern Gift</th>
+                      <td>03</td>
+                      <td>11:00–19:00</td>
+                      <td class="sq-table__number">2,940</td>
+                      <td>
+                        <span class="sq-badge sq-badge--warning">Standby</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="sq-panel" aria-labelledby="unload-title">
+            <div class="sq-stack">
+              <h2 class="sq-heading--3" id="unload-title">Overnight unload</h2>
+              <div>
+                <div class="sq-progress-label">
+                  <span>Berth 7 · Meridian Star</span><span>62%</span>
+                </div>
+                <progress
+                  class="sq-progress sq-progress--large"
+                  value="62"
+                  max="100"
+                >
+                  62%
+                </progress>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script>
+      Squircle.init();
+    </script>
+  </body>
+</html>

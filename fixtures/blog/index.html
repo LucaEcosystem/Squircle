@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Harbor Notes — a Squircle trim fixture</title>
+    <meta
+      name="description"
+      content="Fixture blog exercising a realistic Squircle subset for complete-versus-trimmed verification."
+    />
+    <script src="../../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../../packages/css/dist/squircle.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#articles">Skip to articles</a>
+    <header style="border-bottom: 1px solid var(--sq-color-divider)">
+      <div class="sq-container sq-split sq-py-md">
+        <p class="sq-font-display sq-weight-display sq-text-lg sq-m-0">
+          Harbor Notes
+        </p>
+        <nav class="sq-cluster sq-hidden sq-md-flex" aria-label="Primary">
+          <a href="#articles">Articles</a>
+          <a href="#newsletter">Newsletter</a>
+          <a href="#about">About</a>
+        </nav>
+        <button
+          class="sq-button sq-button--secondary sq-md-hidden"
+          type="button"
+        >
+          Menu
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="sq-section">
+        <div class="sq-container sq-stack--loose sq-stack">
+          <div class="sq-stack sq-max-w-measure">
+            <p class="sq-small sq-muted">
+              A fixture blog · trimmed-CSS verification
+            </p>
+            <h1>Slow writing about fast frameworks.</h1>
+            <p class="sq-lead">
+              Essays on interfaces with breathing room. New pieces every other
+              Sunday, no noise in between.
+            </p>
+          </div>
+
+          <div
+            class="sq-grid sq-grid-cols-1 sq-md-grid-cols-2 sq-lg-grid-cols-3 sq-gap-lg"
+            id="articles"
+          >
+            <article class="sq-card sq-hover-lift">
+              <div class="sq-stack">
+                <p class="sq-small sq-muted sq-m-0">Whitespace · 8 min</p>
+                <h2 class="sq-text-xl">The 64-pixel rule</h2>
+                <p>
+                  Why section rhythm should be a token, not a feeling — and what
+                  happens when every team invents its own.
+                </p>
+                <a href="#articles">Read the essay</a>
+              </div>
+            </article>
+            <article class="sq-card sq-hover-lift">
+              <div class="sq-stack">
+                <p class="sq-small sq-muted sq-m-0">Color · 6 min</p>
+                <h2 class="sq-text-xl">Gold, used sparingly</h2>
+                <p>
+                  A brand accent is a voice, not a paint bucket. Notes on
+                  restraint from the Luca palette.
+                </p>
+                <a href="#articles">Read the essay</a>
+              </div>
+            </article>
+            <article class="sq-card sq-hover-lift">
+              <div class="sq-stack">
+                <p class="sq-small sq-muted sq-m-0">Motion · 5 min</p>
+                <h2 class="sq-text-xl">Entrances that bow out</h2>
+                <p>
+                  Reduced-motion support is not a fallback. It is the design,
+                  stated twice.
+                </p>
+                <a href="#articles">Read the essay</a>
+              </div>
+            </article>
+          </div>
+
+          <div class="sq-panel sq-cq">
+            <div class="sq-stack">
+              <h2 class="sq-text-xl" id="newsletter">The Sunday letter</h2>
+              <p class="sq-muted">
+                One email, every other week. Unsubscribe anytime, no hard
+                feelings.
+              </p>
+              <div class="sq-cq-split">
+                <div class="sq-field sq-flex-1 sq-m-0">
+                  <label class="sq-sr-only" for="blog-email">Email</label>
+                  <input
+                    class="sq-input"
+                    id="blog-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                  />
+                </div>
+                <button class="sq-button sq-button--primary" type="button">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="about">
+      <div class="sq-container sq-py-xl">
+        <hr />
+        <div class="sq-split">
+          <p class="sq-small sq-muted">Harbor Notes · a Squircle fixture</p>
+          <p class="sq-small sq-muted">
+            Complete CSS and trimmed CSS must render this identically.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Squircle Stage 1 — Foundation Preview</title>
+    <meta
+      name="description"
+      content="Preview of the Squircle Stage 1 foundation: tokens, Luca theme, typography, geometry, spacing."
+    />
+    <script src="../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../packages/css/dist/squircle.css" />
+  </head>
+  <body>
+    <main>
+      <!-- Hero -->
+      <section class="sq-section" aria-labelledby="hero-title">
+        <div class="sq-container sq-stack--loose sq-stack">
+          <div class="sq-stack">
+            <p class="sq-small sq-muted">
+              Squircle · Stage 1 foundation preview
+            </p>
+            <h1 id="hero-title">Interfaces with room to breathe.</h1>
+            <p class="sq-lead">
+              Squircle is a CSS-first UI framework with its own visual identity:
+              squircle geometry, generous whitespace, and the Luca Ecosystem
+              Theme baked in from the first token.
+            </p>
+            <div class="sq-cluster">
+              <a class="sq-button sq-button--primary" href="#surfaces"
+                >Explore surfaces</a
+              >
+              <a class="sq-button sq-button--secondary" href="#forms"
+                >Try the form</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Surfaces -->
+      <section class="sq-section" aria-labelledby="surfaces-title">
+        <div class="sq-container sq-stack--loose sq-stack">
+          <div class="sq-stack">
+            <h2 id="surfaces-title">Surfaces that layer deliberately</h2>
+            <p>
+              Navy steps from deep page to raised card. Gold speaks sparingly.
+              Nested panels carve inward with a smaller radius.
+            </p>
+          </div>
+
+          <div class="sq-panel" id="surfaces">
+            <div class="sq-stack">
+              <h3>Outer panel</h3>
+              <p>
+                A panel holds a content group with comfortable internal padding
+                and clear separation from its neighbors.
+              </p>
+              <div class="sq-panel">
+                <div class="sq-stack">
+                  <h4>Nested panel</h4>
+                  <p class="sq-muted">
+                    Inset content steps down one radius grade and one surface
+                    elevation — carved, not stamped.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sq-grid-auto">
+            <article class="sq-card">
+              <div class="sq-stack">
+                <h3>Elevated card</h3>
+                <p>
+                  Cards float above the page with a soft navy shadow for
+                  peer-level content groups.
+                </p>
+              </div>
+            </article>
+            <article class="sq-card">
+              <div class="sq-stack">
+                <h3>Generous by default</h3>
+                <p>
+                  Padding, gaps, and section rhythm come from shared tokens.
+                  Nothing here picks its own spacing.
+                </p>
+              </div>
+            </article>
+            <article class="sq-card">
+              <div class="sq-stack">
+                <h3>Theme-driven color</h3>
+                <p>
+                  Every surface references semantic tokens, so a custom theme
+                  re-skins the page without touching markup.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Controls -->
+      <section class="sq-section" aria-labelledby="controls-title">
+        <div class="sq-container sq-stack--loose sq-stack">
+          <div class="sq-stack">
+            <h2 id="controls-title">Controls with comfortable targets</h2>
+            <p>
+              Buttons clear 48px heights with real gaps between neighbors.
+              Inputs leave room for labels above and messages below.
+            </p>
+          </div>
+          <div class="sq-panel">
+            <div class="sq-stack--loose sq-stack">
+              <div class="sq-cluster">
+                <button class="sq-button sq-button--primary" type="button">
+                  Continue
+                </button>
+                <button class="sq-button sq-button--secondary" type="button">
+                  Learn more
+                </button>
+                <button
+                  class="sq-button sq-button--primary sq-button--large"
+                  type="button"
+                >
+                  Large action
+                </button>
+                <button
+                  class="sq-button sq-button--secondary"
+                  type="button"
+                  disabled
+                >
+                  Disabled
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Forms -->
+      <section class="sq-section" aria-labelledby="forms-title">
+        <div class="sq-container--narrow">
+          <div class="sq-stack--loose sq-stack">
+            <div class="sq-stack">
+              <h2 id="forms-title">A form that never crowds</h2>
+              <p>
+                Labels sit close to their fields; fields sit far from each
+                other. Help text whispers, errors speak clearly.
+              </p>
+            </div>
+            <form class="sq-panel" id="forms" action="#" method="get">
+              <div class="sq-stack">
+                <div class="sq-field">
+                  <label for="demo-name">Full name</label>
+                  <input
+                    class="sq-input"
+                    id="demo-name"
+                    name="name"
+                    type="text"
+                    placeholder="Ada Lovelace"
+                    autocomplete="name"
+                  />
+                  <p class="sq-field__help">
+                    Shown on confirmations and receipts.
+                  </p>
+                </div>
+                <div class="sq-field">
+                  <label for="demo-email">Email address</label>
+                  <input
+                    class="sq-input"
+                    id="demo-email"
+                    name="email"
+                    type="email"
+                    placeholder="ada@example.com"
+                    autocomplete="email"
+                    aria-describedby="demo-email-error"
+                  />
+                  <p class="sq-field__error" id="demo-email-error">
+                    Enter an address like ada@example.com.
+                  </p>
+                </div>
+                <div class="sq-field">
+                  <label for="demo-notes">Notes</label>
+                  <textarea
+                    class="sq-input"
+                    id="demo-notes"
+                    name="notes"
+                    placeholder="Anything we should know before getting started?"
+                  ></textarea>
+                </div>
+                <div class="sq-cluster">
+                  <button class="sq-button sq-button--primary" type="submit">
+                    Send message
+                  </button>
+                  <button class="sq-button sq-button--secondary" type="reset">
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Type scale -->
+      <section class="sq-section" aria-labelledby="type-title">
+        <div class="sq-container sq-stack">
+          <h2 id="type-title">Type with a clear voice</h2>
+          <div class="sq-panel">
+            <div class="sq-stack">
+              <h1>Display heading, Manrope 800</h1>
+              <h3>Section heading, fluid size</h3>
+              <p>
+                Body copy sets in DM Sans at a comfortable measure. Line length
+                caps at 68 characters so long reads never sprawl edge to edge.
+              </p>
+              <blockquote>
+                Whitespace establishes hierarchy — it never merely fills gaps.
+              </blockquote>
+              <ul>
+                <li>Lists breathe between items</li>
+                <li>Markers carry the gold accent</li>
+                <li>
+                  Links like <a href="#type-title">this one</a> stay legible
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="sq-section" aria-label="Page footer">
+      <div class="sq-container">
+        <hr />
+        <div class="sq-split">
+          <p class="sq-small sq-muted">
+            Squircle Stage 1 foundation preview · MIT
+          </p>
+          <p class="sq-small sq-muted">Full components arrive in Stages 3–4.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

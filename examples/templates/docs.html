@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spacing — Harbor docs</title>
+    <meta
+      name="description"
+      content="A navigation-heavy Squircle template: sticky sidebar, breadcrumbs, code, and paging."
+    />
+    <script src="../../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../../packages/css/dist/squircle.css" />
+    <link rel="stylesheet" href="../ocean.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="landing.html">Harbor</a>
+        <nav aria-label="Primary">
+          <details class="sq-nav-menu" open>
+            <summary>Menu</summary>
+            <ul class="sq-nav">
+              <li><a class="sq-nav__link" href="article.html">Journal</a></li>
+              <li>
+                <a class="sq-nav__link" href="dashboard.html">Dashboard</a>
+              </li>
+              <li>
+                <a class="sq-nav__link" href="docs.html" aria-current="page"
+                  >Docs</a
+                >
+              </li>
+            </ul>
+          </details>
+        </nav>
+        <button
+          class="sq-button sq-button--secondary sq-button--small"
+          type="button"
+          data-sq-tooltip="Search is a demo here — it goes nowhere."
+        >
+          Search
+        </button>
+      </div>
+    </header>
+
+    <div class="sq-container sq-py-lg">
+      <div class="sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Docs sections">
+          <p class="sq-sidebar__title">Start</p>
+          <ul class="sq-nav sq-nav--vertical">
+            <li><a class="sq-nav__link" href="docs.html">Introduction</a></li>
+            <li>
+              <a class="sq-nav__link" href="docs.html" aria-current="page"
+                >Spacing</a
+              >
+            </li>
+            <li><a class="sq-nav__link" href="docs.html">Color</a></li>
+          </ul>
+          <p class="sq-sidebar__title">Guides</p>
+          <ul class="sq-nav sq-nav--vertical">
+            <li><a class="sq-nav__link" href="docs.html">Berth boards</a></li>
+            <li><a class="sq-nav__link" href="docs.html">Rosters</a></li>
+            <li><a class="sq-nav__link" href="docs.html">Exports</a></li>
+          </ul>
+        </nav>
+
+        <main id="docs-main" class="sq-stack--loose sq-stack">
+          <nav aria-label="Breadcrumb">
+            <ol class="sq-breadcrumbs">
+              <li><a href="landing.html">Home</a></li>
+              <li><a href="docs.html">Docs</a></li>
+              <li aria-current="page">Spacing</li>
+            </ol>
+          </nav>
+
+          <div class="sq-stack">
+            <h1>Spacing</h1>
+            <p class="sq-lead">
+              One scale, three relationships: within components, between groups,
+              between sections.
+            </p>
+          </div>
+
+          <h2>Within components</h2>
+          <p>
+            Padding and gaps inside a component come from the small end of the
+            scale — <code>2xs</code> through <code>sm</code>. Buttons, fields,
+            and menu items never invent their own.
+          </p>
+          <pre aria-label="Example: stack spacing">
+.sq-stack {
+  display: grid;
+  gap: var(--sq-space-md);
+}</pre>
+
+          <h2>Between groups</h2>
+          <p>
+            Related groups separate at <code>md</code> to <code>lg</code>. Cards
+            in a listing, fields in a form, items in a menu — close enough to
+            belong, far enough to scan.
+          </p>
+          <dl class="sq-datalist">
+            <div>
+              <dt>md — 1.5rem</dt>
+              <dd>Default group separation: stacks, grids, card content.</dd>
+            </div>
+            <div>
+              <dt>lg — 2rem</dt>
+              <dd>
+                Emphatic separation: panels from neighbors, sections within
+                pages.
+              </dd>
+            </div>
+          </dl>
+
+          <h2>Between sections</h2>
+          <p>
+            Major page sections separate at the fluid
+            <code>section</code> token — pages scroll, content breathes, nobody
+            measures by hand.
+          </p>
+          <details class="sq-disclosure">
+            <summary>When may I break the scale?</summary>
+            <div class="sq-disclosure__content">
+              <p class="sq-text">
+                When a component justifies its own density in its documentation
+                — and almost never elsewhere.
+              </p>
+            </div>
+          </details>
+
+          <hr class="sq-divider sq-divider--spacious" />
+
+          <nav aria-label="Docs pages">
+            <ul class="sq-pagination">
+              <li><a href="docs.html" rel="prev">← Introduction</a></li>
+              <li><a href="docs.html" rel="next">Color →</a></li>
+            </ul>
+          </nav>
+        </main>
+      </div>
+    </div>
+    <script>
+      Squircle.init();
+    </script>
+  </body>
+</html>

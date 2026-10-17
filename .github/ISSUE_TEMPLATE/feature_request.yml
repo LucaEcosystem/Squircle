@@ -1,0 +1,34 @@
+name: Feature request
+about: A new component, utility, token, icon, or behavior.
+title: ""
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What would this let you do, or what is missing?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: The API, classes, or markup you would expect.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Area
+      options:
+        - Component
+        - Utility
+        - Token / theme
+        - Icon
+        - Runtime behavior
+        - Build / sq-trim
+        - Docs
+        - Other

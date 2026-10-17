@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fleet Overview — a Squircle trim fixture</title>
+    <meta
+      name="description"
+      content="Fixture dashboard with JS-driven classes (static, toggled, and safelisted-dynamic) for trim verification."
+    />
+    <script src="../../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../../packages/css/dist/squircle.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#fleet-main">Skip to content</a>
+    <div class="sq-container--wide sq-px-md sq-py-lg">
+      <div class="sq-stack--loose sq-stack">
+        <div class="sq-split">
+          <div>
+            <p class="sq-small sq-muted sq-m-0">
+              Fixture dashboard · trim verification
+            </p>
+            <h1 class="sq-text-3xl">Fleet overview</h1>
+          </div>
+          <div class="sq-cluster">
+            <span
+              class="sq-rounded-full sq-px-md sq-py-2xs sq-weight-strong sq-text-sm"
+              id="fleet-status"
+              role="status"
+              >Loading…</span
+            >
+            <button
+              class="sq-button sq-button--secondary"
+              type="button"
+              id="details-toggle"
+              aria-expanded="false"
+              aria-controls="fleet-details"
+            >
+              Details
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="sq-grid sq-grid-cols-1 sq-md-grid-cols-2 sq-lg-grid-cols-4 sq-gap-md"
+        >
+          <article class="sq-card">
+            <p class="sq-small sq-muted sq-m-0">Vessels active</p>
+            <p class="sq-font-display sq-weight-display sq-text-3xl sq-m-0">
+              128
+            </p>
+          </article>
+          <article class="sq-card">
+            <p class="sq-small sq-muted sq-m-0">On schedule</p>
+            <p class="sq-font-display sq-weight-display sq-text-3xl sq-m-0">
+              94%
+            </p>
+          </article>
+          <article class="sq-card">
+            <p class="sq-small sq-muted sq-m-0">Alerts</p>
+            <p class="sq-font-display sq-weight-display sq-text-3xl sq-m-0">
+              3
+            </p>
+          </article>
+          <article class="sq-card">
+            <p class="sq-small sq-muted sq-m-0">Avg. turnaround</p>
+            <p class="sq-font-display sq-weight-display sq-text-3xl sq-m-0">
+              6.2h
+            </p>
+          </article>
+        </div>
+
+        <div class="sq-panel sq-hidden" id="fleet-details">
+          <div class="sq-stack">
+            <h2 class="sq-text-xl">Berth details</h2>
+            <p class="sq-muted">
+              Toggled with <code>classList</code> — the class name is a static
+              string literal, so the scanner keeps it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        // Toggled class: static literal, detected by the scanner.
+        var details = document.getElementById("fleet-details");
+        var toggle = document.getElementById("details-toggle");
+        toggle.addEventListener("click", function () {
+          var open = details.classList.toggle("sq-hidden");
+          toggle.setAttribute("aria-expanded", String(!open));
+        });
+
+        // Dynamic class: built by interpolation — the scanner flags this
+        // and the config safelists the three possible fills explicitly.
+        var states = ["success", "warning", "error"];
+        var pill = document.getElementById("fleet-status");
+        var step = Math.floor(Date.now() / 4000) % states.length;
+        var state = states[step];
+        pill.className =
+          "sq-rounded-full sq-px-md sq-py-2xs sq-weight-strong sq-text-sm sq-bg-" +
+          state;
+        pill.textContent = "Status: " + state;
+      })();
+    </script>
+  </body>
+</html>

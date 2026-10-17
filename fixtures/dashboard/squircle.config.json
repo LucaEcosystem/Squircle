@@ -1,0 +1,7 @@
+{
+  "css": "packages/css/dist/squircle.css",
+  "sources": ["fixtures/dashboard/**/*.{html,js}"],
+  "out": "fixtures/dashboard/squircle.trimmed.css",
+  "report": "fixtures/dashboard/trim-report.json",
+  "safelist": ["sq-bg-success", "sq-bg-warning", "sq-bg-error"]
+}

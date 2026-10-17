@@ -1,0 +1,13 @@
+{
+  "name": "@squircle/components",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Squircle component HTML contracts (Stage 1: placeholder — component implementations land in Stage 3+)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo 'components: no build output in Stage 1'",
+    "check": "echo 'components: nothing to check in Stage 1'",
+    "clean": "echo 'components: nothing to clean in Stage 1'"
+  }
+}

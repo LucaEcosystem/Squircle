@@ -1,0 +1,2 @@
+# Configures the Issue/PR templates to show in the "new issue" modal.
+blank_issues_enabled: false

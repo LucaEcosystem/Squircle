@@ -1,0 +1,20 @@
+{
+  "name": "@squircle/tokens",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Squircle design-token source of truth (TypeScript) — emits CSS custom properties",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node ./dist/emit-css.js",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5"
+  }
+}

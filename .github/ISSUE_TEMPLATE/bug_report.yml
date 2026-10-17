@@ -1,0 +1,43 @@
+name: Bug report
+about: Something is broken — CSS, runtime, build, or an export.
+title: ""
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce / minimal example
+      description: A small HTML snippet or link to a reproduction, with the exact import/install used.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Squircle version
+      description: e.g. 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser / engine
+      options:
+        - Chromium (Chrome/Edge)
+        - Safari
+        - Firefox
+        - Mobile
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: extras
+    attributes:
+      label: Additional context
+      description: Screenshots, console output, `Squircle` API calls, etc.

@@ -1,0 +1,31 @@
+/**
+ * "Ocean" custom theme for Squircle examples.
+ *
+ * The values here MUST match the "ocean example theme" in
+ * packages/themes/test/theme.test.ts — that test validates contrast and
+ * fails on drift. Single source for all example pages; theming*.html and
+ * components.html link this file instead of duplicating the block.
+ *
+ * Custom themes override semantic tokens only; components and utilities
+ * follow automatically because they never hardcode color.
+ */
+
+[data-sq-theme="ocean"] {
+  --sq-color-background: #06222e;
+  --sq-color-background-sunken: #041620;
+  --sq-color-surface: #0a2e3d;
+  --sq-color-surface-elevated: #0f3a4d;
+  --sq-color-surface-overlay: #155063;
+  --sq-color-text-primary: #eef6f4;
+  --sq-color-text-secondary: #b9d4d6;
+  --sq-color-text-muted: #8fb3ba;
+  --sq-color-border: #1d4a5c;
+  --sq-color-border-strong: #2e6a80;
+  --sq-color-divider: #14394a;
+  --sq-color-link: #5fd4e8;
+  --sq-color-link-hover: #9be7f5;
+  --sq-color-accent: #e0a458;
+  --sq-color-accent-bright: #f2c078;
+  --sq-color-accent-contrast: #06222e;
+  --sq-color-selected-background: #0e3d55;
+}

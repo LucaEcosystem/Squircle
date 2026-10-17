@@ -1,0 +1,13 @@
+{
+  "css": "packages/squircle/dist/squircle.css",
+  "sources": ["fixtures/consumers/shop/**/*.{html,js}"],
+  "out": "fixtures/consumers/shop/squircle.trimmed.css",
+  "report": "fixtures/consumers/shop/trim-report.json",
+  "safelist": [
+    "sq-badge--success",
+    "sq-badge--warning",
+    "sq-badge--error",
+    "sq-toast",
+    { "prefix": "sq-toast--" }
+  ]
+}

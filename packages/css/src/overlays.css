@@ -1,0 +1,172 @@
+/**
+ * Squircle overlays layer — dialog, menu, popover, tooltip.
+ *
+ * Native elements first: `<dialog>`, `popover`, and `:focus-visible`
+ * carry the semantics; CSS dresses the surface; `@squircle/runtime`
+ * adds open/close, focus management, positioning, and dismissal.
+ * Nothing here works by class presence alone — behavior is verified
+ * in the browser, not asserted from selectors. See OVERLAYS.md.
+ */
+
+/* -- Dialog ---------------------------------------------------------------------------
+ * Native <dialog>. Modal via showModal() (Escape + focus containment
+ * free from the platform); non-modal via show() + .sq-dialog--modeless.
+ * Backdrop clicks close ONLY with data-sq-dismiss="backdrop" (opt-in —
+ * dialogs often guard unsaved work).
+ */
+
+.sq-dialog {
+  background-color: var(--sq-dialog-background);
+  color: var(--sq-color-text-primary);
+  border: 1px solid var(--sq-color-border-strong);
+  border-radius: var(--sq-dialog-radius);
+  padding: var(--sq-dialog-padding);
+  margin: auto;
+  max-width: min(var(--sq-dialog-max-width), calc(100vw - var(--sq-space-lg)));
+  max-height: calc(100dvh - var(--sq-space-xl));
+  overflow-y: auto;
+  box-shadow: var(--sq-shadow-lg);
+}
+
+.sq-dialog--large {
+  max-width: min(
+    var(--sq-dialog-max-width-large),
+    calc(100vw - var(--sq-space-lg))
+  );
+}
+
+.sq-dialog::backdrop {
+  background-color: var(--sq-color-scrim);
+}
+
+.sq-dialog--modeless {
+  box-shadow: var(--sq-shadow-lg);
+}
+
+.sq-dialog__close {
+  position: absolute;
+  top: var(--sq-space-md);
+  inset-inline-end: var(--sq-space-md);
+}
+
+/* Dialogs need positioning context for the close button. */
+dialog.sq-dialog {
+  position: fixed;
+  inset: 0;
+}
+
+/* -- Menu -------------------------------------------------------------------------------
+ * Action menus (role="menu"): elevated surface, generous items, hint
+ * column. Navigation is NOT a menu — use links (LINKS.md).
+ */
+
+.sq-menu {
+  min-width: var(--sq-menu-min-width);
+  max-width: min(20rem, calc(100vw - var(--sq-space-lg)));
+  margin: 0;
+  padding: var(--sq-menu-padding);
+  background-color: var(--sq-menu-background);
+  color: var(--sq-color-text-primary);
+  border: 1px solid var(--sq-menu-border-color);
+  border-radius: var(--sq-menu-radius);
+  box-shadow: var(--sq-shadow-lg);
+  list-style: none;
+}
+
+.sq-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-sm);
+  width: 100%;
+  padding: var(--sq-menu-item-padding-y) var(--sq-menu-item-padding-x);
+  background: none;
+  border: none;
+  border-radius: var(--sq-menu-item-radius);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  min-height: 2.75rem;
+}
+
+.sq-menu__item:hover,
+.sq-menu__item--active {
+  background-color: var(--sq-menu-item-hover-background);
+}
+
+.sq-menu__item--danger {
+  color: var(--sq-color-error-text);
+}
+
+.sq-menu__item[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sq-menu__item[aria-disabled="true"]:hover {
+  background: none;
+}
+
+.sq-menu__hint {
+  margin-inline-start: auto;
+  padding-inline-start: var(--sq-space-md);
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-muted);
+}
+
+.sq-menu__separator {
+  border: none;
+  border-top: 1px solid var(--sq-color-divider);
+  margin-block: var(--sq-space-2xs);
+}
+
+/* -- Popover ----------------------------------------------------------------------------------
+ * Supplementary content via the native popover API. Default placement is
+ * the platform default (centered); data-sq-anchor="trigger-id" opts into
+ * runtime edge-aware positioning next to the trigger.
+ */
+
+.sq-popover {
+  max-width: min(24rem, calc(100vw - var(--sq-space-xl)));
+  margin: 0;
+  padding: var(--sq-panel-padding);
+  background-color: var(--sq-panel-background-elevated);
+  color: var(--sq-color-text-primary);
+  border: 1px solid var(--sq-color-border-strong);
+  border-radius: var(--sq-panel-radius);
+  box-shadow: var(--sq-shadow-lg);
+}
+
+.sq-popover:popover-open {
+  display: grid;
+  gap: var(--sq-panel-gap);
+  align-content: start;
+}
+
+.sq-popover__title {
+  font-family: var(--sq-font-family-display);
+  font-weight: var(--sq-font-weight-display);
+  font-size: var(--sq-font-size-lg);
+  line-height: var(--sq-font-line-snug);
+  margin: 0;
+}
+
+/* -- Tooltip --------------------------------------------------------------------------------------
+ * Non-interactive hints. Shown by the runtime on hover/focus, hidden on
+ * leave/blur/Escape. Never the only source of essential information.
+ */
+
+.sq-tooltip {
+  position: absolute;
+  z-index: var(--sq-z-index-tooltip);
+  max-width: var(--sq-tooltip-max-width);
+  padding: var(--sq-tooltip-padding-y) var(--sq-tooltip-padding-x);
+  background-color: var(--sq-tooltip-background);
+  color: var(--sq-tooltip-text-color);
+  border: 1px solid var(--sq-tooltip-border-color);
+  border-radius: var(--sq-tooltip-radius);
+  font-size: var(--sq-font-size-sm);
+  line-height: var(--sq-font-line-snug);
+  box-shadow: var(--sq-shadow-md);
+  pointer-events: none;
+}

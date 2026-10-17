@@ -1,0 +1,23 @@
+{
+  "name": "@squircle/themes",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Squircle theme registry, validation, and the Luca Ecosystem Theme",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && cp src/luca.css src/fonts.css dist/",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@squircle/tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5"
+  }
+}

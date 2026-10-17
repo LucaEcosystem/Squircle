@@ -1,0 +1,143 @@
+# CI for Squircle.
+#
+# Every push/PR runs the full gate: install → build → type-check + package
+# gates → lint → format → unit tests → browser tests (Playwright on all four
+# engines) → npm pack dry-run.
+#
+# Publishing is tag-gated (see the `publish` job). It requires:
+#   - an NPM_TOKEN repository secret (a publish-capable npm automation token), and
+#   - (for the first scoped publish) the `@luca-ecosystem` scope already claimed
+#     on the npm account behind that token.
+#
+# No tokens live in this file or the repo — only in GitHub Secrets.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+# One long-running pipeline at a time per ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build, test, and pack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm (pinned version)
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.11.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Type-check + package gates
+        run: pnpm check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Unit + integration tests
+        run: pnpm test
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Browser tests (chromium)
+        run: pnpm exec playwright test --project=chromium
+
+      - name: Browser tests (webkit)
+        run: pnpm exec playwright test --project=webkit
+
+      - name: Browser tests (firefox)
+        run: pnpm exec playwright test --project=firefox
+
+      - name: Browser tests (mobile)
+        run: pnpm exec playwright test --project=mobile
+
+      - name: Upload Playwright report (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            test-results/
+            playwright-report/
+
+      - name: Repack the fixture consumer tarball (regenerate committed artifact)
+        run: pnpm -C packages/squircle exec npm pack --pack-destination ../../fixtures/consumers/_tarball
+
+      - name: npm pack dry-run (public package)
+        working-directory: packages/squircle
+        run: npm pack --dry-run
+
+  # --- Publishing (tag-gated, secret-minimizing) --------------------------
+  publish:
+    name: Publish @luca-ecosystem/squircle
+    needs: build-test
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # creates the GitHub release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm (pinned version)
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.11.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry: npm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Verify the tag version matches the package
+        working-directory: packages/squircle
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "v$PKG" ]; then
+            echo "::error::Tag $TAG does not match package version $PKG"
+            exit 1
+          fi
+
+      - name: Publish to npm
+        working-directory: packages/squircle
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true

@@ -1,0 +1,100 @@
+/**
+ * Squircle media layer — figures, responsive containers, media
+ * wrappers, placeholders. Intrinsic ratios reserved up-front (no
+ * layout shift); captions and alt text are structural, never
+ * decorative. Native controls are never restyled into mystery meat.
+ * See MEDIA.md.
+ */
+
+/* -- Figures ---------------------------------------------------------------------------------
+ * Image + caption as a unit with room around both.
+ */
+
+.sq-figure {
+  display: grid;
+  gap: var(--sq-space-sm);
+  margin: 0;
+  max-width: 100%;
+}
+
+.sq-figure img,
+.sq-figure video {
+  width: 100%;
+  height: auto;
+  border-radius: var(--sq-radius-md);
+  border: 1px solid var(--sq-color-border);
+}
+
+.sq-figure figcaption {
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-muted);
+  max-width: var(--sq-font-measure);
+}
+
+/* -- Responsive media containers ---------------------------------------------------------------
+ * .sq-media reserves a ratio box; children fill it (iframe, video, or
+ * img with width/height attributes to prevent shift). 16:9 default.
+ */
+
+.sq-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--sq-radius-md);
+  border: 1px solid var(--sq-color-border);
+  background-color: var(--sq-color-background-sunken);
+}
+
+.sq-media--square {
+  aspect-ratio: 1 / 1;
+}
+
+.sq-media--wide {
+  aspect-ratio: 21 / 9;
+}
+
+.sq-media > iframe,
+.sq-media > video,
+.sq-media > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.sq-media > img {
+  object-fit: cover;
+}
+
+/* -- Audio -----------------------------------------------------------------------------------
+ * Native controls, full width, comfortable height. Nothing custom —
+ * every platform's player stays familiar and accessible.
+ */
+
+.sq-audio {
+  display: block;
+  width: 100%;
+  min-height: 3rem;
+}
+
+/* -- Placeholders ----------------------------------------------------------------------------------
+ * Reserved-space loading shells for media that has not arrived. Fixed
+ * ratios (never auto-height mystery boxes); the label names what loads.
+ */
+
+.sq-media-placeholder {
+  display: grid;
+  place-items: center;
+  gap: var(--sq-space-2xs);
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--sq-radius-md);
+  border: 1px dashed var(--sq-color-border-strong);
+  background-color: var(--sq-color-background-sunken);
+  color: var(--sq-color-text-muted);
+  font-size: var(--sq-font-size-sm);
+  padding: var(--sq-space-md);
+  text-align: center;
+}

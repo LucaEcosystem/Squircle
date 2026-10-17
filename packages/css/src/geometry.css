@@ -1,0 +1,31 @@
+/**
+ * Squircle geometry layer — the shape system and its technique.
+ *
+ * Technique:
+ *  - Default: generous circular radii from `--sq-radius-*`, sized to the
+ *    component (small controls ≠ dialogs).
+ *  - Enhancement: where the browser supports `corner-shape: squircle`,
+ *    true continuous-curve squircles replace the circular approximation
+ *    automatically. Unsupported browsers keep the circular fallback, which
+ *    is a complete design in its own right — never a broken one.
+ *  - Nested surfaces step DOWN one radius grade (the nested-surface rule),
+ *    so inset panels read as carved, not stamped.
+ *
+ * Component shape defaults (panel/card/button/input radii, nesting) live
+ * in `components.css` (surfaces) and `forms.css` (controls). This file
+ * keeps the cross-cutting enhancement only.
+ */
+
+@supports (corner-shape: squircle) {
+  .sq-panel,
+  .sq-card,
+  .sq-button,
+  .sq-input,
+  .sq-rounded-xs,
+  .sq-rounded-sm,
+  .sq-rounded-md,
+  .sq-rounded-lg,
+  .sq-rounded-xl {
+    corner-shape: squircle;
+  }
+}

@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Workspace settings — Harbor</title>
+    <meta
+      name="description"
+      content="A forms-and-settings Squircle template: tabbed sections, validation, and toast confirmation."
+    />
+    <script src="../../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../../packages/css/dist/squircle.css" />
+    <link rel="stylesheet" href="../ocean.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#settings-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="landing.html">Harbor</a>
+        <nav aria-label="Primary">
+          <details class="sq-nav-menu" open>
+            <summary>Menu</summary>
+            <ul class="sq-nav">
+              <li>
+                <a class="sq-nav__link" href="dashboard.html">Dashboard</a>
+              </li>
+              <li>
+                <a class="sq-nav__link" href="settings.html" aria-current="page"
+                  >Settings</a
+                >
+              </li>
+              <li><a class="sq-nav__link" href="docs.html">Docs</a></li>
+            </ul>
+          </details>
+        </nav>
+      </div>
+    </header>
+
+    <main id="settings-main">
+      <section class="sq-section">
+        <div class="sq-container--narrow sq-stack--loose sq-stack">
+          <nav aria-label="Breadcrumb">
+            <ol class="sq-breadcrumbs">
+              <li><a href="dashboard.html">Dashboard</a></li>
+              <li aria-current="page">Settings</li>
+            </ol>
+          </nav>
+          <div class="sq-stack">
+            <h1>Workspace settings</h1>
+            <p class="sq-lead">
+              Three sections, one save. Changes confirm with a toast — never a
+              mystery.
+            </p>
+          </div>
+
+          <div data-sq-tabs>
+            <div
+              class="sq-tablist"
+              role="tablist"
+              aria-label="Settings sections"
+            >
+              <button
+                class="sq-tab"
+                role="tab"
+                type="button"
+                aria-controls="set-general"
+                aria-selected="true"
+              >
+                General
+              </button>
+              <button
+                class="sq-tab"
+                role="tab"
+                type="button"
+                aria-controls="set-notify"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                Notifications
+              </button>
+              <button
+                class="sq-tab"
+                role="tab"
+                type="button"
+                aria-controls="set-danger"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                Danger zone
+              </button>
+            </div>
+
+            <section
+              class="sq-tabpanel"
+              role="tabpanel"
+              id="set-general"
+              tabindex="0"
+            >
+              <form class="sq-panel" id="general-form" action="#" method="get">
+                <div class="sq-stack">
+                  <div class="sq-field">
+                    <label for="ws-name">Workspace name</label>
+                    <input
+                      class="sq-input"
+                      id="ws-name"
+                      name="workspace"
+                      type="text"
+                      value="North Pier"
+                      required
+                      aria-describedby="ws-name-error"
+                    />
+                    <p class="sq-field__error" id="ws-name-error" hidden>
+                      Name your workspace.
+                    </p>
+                  </div>
+                  <div class="sq-field">
+                    <label for="ws-tz">Home timezone</label>
+                    <select class="sq-input" id="ws-tz" name="timezone">
+                      <option selected>UTC (recommended for fleets)</option>
+                      <option>Local port time</option>
+                    </select>
+                  </div>
+                  <div class="sq-cluster">
+                    <button class="sq-button sq-button--primary" type="submit">
+                      Save general
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </section>
+
+            <section class="sq-tabpanel" role="tabpanel" id="set-notify" hidden>
+              <form class="sq-panel" id="notify-form" action="#" method="get">
+                <div class="sq-stack">
+                  <label class="sq-switch" for="nt-digest">
+                    <input
+                      type="checkbox"
+                      role="switch"
+                      id="nt-digest"
+                      checked
+                    />
+                    <span class="sq-switch__track" aria-hidden="true"></span>
+                    <span class="sq-check__text"
+                      >Weekly digest
+                      <span class="sq-check__description"
+                        >One email, every Monday.</span
+                      >
+                    </span>
+                  </label>
+                  <fieldset class="sq-fieldset">
+                    <legend>Alert channels</legend>
+                    <label class="sq-check">
+                      <input type="checkbox" checked />
+                      <span class="sq-check__text">Email</span>
+                    </label>
+                    <label class="sq-check">
+                      <input type="checkbox" />
+                      <span class="sq-check__text">Text message</span>
+                    </label>
+                  </fieldset>
+                  <div class="sq-cluster">
+                    <button class="sq-button sq-button--primary" type="submit">
+                      Save notifications
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </section>
+
+            <section class="sq-tabpanel" role="tabpanel" id="set-danger" hidden>
+              <div class="sq-panel">
+                <div class="sq-stack">
+                  <div class="sq-alert sq-alert--error" role="alert">
+                    <span class="sq-alert__icon" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        focusable="false"
+                      >
+                        <path d="M12 4 2.5 20h19L12 4Z" />
+                        <path d="M12 10v4" />
+                      </svg>
+                    </span>
+                    <div class="sq-alert__body">
+                      <p class="sq-alert__title">
+                        Decommissioning removes everything
+                      </p>
+                      <p class="sq-alert__text">
+                        Schedules, rosters, and history. Exports first if
+                        unsure.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="sq-cluster">
+                    <button
+                      class="sq-button sq-button--danger"
+                      type="button"
+                      data-sq-dialog-open="decom-dialog"
+                      id="open-decom"
+                    >
+                      Decommission…
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="sq-dialog" id="decom-dialog" aria-labelledby="decom-title">
+      <button
+        class="sq-button sq-button--secondary sq-button--icon-only sq-dialog__close"
+        type="button"
+        data-sq-dialog-close
+        aria-label="Close dialog"
+      >
+        ✕
+      </button>
+      <div class="sq-stack">
+        <h2 class="sq-heading--3" id="decom-title">Decommission workspace?</h2>
+        <p class="sq-text">
+          North Pier and its history go away. This cannot be undone.
+        </p>
+        <div class="sq-cluster">
+          <button
+            class="sq-button sq-button--danger"
+            type="button"
+            id="confirm-decom"
+          >
+            Decommission workspace
+          </button>
+          <button
+            class="sq-button sq-button--tertiary"
+            type="button"
+            data-sq-dialog-close
+          >
+            Keep it
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      (function () {
+        Squircle.init();
+        for (const id of ["general-form", "notify-form"]) {
+          const form = document.getElementById(id);
+          Squircle.enhanceForm(form);
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            Squircle.notify("Settings saved.", { tone: "success" });
+          });
+        }
+        document
+          .getElementById("confirm-decom")
+          .addEventListener("click", function () {
+            Squircle.closeDialog(document.getElementById("decom-dialog"));
+            Squircle.notify(
+              "Decommission cancelled in this demo — nothing was removed.",
+              {
+                tone: "info",
+                duration: 8000,
+              },
+            );
+          });
+      })();
+    </script>
+  </body>
+</html>

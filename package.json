@@ -1,0 +1,30 @@
+{
+  "name": "squircle-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Squircle CSS and UI framework — monorepo root (Stage 1: core foundation)",
+  "license": "MIT",
+  "packageManager": "pnpm@12.11.2",
+  "type": "module",
+  "scripts": {
+    "build": "corepack pnpm --recursive --workspace-concurrency=1 --filter=!squircle build && corepack pnpm --filter squircle build",
+    "check": "corepack pnpm --recursive --workspace-concurrency=1 check",
+    "lint": "eslint .",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "clean": "corepack pnpm --recursive clean"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.55.0",
+    "eslint": "^9.34.0",
+    "globals": "^17.13.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0",
+    "vitest": "^4.0.0"
+  }
+}

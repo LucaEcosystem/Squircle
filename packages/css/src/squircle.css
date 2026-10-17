@@ -1,0 +1,24 @@
+/**
+ * Squircle complete stylesheet — source entry (Stage 1).
+ *
+ * This file is never shipped directly. `build.mjs` concatenates the layers
+ * below in order, then Lightning CSS prefixes, lowers syntax for the
+ * support baseline (evergreen + Safari 16.4), and writes
+ * `dist/squircle.css` (readable) and `dist/squircle.min.css` (production).
+ *
+ * Layer order IS the cascade contract: fonts -> tokens -> theme ->
+ * base -> typography -> geometry -> layout. Custom themes and user
+ * overrides load after this bundle and win by source order.
+ *
+ * NOTE (file:// support): the fonts @import requires network access. For
+ * fully offline use, self-host the fonts (see themes/src/fonts.css) and
+ * build with `SQUIRCLE_OFFLINE_FONTS=1`.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,700&family=Manrope:wght@700;800&display=swap");
+/* __SQUIRCLE_TOKENS__ */
+/* __SQUIRCLE_LUCA__ */
+/* __SQUIRCLE_BASE__ */
+/* __SQUIRCLE_TYPOGRAPHY__ */
+/* __SQUIRCLE_GEOMETRY__ */
+/* __SQUIRCLE_LAYOUT__ */

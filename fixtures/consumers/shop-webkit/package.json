@@ -1,0 +1,10 @@
+{
+  "name": "chandlery-consumer-test",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Clean-room Squircle consumer: squircle is installed here from a packed tarball by consumer.spec.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@luca-ecosystem/squircle": "file:../_tarball/luca-ecosystem-squircle-1.0.0.tgz"
+  }
+}

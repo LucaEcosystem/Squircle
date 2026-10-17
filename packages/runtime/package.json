@@ -1,0 +1,20 @@
+{
+  "name": "@squircle/runtime",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Squircle browser runtime (framework-independent): theme switching and environment helpers. No TypeScript required by consumers.",
+  "type": "module",
+  "main": "./dist/squircle-runtime.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node ./build.mjs",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

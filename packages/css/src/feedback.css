@@ -1,0 +1,376 @@
+/**
+ * Squircle feedback layer — alerts, toasts, progress, skeletons,
+ * badges, status, empty states. Persistent messages vs transient
+ * notifications are distinct components with distinct announcement
+ * behavior. See FEEDBACK.md.
+ *
+ * Nothing essential depends on color or animation alone: every tone
+ * pairs with an icon + heading/text. Contract: CONTRACT.md.
+ */
+
+/* -- Alerts --------------------------------------------------------------------------------
+ * Persistent, in-flow status messages. Tone border + tinted wash +
+ * icon + title; role comes from markup (alert/status), never CSS.
+ */
+
+.sq-alert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--sq-alert-gap);
+  align-items: start;
+  padding: var(--sq-alert-padding-y) var(--sq-alert-padding-x);
+  border: var(--sq-alert-border-width) solid var(--sq-color-border-strong);
+  border-radius: var(--sq-alert-radius);
+  background-color: var(--sq-color-surface);
+  border-inline-start-width: 4px;
+}
+
+.sq-alert__icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-block-start: 0.125em;
+}
+
+.sq-alert__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sq-alert__body {
+  display: grid;
+  gap: var(--sq-space-3xs);
+  align-content: start;
+  min-width: 0;
+}
+
+.sq-alert__title {
+  font-weight: var(--sq-font-weight-strong);
+  color: var(--sq-color-text-primary);
+}
+
+.sq-alert__text {
+  color: var(--sq-color-text-secondary);
+  font-size: var(--sq-font-size-sm);
+  max-width: var(--sq-font-measure);
+}
+
+.sq-alert--success {
+  border-inline-start-color: var(--sq-color-success);
+}
+.sq-alert--success .sq-alert__icon {
+  color: var(--sq-color-success-text);
+}
+
+.sq-alert--info {
+  border-inline-start-color: var(--sq-color-info);
+}
+.sq-alert--info .sq-alert__icon {
+  color: var(--sq-color-info-text);
+}
+
+.sq-alert--warning {
+  border-inline-start-color: var(--sq-color-warning);
+}
+.sq-alert--warning .sq-alert__icon {
+  color: var(--sq-color-warning-text);
+}
+
+.sq-alert--error {
+  border-inline-start-color: var(--sq-color-error);
+}
+.sq-alert--error .sq-alert__icon {
+  color: var(--sq-color-error-text);
+}
+
+/* -- Toasts ----------------------------------------------------------------------------------
+ * Transient notifications in a live region. The region is fixed
+ * bottom, stacked with gaps; toasts enter with a rise (gated) and
+ * never block content (pointer events only on the toast itself).
+ */
+
+.sq-toasts {
+  position: fixed;
+  z-index: var(--sq-z-index-toast);
+  inset-inline: var(--sq-space-md);
+  bottom: var(--sq-space-md);
+  display: grid;
+  gap: var(--sq-space-sm);
+  justify-items: center;
+  pointer-events: none;
+}
+
+@media (min-width: 48rem) {
+  .sq-toasts {
+    justify-items: end;
+    inset-inline-end: var(--sq-space-lg);
+    bottom: var(--sq-space-lg);
+    inset-inline-start: auto;
+  }
+}
+
+.sq-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sq-toast-gap);
+  max-width: min(var(--sq-toast-max-width), calc(100vw - var(--sq-space-xl)));
+  padding: var(--sq-toast-padding);
+  background-color: var(--sq-toast-background);
+  border: 1px solid var(--sq-toast-border-color);
+  border-inline-start: 4px solid var(--sq-color-info);
+  border-radius: var(--sq-toast-radius);
+  box-shadow: var(--sq-shadow-lg);
+  pointer-events: auto;
+  animation: sq-rise-in var(--sq-motion-duration-base)
+    var(--sq-motion-easing-out);
+}
+
+.sq-toast--success {
+  border-inline-start-color: var(--sq-color-success);
+}
+
+.sq-toast--warning {
+  border-inline-start-color: var(--sq-color-warning);
+}
+
+.sq-toast--error {
+  border-inline-start-color: var(--sq-color-error);
+}
+
+.sq-toast__text {
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-toast {
+    animation: none;
+  }
+}
+
+/* -- Progress ------------------------------------------------------------------------------------
+ * Native <progress> and <meter>, themed and given room. Labels live
+ * outside the element (associated text), values announced natively.
+ */
+
+.sq-progress {
+  display: block;
+  width: 100%;
+  min-height: 0.75rem;
+  accent-color: var(--sq-check-accent-color);
+}
+
+.sq-progress--large {
+  min-height: 1rem;
+}
+
+.sq-progress-label {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sq-space-2xs) var(--sq-space-sm);
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-secondary);
+  margin-block-end: var(--sq-space-2xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* -- Spinner & skeleton -----------------------------------------------------------------------------
+ * Spinner: border-ring, currentColor, frozen (not hidden) under reduced
+ * motion. Skeletons: reserved-space blocks with a shimmer that becomes
+ * a static wash under reduced motion — never empty space that shifts.
+ */
+
+.sq-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 4px solid var(--sq-color-border);
+  border-top-color: var(--sq-color-accent);
+  animation: sq-spin var(--sq-motion-duration-slower)
+    var(--sq-motion-easing-linear) infinite;
+}
+
+.sq-spinner--small {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 3px;
+}
+
+.sq-spinner__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-spinner {
+    animation: none;
+    border-color: var(--sq-color-accent);
+    opacity: 0.45;
+  }
+}
+
+.sq-skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--sq-skeleton-background);
+  border-radius: var(--sq-skeleton-radius);
+  min-height: 1rem;
+}
+
+.sq-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    var(--sq-skeleton-highlight) 50%,
+    transparent 80%
+  );
+  animation: sq-shimmer 1600ms var(--sq-motion-easing-linear) infinite;
+}
+
+@keyframes sq-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-skeleton::after {
+    animation: none;
+    background: none;
+  }
+}
+
+/* -- Badges & status -----------------------------------------------------------------------------------
+ * Badges: small labeled pills (tones pair fill + contrast ink, never
+ * color alone — the LABEL carries meaning). Status: dot + text for
+ * inline presence; the text (not the dot) announces.
+ */
+
+.sq-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sq-space-3xs);
+  padding: var(--sq-badge-padding-y) var(--sq-badge-padding-x);
+  border-radius: var(--sq-badge-radius);
+  font-size: var(--sq-font-size-xs);
+  font-weight: var(--sq-font-weight-strong);
+  line-height: var(--sq-font-line-snug);
+  white-space: nowrap;
+  background-color: var(--sq-color-surface-overlay);
+  color: var(--sq-color-text-primary);
+  border: 1px solid var(--sq-color-border);
+}
+
+.sq-badge--accent {
+  background-color: var(--sq-color-accent);
+  color: var(--sq-color-accent-contrast);
+  border-color: transparent;
+}
+
+.sq-badge--success {
+  background-color: var(--sq-color-success);
+  color: var(--sq-color-success-contrast);
+  border-color: transparent;
+}
+
+.sq-badge--info {
+  background-color: var(--sq-color-info);
+  color: var(--sq-color-info-contrast);
+  border-color: transparent;
+}
+
+.sq-badge--warning {
+  background-color: var(--sq-color-warning);
+  color: var(--sq-color-warning-contrast);
+  border-color: transparent;
+}
+
+.sq-badge--error {
+  background-color: var(--sq-color-error);
+  color: var(--sq-color-error-contrast);
+  border-color: transparent;
+}
+
+.sq-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sq-space-2xs);
+  font-size: var(--sq-font-size-sm);
+  color: var(--sq-color-text-secondary);
+}
+
+.sq-status__dot {
+  width: 0.625em;
+  height: 0.625em;
+  flex: none;
+  border-radius: 50%;
+  background-color: var(--sq-color-text-muted);
+}
+
+.sq-status--success .sq-status__dot {
+  background-color: var(--sq-color-success);
+}
+
+.sq-status--warning .sq-status__dot {
+  background-color: var(--sq-color-warning);
+}
+
+.sq-status--error .sq-status__dot {
+  background-color: var(--sq-color-error);
+}
+
+.sq-status--info .sq-status__dot {
+  background-color: var(--sq-color-info);
+}
+
+/* -- Empty states ------------------------------------------------------------------------------------------
+ * Generous, centered, honest: what is missing, why, and the one next
+ * action. Never a dead end, never a joke that obscures the path.
+ */
+
+.sq-empty {
+  display: grid;
+  gap: var(--sq-space-sm);
+  justify-items: center;
+  text-align: center;
+  padding: var(--sq-space-2xl) var(--sq-space-lg);
+  max-width: var(--sq-font-measure);
+  margin-inline: auto;
+}
+
+.sq-empty__icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--sq-color-text-muted);
+}
+
+.sq-empty__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sq-empty__title {
+  font-family: var(--sq-font-family-display);
+  font-weight: var(--sq-font-weight-display);
+  font-size: var(--sq-font-size-xl);
+  line-height: var(--sq-font-line-snug);
+  text-wrap: balance;
+}
+
+.sq-empty__text {
+  color: var(--sq-color-text-secondary);
+  max-width: var(--sq-font-measure);
+}

@@ -1,0 +1,71 @@
+/**
+ * Luca Ecosystem Theme — explicit `[data-sq-theme="luca"]` declaration.
+ *
+ * The `:root` defaults emitted by `@squircle/tokens` already ARE Luca
+ * values, so this block re-declares them for three reasons:
+ *  1. `Squircle.setTheme("luca")` (runtime) has a concrete target.
+ *  2. Custom-theme authors can read the complete mapping in one place.
+ *  3. `test/luca-css.test.ts` asserts every value here equals the token
+ *     default — drift between this file and the token source fails the
+ *     build instead of shipping a silent fork.
+ *
+ * Mapping policy (see packages/tokens/src/semantic.ts):
+ * - Navy layers deep->raised across page/surface/elevated; never flat.
+ * - Gold is the secondary voice (borders, premium fills, dark-on-gold
+ *   text) — never body copy.
+ * - Vert / Azure / Tangerine are functional accents with dedicated
+ *   `*Text` variants for dark backgrounds; `*Contrast` ink sits on fills.
+ * - Error red (#ff6b6b) is semantic-only; it is not a brand color.
+ */
+
+[data-sq-theme="luca"] {
+  /* Page and surfaces: navy ramp, deepest at the back. */
+  --sq-color-background: #131e33;
+  --sq-color-background-sunken: #0b1222;
+  --sq-color-surface: #1d2d44;
+  --sq-color-surface-elevated: #243655;
+  --sq-color-surface-overlay: #2c4066;
+
+  /* Text: warm paper over navy, mist secondary, fog muted. */
+  --sq-color-text-primary: #f4f1e8;
+  --sq-color-text-secondary: #c9d1e0;
+  --sq-color-text-muted: #a3aec2;
+  --sq-color-text-disabled: #6d7790;
+
+  /* Structure. */
+  --sq-color-border: #33415c;
+  --sq-color-border-strong: #4d6084;
+  --sq-color-divider: #2a3a56;
+
+  /* Interaction. */
+  --sq-color-focus: #00bbff;
+  --sq-color-link: #4dd2ff;
+  --sq-color-link-hover: #8fe3ff;
+  --sq-color-link-visited: #c9a6f2;
+
+  /* Brand voice: gold, used sparingly. */
+  --sq-color-accent: #ae9d5d;
+  --sq-color-accent-bright: #cfc08a;
+  --sq-color-accent-contrast: #0b1222;
+
+  /* Functional accents with contrast-safe text variants. */
+  --sq-color-success: #00ff00;
+  --sq-color-success-text: #7bff7b;
+  --sq-color-success-contrast: #0b1222;
+  --sq-color-info: #00bbff;
+  --sq-color-info-text: #66d9ff;
+  --sq-color-info-contrast: #0b1222;
+  --sq-color-warning: #ff8c00;
+  --sq-color-warning-text: #ffab4d;
+  --sq-color-warning-contrast: #0b1222;
+  --sq-color-error: #ff6b6b;
+  --sq-color-error-text: #ff8585;
+  --sq-color-error-contrast: #0b1222;
+
+  /* Selection, disabled, overlays. */
+  --sq-color-selected-background: #1b3a5c;
+  --sq-color-selected-border: #00bbff;
+  --sq-color-disabled-background: #26334d;
+  --sq-color-scrim: rgba(11, 18, 34, 0.72);
+  --sq-color-shadow-color: rgba(4, 8, 18, 0.45);
+}

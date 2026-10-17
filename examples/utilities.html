@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Squircle Stage 2 — Utility system</title>
+    <meta
+      name="description"
+      content="Every Squircle utility category on one calm page: layout, spacing, type, color, motion, responsive."
+    />
+    <script src="../packages/runtime/dist/squircle-runtime.js"></script>
+    <script>
+      Squircle.initTheme();
+    </script>
+    <link rel="stylesheet" href="../packages/css/dist/squircle.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#util-main">Skip to content</a>
+    <main id="util-main">
+      <section class="sq-section">
+        <div class="sq-container sq-stack--loose sq-stack">
+          <div class="sq-stack sq-max-w-measure">
+            <p class="sq-small sq-muted">Squircle · utility system</p>
+            <h1>Utilities with the same voice.</h1>
+            <p class="sq-lead">
+              Single-purpose classes over shared tokens. This page is built
+              almost entirely from utilities — and still breathes.
+            </p>
+          </div>
+
+          <div class="sq-panel">
+            <div class="sq-stack">
+              <h2 class="sq-text-xl">Layout: flex, grid, alignment</h2>
+              <div
+                class="sq-flex sq-flex-col sq-md-flex-row sq-gap-md sq-items-stretch"
+                id="responsive-row"
+              >
+                <div class="sq-bg-sunken sq-rounded-md sq-p-md sq-flex-1">
+                  <p class="sq-m-0"><strong>Stacks</strong> below 48rem.</p>
+                </div>
+                <div class="sq-bg-sunken sq-rounded-md sq-p-md sq-flex-1">
+                  <p class="sq-m-0"><strong>Rows</strong> at 48rem and up.</p>
+                </div>
+              </div>
+              <div
+                class="sq-grid sq-grid-cols-2 sq-lg-grid-cols-4 sq-gap-sm"
+                id="responsive-grid"
+              >
+                <div
+                  class="sq-bg-selected sq-rounded-sm sq-p-sm sq-text-center"
+                >
+                  A
+                </div>
+                <div
+                  class="sq-bg-selected sq-rounded-sm sq-p-sm sq-text-center"
+                >
+                  B
+                </div>
+                <div
+                  class="sq-bg-selected sq-rounded-sm sq-p-sm sq-text-center"
+                >
+                  C
+                </div>
+                <div
+                  class="sq-bg-selected sq-rounded-sm sq-p-sm sq-text-center"
+                >
+                  D
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sq-panel">
+            <div class="sq-stack">
+              <h2 class="sq-text-xl">Visibility across viewports</h2>
+              <p class="sq-muted" id="visibility-note">
+                Exactly one of these lines is visible at any width.
+              </p>
+              <p class="sq-m-0 sq-md-hidden" id="only-narrow">
+                Narrow viewport: stacked and simple.
+              </p>
+              <p class="sq-m-0 sq-hidden sq-md-block" id="only-wide">
+                Wide viewport: room for side-by-side ideas.
+              </p>
+            </div>
+          </div>
+
+          <div class="sq-grid sq-grid-cols-1 sq-md-grid-cols-2 sq-gap-lg">
+            <div class="sq-card">
+              <div class="sq-stack">
+                <h2 class="sq-text-xl">Type utilities</h2>
+                <p class="sq-text-sm sq-muted">
+                  Small muted meta text sets the scene without shouting.
+                </p>
+                <p
+                  class="sq-truncate"
+                  title="Truncation keeps long single-line strings on one line with an ellipsis."
+                >
+                  Truncation keeps long single-line strings on one line with an
+                  ellipsis.
+                </p>
+                <p class="sq-clamp-2">
+                  Clamping holds paragraphs to two lines: enough to invite a
+                  click, never enough to flood a card with text that belongs on
+                  the article page itself.
+                </p>
+              </div>
+            </div>
+            <div class="sq-card">
+              <div class="sq-stack">
+                <h2 class="sq-text-xl">Color, radius, shadow</h2>
+                <div class="sq-cluster">
+                  <span
+                    class="sq-bg-success sq-rounded-full sq-px-md sq-py-2xs sq-text-sm sq-weight-strong"
+                    >Live</span
+                  >
+                  <span
+                    class="sq-bg-warning sq-rounded-full sq-px-md sq-py-2xs sq-text-sm sq-weight-strong"
+                    >Soon</span
+                  >
+                  <span
+                    class="sq-bg-error sq-rounded-full sq-px-md sq-py-2xs sq-text-sm sq-weight-strong"
+                    >Down</span
+                  >
+                </div>
+                <div
+                  class="sq-bg-elevated sq-border sq-rounded-lg sq-shadow-md sq-p-md sq-transition sq-hover-lift"
+                  id="lift-card"
+                >
+                  <p class="sq-m-0">
+                    Hover lifts this tile. Motion rests when the OS asks it to.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sq-panel sq-overflow-hidden">
+            <div class="sq-stack">
+              <h2 class="sq-text-xl">Motion, gated by preference</h2>
+              <div class="sq-cluster">
+                <div class="sq-bg-sunken sq-rounded-md sq-p-md sq-fade-in">
+                  <p class="sq-m-0">Fades in.</p>
+                </div>
+                <div class="sq-bg-sunken sq-rounded-md sq-p-md sq-rise-in">
+                  <p class="sq-m-0">Rises in.</p>
+                </div>
+                <div class="sq-bg-sunken sq-rounded-md sq-p-md sq-motion-none">
+                  <p class="sq-m-0">Never moves.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

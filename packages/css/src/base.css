@@ -1,0 +1,125 @@
+/**
+ * Squircle base layer — modern reset and document defaults.
+ *
+ * - Border-box everywhere; no margin/padding surprises.
+ * - The page IS the Luca theme: navy-deep background, paper text,
+ *   DM Sans 500 at a comfortable 17px base with generous line height.
+ * - `:focus-visible` is always a 3px azure ring — never removed, never
+ *   restyled into invisibility by components (Stage 3+ rule, stated here).
+ * - `prefers-reduced-motion` disables non-essential animation globally;
+ *   transitions below `durationInstant` are exempt (state feedback).
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--sq-color-background);
+  color: var(--sq-color-text-primary);
+  font-family: var(--sq-font-family-body);
+  font-size: var(--sq-font-size-base);
+  font-weight: var(--sq-font-weight-body);
+  line-height: var(--sq-font-line-body);
+  min-height: 100dvh;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--sq-color-accent);
+  color: var(--sq-color-accent-contrast);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--sq-focus-width, 3px) solid var(--sq-color-focus);
+  outline-offset: var(--sq-focus-offset, 3px);
+  border-radius: var(--sq-radius-xs);
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--sq-color-link);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  color: var(--sq-color-link-hover);
+}
+
+a:visited {
+  color: var(--sq-color-link-visited);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--sq-color-divider);
+  margin-block: var(--sq-space-lg);
+}
+
+/* The `hidden` attribute must always win: component display rules
+ * (flex, grid, :popover-open) must never resurrect hidden content.
+ * Squircle uses `hidden` as its hide contract (tabs, menus, errors). */
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
