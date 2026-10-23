@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Buttons — Squircle docs</title>
+    <meta name="description" content="Purpose:  trigger actions. Semantic HTML is `&lt;button&gt;` with an explicit" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Buttons</h1>
+      <p class="sq-lead">Purpose:  trigger actions. Semantic HTML is <code>&lt;button&gt;</code> with an explicit</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: trigger actions. Semantic HTML is <code>&lt;button&gt;</code> with an explicit <code>type</code> (<code>button</code>, <code>submit</code>, <code>reset</code>). An <code>&lt;a class=&quot;sq-button&quot;&gt;</code> is navigation wearing a button's surface — same look, anchor semantics.</p>
+<h2 id="usage">Usage</h2>
+<pre tabindex="0" aria-label="Example code">&lt;button class=&quot;sq-button sq-button--primary&quot; type=&quot;button&quot;&gt;Continue&lt;/button&gt;
+&lt;button class=&quot;sq-button sq-button--secondary&quot; type=&quot;submit&quot;&gt;Save draft&lt;/button&gt;
+&lt;button class=&quot;sq-button sq-button--tertiary&quot; type=&quot;button&quot;&gt;Not now&lt;/button&gt;
+&lt;button class=&quot;sq-button sq-button--danger&quot; type=&quot;button&quot;&gt;
+  Delete project
+&lt;/button&gt;</pre>
+<h2 id="variants-and-sizes">Variants and sizes</h2>
+<div class="sq-table-scroll" role="region" tabindex="0" aria-label="Data table"><table class="sq-table"><thead><tr><th scope="col">Class</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>sq-button--primary</code></td><td>The one main action per view. Gold fill, ink text.</td></tr><tr><td><code>sq-button--secondary</code></td><td>Alternative actions. Elevated surface, strong border.</td></tr><tr><td><code>sq-button--tertiary</code></td><td>Quiet actions (cancel, dismiss). Transparent until hover.</td></tr><tr><td><code>sq-button--danger</code></td><td>Destructive actions. Error fill + contrast ink. Never the only cue (see below).</td></tr><tr><td><code>sq-button--small</code></td><td>Dense rows only (40px height). Default is <code>md</code> (48px).</td></tr><tr><td><code>sq-button--large</code></td><td>Hero and stretched-touch moments (56px).</td></tr><tr><td><code>sq-button--block</code></td><td>Full-width (forms, mobile sheets).</td></tr><tr><td><code>sq-button--icon-only</code></td><td>Square button for an icon + <code>aria-label</code>.</td></tr></tbody></table></div>
+<h2 id="labels">Labels</h2>
+<p>Keep labels short (1–3 words) — buttons never clip, long labels wrap and stay centered, but a paragraph in a button is a design problem, not a feature. Never communicate meaning through color alone: pair every color cue with an explicit verb.</p>
+<h2 id="icons">Icons</h2>
+<pre tabindex="0" aria-label="Example code">&lt;button class=&quot;sq-button sq-button--secondary&quot; type=&quot;button&quot;&gt;
+  &lt;span class=&quot;sq-button__icon&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;svg
+      viewBox=&quot;0 0 24 24&quot;
+      fill=&quot;none&quot;
+      stroke=&quot;currentColor&quot;
+      stroke-width=&quot;2&quot;
+      focusable=&quot;false&quot;
+    &gt;
+      &lt;path d=&quot;M12 5v14M5 12h14&quot; stroke-linecap=&quot;round&quot; /&gt;
+    &lt;/svg&gt;
+  &lt;/span&gt;
+  New project
+&lt;/button&gt;
+&lt;button
+  class=&quot;sq-button sq-button--secondary sq-button--icon-only&quot;
+  type=&quot;button&quot;
+  aria-label=&quot;Close dialog&quot;
+&gt;
+  &lt;span class=&quot;sq-button__icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;!-- svg --&gt;&lt;/span&gt;
+&lt;/button&gt;</pre>
+<p>Slot rules: <code>.sq-button__icon</code> wraps the SVG, always <code>aria-hidden</code>; icon-only buttons always carry <code>aria-label</code>. The full icon set arrives in Stage 5 — any inline SVG works today.</p>
+<h2 id="states">States</h2>
+<ul><li>Hover/active/focus-visible/disabled are built in. Focus is always the</li></ul>
+<p>theme ring; never restyle it away.</p>
+<ul><li>Disabled: native <code>disabled</code> (cuts activation + tab stop). For</li></ul>
+<p>would-be-disabled links, see LINKS.md.</p>
+<ul><li>Loading: keep the button <code>disabled</code>, add <code>aria-busy=&quot;true&quot;</code>, swap the</li></ul>
+<p>visible label (&quot;Saving…&quot;), and show <code>.sq-button__spinner</code>:</p>
+<pre tabindex="0" aria-label="Example code">&lt;button
+  class=&quot;sq-button sq-button--primary&quot;
+  type=&quot;button&quot;
+  disabled
+  aria-busy=&quot;true&quot;
+&gt;
+  &lt;span class=&quot;sq-button__spinner&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  Saving…
+&lt;/button&gt;</pre>
+<p>Reduced motion freezes the spin; the busy label still communicates.</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li>Meaning never comes from color alone: danger pairs the error fill</li></ul>
+<p>with explicit verbs (&quot;Delete project&quot;, never &quot;Confirm&quot; in red).</p>
+<ul><li>48px default targets; <code>small</code> only where rows are already dense.</li><li>Touch: <code>:active</code> scale is instant feedback; nothing essential happens</li></ul>
+<p>on hover alone.</p>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>A theme may retune semantic tokens; fills derive from tokens, so they follow the retune — Ocean retunes <code>--sq-color-accent</code>, and primary fills ride along (that is one override retuning the surface). Tokens the theme does not retune keep their values: danger stays red under Ocean. Text, radius, spacing, and ring follow the active theme. Verified under Luca and Ocean, including focus-ring contrast.</p>
+<h2 id="customization">Customization</h2>
+<p>Override tokens (<code>--sq-button-radius</code>) or variant properties in a later stylesheet at equal specificity — no <code>!important</code> needed. Do not restyle <code>:focus-visible</code> globally.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li><code>&lt;div class=&quot;sq-button&quot;&gt;</code> — not keyboard-operable, not announced. Use <code>&lt;button&gt;</code>.</li><li><code>&lt;button&gt;</code> without <code>type</code> inside a form — defaults to <code>submit</code>.</li><li>Spinner without a label change — motion-only status excludes</li></ul>
+<p>reduced-motion and screen-reader users.</p>
+<ul><li>Icon-only button without <code>aria-label</code> — announced as &quot;button&quot;, nothing else.</li></ul>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>No split-button variant (deferred post-1.0 — menu-buttons compose from</li></ul>
+<p><code>data-sq-menu</code> + OVERLAYS.md; split-buttons need their own contract).</p>
+<ul><li><code>filter: brightness()</code> hover on primary/danger shifts hue slightly</li></ul>
+<p>under exotic custom themes; acceptable, documented.</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

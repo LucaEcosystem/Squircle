@@ -27,7 +27,7 @@ export {
   isDialogOpen,
   initDialogs,
 } from "./dialog.js";
-export type { MenuHandle } from "./menu.js";
+export type { MenuHandle, MenuOpenOptions } from "./menu.js";
 export { createMenu, initMenus } from "./menu.js";
 export type { PopoverPlacement, PopoverOptions } from "./popover.js";
 export { positionPopover, initPopovers } from "./popover.js";
@@ -38,6 +38,11 @@ export type { ToastTone, ToastOptions, ToastHandle } from "./toast.js";
 export { notify, dismissAll } from "./toast.js";
 export type { ValidatableField } from "./validation.js";
 export { setFieldError, clearFieldError, enhanceForm } from "./validation.js";
+export type { ComboboxHandle } from "./combobox.js";
+export { initComboboxes } from "./combobox.js";
+export type { CarouselHandle } from "./carousel.js";
+export { initCarousels } from "./carousel.js";
+export { initUploads } from "./upload.js";
 export { focusableChildren } from "./dom.js";
 
 import { initDialogs } from "./dialog.js";
@@ -45,12 +50,16 @@ import { initMenus } from "./menu.js";
 import { initPopovers } from "./popover.js";
 import { initTooltips } from "./tooltip.js";
 import { initTabs } from "./tabs.js";
+import { initComboboxes } from "./combobox.js";
+import { initCarousels } from "./carousel.js";
+import { initUploads } from "./upload.js";
 
 /**
  * Initializes every declarative behavior under `root` (dialogs, menus,
- * popovers, tooltips, tabs). Idempotent — elements initialize once no
- * matter how often `init()` runs. Returns a cleanup function that
- * removes all listeners installed by this call.
+ * popovers, tooltips, tabs, comboboxes, carousels, file uploads).
+ * Idempotent — elements initialize once no matter how often `init()`
+ * runs. Returns a cleanup function that removes all listeners installed
+ * by this call.
  */
 export function init(root: ParentNode = document): () => void {
   const cleanups = [
@@ -59,6 +68,9 @@ export function init(root: ParentNode = document): () => void {
     initPopovers(root),
     initTooltips(root),
     initTabs(root),
+    initComboboxes(root),
+    initCarousels(root),
+    initUploads(root),
   ];
   return () => {
     for (const cleanup of cleanups) cleanup();

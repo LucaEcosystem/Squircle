@@ -7,8 +7,9 @@
  */
 
 /* -- Tables --------------------------------------------------------------------------------
- * .sq-table styles a real <table>. Comfortable cells, sticky header
- * wash, row dividers; striped/zebra is opt-in (often noise).
+ * .sq-table styles a real <table>. Comfortable cells, raised header
+ * band, row dividers; striped/zebra is opt-in (often noise). Rows keep
+ * their background on hover via the elevated surface.
  */
 
 .sq-table-scroll {
@@ -22,7 +23,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: var(--sq-font-size-sm);
-  min-width: 36rem;
+  min-width: var(--sq-table-min-width);
 }
 
 .sq-table caption {
@@ -44,14 +45,14 @@
 .sq-table th,
 .sq-table td {
   padding: var(--sq-table-cell-padding-y) var(--sq-table-cell-padding-x);
-  border-bottom: 1px solid var(--sq-table-row-border-color);
+  border-block-end: 1px solid var(--sq-table-row-border-color);
   vertical-align: top;
   overflow-wrap: anywhere;
 }
 
 .sq-table tbody tr:last-child th,
 .sq-table tbody tr:last-child td {
-  border-bottom: none;
+  border-block-end: none;
 }
 
 .sq-table tbody tr:hover {
@@ -84,11 +85,11 @@
   display: grid;
   gap: var(--sq-space-3xs);
   padding-block-end: var(--sq-space-sm);
-  border-bottom: 1px solid var(--sq-color-divider);
+  border-block-end: 1px solid var(--sq-color-divider);
 }
 
 .sq-datalist > div:last-child {
-  border-bottom: none;
+  border-block-end: none;
   padding-block-end: 0;
 }
 
@@ -178,4 +179,89 @@
 
 .sq-metric__delta--down {
   color: var(--sq-color-error-text);
+}
+
+/* -- Timeline ---------------------------------------------------------------------------------------------
+ * Activity feed: a rail of markers with content beside them. The rail is
+ * the li's own border (::before), drawn between the previous and the
+ * marker; it never crosses the last entry. Content is plain flow:
+ * title, detail, and any meta chips compose with their own components.
+ */
+
+.sq-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sq-space-sm);
+}
+
+.sq-timeline__entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sq-space-md);
+  padding-block-end: var(--sq-space-md);
+}
+
+/* The rail segment runs from this marker to the next one. */
+.sq-timeline__entry::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--sq-timeline-marker) / 2);
+  width: var(--sq-timeline-rail-width);
+  transform: translateX(-50%);
+  background-color: var(--sq-timeline-rail-color);
+}
+
+.sq-timeline__entry:last-child::before {
+  content: none;
+}
+
+.sq-timeline__marker {
+  position: relative;
+  z-index: 1;
+  width: var(--sq-timeline-marker);
+  height: var(--sq-timeline-marker);
+  border-radius: var(--sq-timeline-marker);
+  border: 2px solid var(--sq-timeline-marker-border);
+  background-color: var(--sq-timeline-marker-color);
+  align-self: start;
+  margin-block-start: 0.1875rem;
+}
+
+/* Muted entries (planned, pending): hollow marker on the rail. */
+.sq-timeline__entry--muted .sq-timeline__marker {
+  background-color: var(--sq-color-surface);
+}
+
+.sq-timeline__content {
+  display: grid;
+  gap: var(--sq-space-3xs);
+  align-content: start;
+  min-width: 0;
+}
+
+.sq-timeline__time {
+  color: var(--sq-color-text-muted);
+  font-size: var(--sq-font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.sq-timeline__title {
+  color: var(--sq-color-text-primary);
+  font-weight: var(--sq-font-weight-strong);
+}
+
+.sq-timeline__detail {
+  color: var(--sq-color-text-secondary);
+  font-size: var(--sq-font-size-sm);
+  max-width: var(--sq-font-measure);
+}
+
+.sq-timeline__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sq-space-2xs);
 }

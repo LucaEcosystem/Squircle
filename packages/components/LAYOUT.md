@@ -70,5 +70,5 @@ handle wide tables/code — never the page itself.
 ## Tested limitations
 
 - No masonry/source-order-independent layouts (write page CSS).
-- `sq-grid-auto` minimum (18rem) is fixed; narrower tiles need an
-  explicit grid.
+- `sq-grid-auto` tiles never shrink below `--sq-layout-tile-min` (18rem
+  default); narrower tiles need an explicit grid or a token override.

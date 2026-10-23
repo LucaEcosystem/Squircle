@@ -29,15 +29,15 @@ experience is HTML/CSS/JS.
 
 ## Features
 
-| Area              | Highlights                                                                                                          |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| **Geometry**      | Squircle-inspired corner treatment with `corner-shape` enhancement and generous radii fallback                      |
-| **Whitespace**    | Section rhythm token (`clamp(4rem, 8vw, 7rem)`); interfaces never feel cramped                                      |
-| **Themes**        | Luca Ecosystem Theme is the default; ship your own by overriding semantic tokens                                    |
-| **Components**    | Buttons, inputs, forms, cards, panels, dialogs, menus, popovers, tooltips, tabs, toasts, alerts, data tables, media |
-| **Utilities**     | Layout, spacing, typography, color, geometry, responsive + container-query primitives                               |
-| **Icons**         | 44 original glyphs, `currentColor`-driven, sized by context                                                         |
-| **Accessibility** | WCAG 2.2 AA target; always-visible focus; honors `prefers-reduced-motion`                                           |
+| Area              | Highlights                                                                                                                                                                                |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Geometry**      | Squircle-inspired corner treatment with `corner-shape` enhancement and generous radii fallback                                                                                            |
+| **Whitespace**    | Section rhythm token (`clamp(4rem, 8vw, 7rem)`); interfaces never feel cramped                                                                                                            |
+| **Themes**        | Luca Ecosystem Theme is the default; ship your own by overriding semantic tokens                                                                                                          |
+| **Components**    | Buttons, inputs, forms, cards, panels, dialogs, menus, popovers, tooltips, tabs, toasts, alerts, data tables, media, combobox, stepper, upload, chips, banner, carousel, rating, timeline |
+| **Utilities**     | Layout, spacing, typography, color, geometry, responsive + container-query primitives                                                                                                     |
+| **Icons**         | 44 original glyphs, `currentColor`-driven, sized by context                                                                                                                               |
+| **Accessibility** | WCAG 2.2 AA target; always-visible focus; honors `prefers-reduced-motion`                                                                                                                 |
 
 ## Quick start (plain HTML, no build)
 
@@ -97,6 +97,7 @@ The runtime also exposes these named exports:
 `setTheme`, `getTheme`, `resetTheme`, `initTheme`, `init`, `initDialogs`,
 `openDialog`, `closeDialog`, `isDialogOpen`, `initMenus`, `initPopovers`,
 `positionPopover`, `initTooltips`, `initTabs`, `createTabs`, `createMenu`,
+`initComboboxes`, `initCarousels`, `initUploads`,
 `notify`, `dismissAll`, `enhanceForm`, `setFieldError`, `clearFieldError`,
 `prefersReducedMotion`, `onReducedMotionChange`, `onThemeChange`,
 `focusableChildren`.
@@ -122,16 +123,18 @@ back to generous radii elsewhere.
 
 ## Repository layout
 
-| Package                    | Purpose                                                                    |
-| -------------------------- | -------------------------------------------------------------------------- |
-| `@luca-ecosystem/squircle` | **Public** npm package — assembled `dist/` (CSS + runtime + icons + types) |
-| `@squircle/css`            | CSS foundation, geometry, components, and utilities                        |
-| `@squircle/runtime`        | Framework-independent browser runtime (IIFE + ESM)                         |
-| `@squircle/tokens`         | Design-token source of truth; emits CSS custom properties                  |
-| `@squircle/themes`         | Theme registry, validation, and the Luca Ecosystem Theme                   |
-| `@squircle/icons`          | 44 original SVG icons (sprite, individual files, manifest)                 |
-| `@squircle/build-tools`    | `sq-trim` production unused-CSS removal                                    |
-| `@squircle/components`     | Component HTML contracts and documentation                                 |
+| Package                    | Purpose                                                                       |
+| -------------------------- | ----------------------------------------------------------------------------- |
+| `@luca-ecosystem/squircle` | **Public** npm package — assembled `dist/` (CSS + runtime + icons + types)    |
+| `@squircle/css`            | CSS foundation, geometry, components, and utilities                           |
+| `@squircle/runtime`        | Framework-independent browser runtime (IIFE + ESM)                            |
+| `@squircle/tokens`         | Design-token source of truth; emits CSS custom properties                     |
+| `@squircle/themes`         | Theme registry, validation, and the Luca Ecosystem Theme                      |
+| `@squircle/icons`          | 44 original SVG icons (sprite, individual files, manifest)                    |
+| `@squircle/build-tools`    | `sq-trim` production unused-CSS removal                                       |
+| `@luca-ecosystem/sq-trim`  | **Public** npm handle for the `sq-trim` CLI (executes the build-tools engine) |
+| `docs-site/`               | Generated component reference site (`pnpm site:build`)                        |
+| `@squircle/components`     | Component HTML contracts and documentation                                    |
 
 The `@squircle/*` internal packages are workspace-only; the public surface
 is `@luca-ecosystem/squircle`.

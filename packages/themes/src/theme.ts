@@ -11,7 +11,13 @@
  * dark theme, and `data-sq-theme="luca"` re-declares them explicitly.
  */
 
-import { contrastRatio, flattenTokens, semantic } from "@squircle/tokens";
+import {
+  aaContrastPairs,
+  contrastRatio,
+  flattenTokens,
+  semantic,
+  tokenVarName,
+} from "@squircle/tokens";
 
 export interface ThemeDefinition {
   /** Unique theme name; used as `data-sq-theme="<name>"`. */
@@ -70,7 +76,10 @@ const AA_TEXT = 4.5;
 /**
  * Checks the resolved theme's text/background and fill pairs against
  * WCAG 2.2 AA. Returns human-readable failures; empty means compliant.
- * Non-text pairs (borders, shadows) are intentionally not asserted here.
+ * Iterates the canonical pair list from `@squircle/tokens` — the same
+ * list the Luca token suite pins — so every custom theme gets the
+ * identical guarantee. Non-text pairs (borders, shadows) are
+ * intentionally not asserted here.
  */
 export function checkThemeContrast(
   resolved: Record<string, string>,
@@ -80,17 +89,10 @@ export function checkThemeContrast(
     if (value === undefined) throw new Error(`missing token ${name}`);
     return value;
   };
-  const pairs: Array<[string, string]> = [
-    ["--sq-color-text-primary", "--sq-color-background"],
-    ["--sq-color-text-secondary", "--sq-color-background"],
-    ["--sq-color-text-muted", "--sq-color-background"],
-    ["--sq-color-text-primary", "--sq-color-surface"],
-    ["--sq-color-text-muted", "--sq-color-surface-elevated"],
-    ["--sq-color-link", "--sq-color-background"],
-    ["--sq-color-accent-contrast", "--sq-color-accent"],
-  ];
   const issues: ThemeIssue[] = [];
-  for (const [fgName, bgName] of pairs) {
+  for (const { fg, bg } of aaContrastPairs) {
+    const fgName = tokenVarName("color", [fg]);
+    const bgName = tokenVarName("color", [bg]);
     let ratio: number;
     try {
       ratio = contrastRatio(v(fgName), v(bgName));

@@ -44,6 +44,23 @@ const publicClasses = [
   "sq-switch__track",
   "sq-range",
   "sq-range__value",
+  // 1.1 additions
+  "sq-select",
+  "sq-select--native",
+  "sq-file",
+  "sq-file__input",
+  "sq-file__zone",
+  "sq-file__icon",
+  "sq-file__title",
+  "sq-file__hint",
+  "sq-rating",
+  "sq-rating__star",
+  "sq-rating__input",
+  "sq-combobox",
+  "sq-combobox__list",
+  "sq-combobox__option",
+  "sq-combobox__empty",
+  "sq-combobox__meta",
 ];
 
 describe("form naming contract", () => {

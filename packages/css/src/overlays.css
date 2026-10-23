@@ -49,18 +49,25 @@
   inset-inline-end: var(--sq-space-md);
 }
 
-/* Dialogs need positioning context for the close button. */
-dialog.sq-dialog {
+/* Modal dialogs need a positioning context for the close button (and
+ * the native centered look); modeless dialogs flow in place, keeping
+ * the platform's default non-modal behavior. */
+dialog.sq-dialog:modal {
   position: fixed;
   inset: 0;
 }
 
 /* -- Menu -------------------------------------------------------------------------------
  * Action menus (role="menu"): elevated surface, generous items, hint
- * column. Navigation is NOT a menu — use links (LINKS.md).
+ * column. Positioned absolute + dropdown z-tier so opening never shifts
+ * the document flow; the nearest positioned ancestor anchors it —
+ * author the menu beside its trigger inside a positioned container.
+ * Navigation is NOT a menu — use links (LINKS.md).
  */
 
 .sq-menu {
+  position: absolute;
+  z-index: var(--sq-z-index-dropdown);
   min-width: var(--sq-menu-min-width);
   max-width: min(20rem, calc(100vw - var(--sq-space-lg)));
   margin: 0;
@@ -86,7 +93,7 @@ dialog.sq-dialog {
   font: inherit;
   text-align: start;
   cursor: pointer;
-  min-height: 2.75rem;
+  min-height: var(--sq-menu-item-min-height);
 }
 
 .sq-menu__item:hover,
@@ -99,7 +106,7 @@ dialog.sq-dialog {
 }
 
 .sq-menu__item[aria-disabled="true"] {
-  opacity: 0.55;
+  opacity: var(--sq-opacity-disabled-action);
   cursor: not-allowed;
 }
 

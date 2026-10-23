@@ -101,10 +101,22 @@ limitation) — use the classic script for direct-file pages.
 
 ## Production trimming
 
-Ship the complete bundle, or trim provably-unused styles. The
-repository's `sq-trim` tool (conservative by design: keeps used,
-safelisted, structural, token, theme, keyframe, and state-variant
-styles) documents safelists, dynamic-class handling, and diagnostics.
+Ship the complete bundle, or trim provably-unused styles with the
+`sq-trim` CLI (conservative by design: keeps used, safelisted,
+structural, token, theme, keyframe, and state-variant styles):
+
+```sh
+npx @luca-ecosystem/sq-trim \
+  --css node_modules/@luca-ecosystem/squircle/dist/squircle.min.css \
+  --sources "src/**/*.html" --sources "src/**/*.js" \
+  --out dist/squircle.trimmed.css --report dist/sq-trim.json
+```
+
+The engine and its full documentation (safelists, dynamic-class
+handling, diagnostics, exit codes) live in
+[`@squircle/build-tools`](https://github.com/LucaEcosystem/Squircle/tree/main/Framework/packages/build-tools);
+the public npm handle is
+[`@luca-ecosystem/sq-trim`](https://www.npmjs.com/package/@luca-ecosystem/sq-trim).
 Dynamic classes (`sq-badge--${tone}`) need explicit safelist entries —
 the tool reports them instead of guessing.
 

@@ -58,6 +58,26 @@ const feedbackClasses = [
   "sq-empty__icon",
   "sq-empty__title",
   "sq-empty__text",
+  // 1.1 additions: chips + banner
+  "sq-chips",
+  "sq-chip",
+  "sq-chip__text",
+  "sq-chip__remove",
+  "sq-chip--accent",
+  "sq-chip--success",
+  "sq-chip--info",
+  "sq-chip--warning",
+  "sq-chip--error",
+  "sq-banner",
+  "sq-banner__body",
+  "sq-banner__title",
+  "sq-banner__text",
+  "sq-banner__icon",
+  "sq-banner__close",
+  "sq-banner--success",
+  "sq-banner--info",
+  "sq-banner--warning",
+  "sq-banner--error",
 ];
 
 const mediaClasses = [
@@ -67,6 +87,14 @@ const mediaClasses = [
   "sq-media--wide",
   "sq-audio",
   "sq-media-placeholder",
+  // 1.1 addition: carousel
+  "sq-carousel",
+  "sq-carousel__track",
+  "sq-carousel__slide",
+  "sq-carousel__slide--half",
+  "sq-carousel__controls",
+  "sq-carousel__prev",
+  "sq-carousel__next",
 ];
 
 describe("stage 5 naming contract (feedback/media)", () => {

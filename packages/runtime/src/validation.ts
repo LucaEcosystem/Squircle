@@ -6,12 +6,30 @@
  * `aria-describedby`, creating the message element, and moving focus to
  * the first problem on submit. No custom validity engine, no shadow
  * validity state to drift from the platform.
+ *
+ * Message ids: an author-provided input id wins (`<id>-error`). Fields
+ * without ids get ids scoped to their form (`<form-id>-<name>-error`)
+ * so two forms never steal each other's message element.
  */
 
-function fieldErrorId(input: Element): string {
-  const base =
-    input.id !== "" ? input.id : (input.getAttribute("name") ?? "field");
-  return `${base}-error`;
+import { INITIALIZED_ATTRS } from "./dom.js";
+
+let formSerial = 0;
+const formScopes = new WeakMap<HTMLFormElement, string>();
+
+function fieldErrorId(input: ValidatableField): string {
+  if (input.id !== "") return `${input.id}-error`;
+  const name = input.getAttribute("name") || "field";
+  const form = input.closest("form");
+  if (form instanceof HTMLFormElement) {
+    let scope = formScopes.get(form);
+    if (scope === undefined) {
+      scope = form.id !== "" ? form.id : `sq-form-${++formSerial}`;
+      formScopes.set(form, scope);
+    }
+    return `${scope}-${name}-error`;
+  }
+  return `${name}-error`;
 }
 
 function messageElement(input: HTMLElement, id: string): HTMLElement {
@@ -84,10 +102,10 @@ export function clearFieldError(input: ValidatableField): void {
  * the rest are ignored until the next task.
  */
 export function enhanceForm(form: HTMLFormElement): () => void {
-  if (form.hasAttribute("data-sq-initialized")) {
+  if (form.hasAttribute(INITIALIZED_ATTRS.form)) {
     return () => undefined;
   }
-  form.setAttribute("data-sq-initialized", "");
+  form.setAttribute(INITIALIZED_ATTRS.form, "");
   const controller = new AbortController();
   let handling = false;
   form.addEventListener(
@@ -107,5 +125,6 @@ export function enhanceForm(form: HTMLFormElement): () => void {
   );
   return () => {
     controller.abort();
+    form.removeAttribute(INITIALIZED_ATTRS.form);
   };
 }

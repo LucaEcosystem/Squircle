@@ -38,6 +38,13 @@ Or a config file (`--config squircle.config.json`):
 Glob subset: `*`, `**`, `?`, `{a,b}`. `node_modules` and `dist` are
 never scanned.
 
+Config entries may mix `prefix` and `pattern` — a dual entry applies
+BOTH (a match from either keeps the class — conservative, never a
+silent drop) and a warning names the entry so it can be tightened.
+Warnings (that one, skipped unreadable directories, and malformed CSS
+tails) go to stderr as `sq-trim: warning: …` and never change the exit
+code; every trimmed CSS is still complete.
+
 ## What is kept, unconditionally
 
 `:root` token variables (utilities resolve them at runtime — dropping

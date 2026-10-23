@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Layout primitives — Squircle docs</title>
+    <meta name="description" content="Purpose:  compose interfaces from a small set of content-first" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Layout primitives</h1>
+      <p class="sq-lead">Purpose:  compose interfaces from a small set of content-first</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: compose interfaces from a small set of content-first primitives. Primitives position; utilities fine-tune; components fill. If a layout needs a new primitive, it probably needs restructuring.</p>
+<h2 id="the-set">The set</h2>
+<div class="sq-table-scroll" role="region" tabindex="0" aria-label="Data table"><table class="sq-table"><thead><tr><th scope="col">Primitive</th><th scope="col">Rule</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>.sq-container</code> (+ <code>--narrow</code>, <code>--wide</code>)</td><td>Centered, capped width, breathing gutters</td><td>Page content</td></tr><tr><td><code>.sq-section</code></td><td>Generous vertical rhythm (<code>section</code> token)</td><td>Major page sections; pages scroll</td></tr><tr><td><code>.sq-stack</code> (+ <code>--tight</code>, <code>--loose</code>)</td><td>Even vertical gaps between flow children</td><td>Any stacked content</td></tr><tr><td><code>.sq-cluster</code></td><td>Wrapping row with real gaps</td><td>Buttons, chips, meta rows — never collides</td></tr><tr><td><code>.sq-split</code></td><td>Wrapping row, space-between</td><td>Header rows, footers, label/value lines</td></tr><tr><td><code>.sq-grid-auto</code></td><td>Intrinsic responsive grid (no breakpoint math)</td><td>Card listings</td></tr><tr><td><code>.sq-divider</code> (+ <code>--vertical</code>, <code>--spacious</code>)</td><td>Token-spaced separator</td><td>Between sections or inline groups</td></tr></tbody></table></div>
+<h2 id="composition-patterns">Composition patterns</h2>
+<p>Page: <code>sq-section &gt; sq-container &gt; sq-stack--loose</code>. Header row: <code>sq-split</code> (title left, actions right — wraps on narrow). Card grid: <code>sq-grid-auto</code>, or explicit <code>sq-grid sq-grid-cols-*</code> with responsive prefixes for exact column counts. Form: <code>sq-panel &gt; sq-stack &gt; sq-field*</code> (fields own their labels, help, and errors; see Stage 4 for full form behavior).</p>
+<pre tabindex="0" aria-label="Example code">&lt;section class=&quot;sq-section&quot;&gt;
+  &lt;div class=&quot;sq-container sq-stack--loose sq-stack&quot;&gt;
+    &lt;div class=&quot;sq-split&quot;&gt;
+      &lt;h2 class=&quot;sq-heading--2&quot;&gt;Projects&lt;/h2&gt;
+      &lt;div class=&quot;sq-cluster&quot;&gt;
+        &lt;button class=&quot;sq-button sq-button--secondary&quot; type=&quot;button&quot;&gt;
+          Filter
+        &lt;/button&gt;
+        &lt;button class=&quot;sq-button sq-button--primary&quot; type=&quot;button&quot;&gt;New&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;sq-grid-auto&quot;&gt;
+      &lt;article class=&quot;sq-card&quot;&gt;…&lt;/article&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</pre>
+<h2 id="rules">Rules</h2>
+<ul><li>Sections grow; pages scroll. Never cap heights to &quot;fit the viewport&quot;.</li><li>Narrow viewports stack (<code>flex-col</code>, single column) — never squeeze.</li><li><code>sq-cluster</code>/<code>sq-split</code> wrap by default; controls keep ≥13px gaps.</li><li>Dividers separate; they never decorate. One per boundary.</li><li>Vertical dividers stretch (<code>align-self: stretch</code>) and are</li></ul>
+<p><code>aria-hidden=&quot;true&quot;</code> when purely visual between labeled groups.</p>
+<h2 id="responsive-notes">Responsive notes</h2>
+<p>Primitives are fluid by construction. Add responsive utilities (<code>sq-md-flex-row</code>, <code>sq-lg-grid-cols-3</code>) only for deliberate breakpoints, documented in UTILITIES.md. Overflow utilities (<code>sq-overflow-x-auto</code>) handle wide tables/code — never the page itself.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li>New wrapper classes per page (<code>project-list</code>, <code>dashboard-grid</code>) when</li></ul>
+<p><code>sq-grid-auto</code> or <code>sq-stack</code> already compose.</p>
+<ul><li>Fixed heights on content regions — content decides height.</li><li><code>sq-split</code> for three balanced columns — that's a grid.</li></ul>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>No masonry/source-order-independent layouts (write page CSS).</li><li><code>sq-grid-auto</code> tiles never shrink below <code>--sq-layout-tile-min</code> (18rem</li></ul>
+<p>default); narrower tiles need an explicit grid or a token override.</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

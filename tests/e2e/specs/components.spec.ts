@@ -135,13 +135,13 @@ test("Ocean re-skins components without markup changes", async ({ page }) => {
     "background-color",
     "rgb(6, 34, 46)",
   );
-  // Precedence per CONTRACT.md §4: the primary FILL stays Luca gold
-  // (the fill IS the variant default), while surfaces, text, and
-  // structure follow Ocean.
+  // Precedence per CONTRACT.md §4: fills derive from semantic tokens, so
+  // Ocean's accent retune (#e0a458) reaches accent-derived fills, while
+  // surfaces, text, and structure follow Ocean as well.
   await expect(page.locator("#button-variants .sq-button--primary")).toHaveCSS(
     "background-color",
-    "rgb(174, 157, 93)",
-  ); // variant default wins for the fill
+    "rgb(224, 164, 88)",
+  ); // fill follows Ocean's accent retune
   await expect(page.locator(".sq-card").first()).toHaveCSS(
     "background-color",
     "rgb(15, 58, 77)", // ocean surface-elevated

@@ -1,6 +1,6 @@
 {
   "name": "@squircle/icons",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "Squircle custom-drawn icon library (original work, MIT): SVG sprite, per-icon files, manifest",
   "private": true,

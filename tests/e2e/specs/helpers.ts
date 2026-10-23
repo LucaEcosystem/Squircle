@@ -6,18 +6,65 @@
 
 import type { Page } from "@playwright/test";
 
+export interface SquircleMenuHandle {
+  open(options?: { focus?: string }): void;
+  close(restoreFocus?: boolean): void;
+  readonly isOpen: boolean;
+  destroy(): void;
+}
+
+export interface SquircleTabsHandle {
+  select(index: number): void;
+  readonly selectedIndex: number;
+  destroy(): void;
+}
+
+export interface SquircleThemeChange {
+  previous: string;
+  current: string;
+}
+
+export interface SquircleToastOptions {
+  tone?: string;
+  duration?: number;
+  region?: HTMLElement;
+  dismissLabel?: string;
+}
+
 export interface SquircleBrowserApi {
   setTheme(name: string): void;
   getTheme(): string;
   resetTheme(): void;
   prefersReducedMotion(): boolean;
-  openDialog(dialog: HTMLDialogElement, options?: { modal?: boolean }): void;
+  onThemeChange(listener: (event: SquircleThemeChange) => void): () => void;
+  onReducedMotionChange(listener: (reduced: boolean) => void): () => void;
+  openDialog(
+    dialog: HTMLDialogElement,
+    options?: { modal?: boolean; invoker?: Element | null },
+  ): void;
   closeDialog(dialog: HTMLDialogElement, restoreFocus?: boolean): void;
   isDialogOpen(dialog: HTMLDialogElement): boolean;
+  initDialogs(root?: ParentNode): () => void;
+  createMenu(trigger: HTMLElement, menu: HTMLElement): SquircleMenuHandle;
+  initMenus(root?: ParentNode): () => void;
+  positionPopover(
+    trigger: Element,
+    popover: HTMLElement,
+    options?: { placement?: string; offset?: number },
+  ): void;
+  initPopovers(root?: ParentNode): () => void;
+  initTooltips(root?: ParentNode): () => void;
+  createTabs(tablist: HTMLElement): SquircleTabsHandle;
+  initTabs(root?: ParentNode): () => void;
+  initComboboxes(root?: ParentNode): () => void;
+  initCarousels(root?: ParentNode): () => void;
+  initUploads(root?: ParentNode): () => void;
+  init(root?: ParentNode): void;
   setFieldError(input: Element, message: string): void;
   clearFieldError(input: Element): void;
-  notify(message: string, options?: { tone?: string; duration?: number }): void;
-  dismissAll(): void;
+  notify(message: string, options?: SquircleToastOptions): void;
+  dismissAll(region?: HTMLElement): void;
+  focusableChildren(root: ParentNode): HTMLElement[];
 }
 
 declare global {

@@ -86,6 +86,46 @@ decorative — no `role="img"` needed.
 Fluid display numerals, tabular figures, deltas pair arrows with
 words (direction never travels alone; color never travels alone).
 
+## Timeline (activity feed)
+
+```html
+<ol class="sq-timeline">
+  <li class="sq-timeline__entry">
+    <div class="sq-timeline__marker" aria-hidden="true"></div>
+    <div class="sq-timeline__content">
+      <time class="sq-timeline__time" datetime="2026-10-23T09:41:00+02:00"
+        >Today, 09:41</time
+      >
+      <p class="sq-timeline__title">Deploy succeeded</p>
+      <p class="sq-timeline__detail">
+        Release candidate 3 shipped to production.
+      </p>
+      <div class="sq-timeline__meta">
+        <span class="sq-chip sq-chip--success"
+          ><span class="sq-chip__text">production</span></span
+        >
+      </div>
+    </div>
+  </li>
+  <li class="sq-timeline__entry sq-timeline__entry--muted">
+    <div class="sq-timeline__marker" aria-hidden="true"></div>
+    <div class="sq-timeline__content">
+      <time class="sq-timeline__time" datetime="2026-10-22T16:20:00+02:00"
+        >Yesterday, 16:20</time
+      >
+      <p class="sq-timeline__title">Rollback rehearsal</p>
+      <p class="sq-timeline__detail">Staged the previous candidate.</p>
+    </div>
+  </li>
+</ol>
+```
+
+The rail is drawn between entries by CSS — never in markup. Content is
+plain flow: `time` first (machine datetime, human text), then title,
+detail, and any meta (chips from FEEDBACK.md compose naturally). The
+default marker fills with the accent; `--muted` entries get a hollow
+marker for planned/pending events.
+
 ## Accessibility
 
 - Table headers scope correctly; captions name the table; scroll
@@ -120,6 +160,10 @@ wrap, numbers stay tabular, captions stay readable.
 - `th` without `scope` — association becomes guesswork.
 - Missing captions ("the table below") — name it.
 - Zebra striping + hover + selected + sorted all at once — pick one emphasis.
+- Timeline rail drawn as a div/character run — it is CSS; entries stay
+  plain list items.
+- Timeline as fake headings-of-events without `time` — timestamps
+  deserve machine-readable datetimes.
 
 ## Tested limitations
 
@@ -127,3 +171,5 @@ wrap, numbers stay tabular, captions stay readable.
   application logic; the styles support them when added).
 - No virtualized tables (1.1+ candidate, documented exclusion).
 - Column pinning (`position: sticky` cells) is page CSS, untested.
+- The timeline does not announce marker colors or kinds — semantics
+  belong in text (use the chip or `--muted` with a text label).

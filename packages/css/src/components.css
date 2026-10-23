@@ -50,7 +50,7 @@
 }
 
 .sq-button--primary:hover {
-  filter: brightness(1.08);
+  filter: brightness(var(--sq-button-hover-brightness));
 }
 
 .sq-button--secondary {
@@ -79,7 +79,7 @@
 }
 
 .sq-button--danger:hover {
-  filter: brightness(1.1);
+  filter: brightness(var(--sq-button-danger-hover-brightness));
 }
 
 .sq-button--small {
@@ -102,7 +102,7 @@
 .sq-button:disabled,
 .sq-button[aria-disabled="true"] {
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: var(--sq-opacity-disabled-action);
   transform: none;
   filter: none;
 }
@@ -152,7 +152,7 @@
   .sq-button__spinner {
     animation: none;
     border-color: currentColor;
-    opacity: 0.6;
+    opacity: var(--sq-opacity-still-nested);
   }
   .sq-button:active {
     transform: none;
@@ -261,7 +261,7 @@
   gap: var(--sq-space-2xs);
   padding-block-end: var(--sq-space-md);
   margin-block-end: var(--sq-space-md);
-  border-bottom: 1px solid var(--sq-color-divider);
+  border-block-end: 1px solid var(--sq-color-divider);
 }
 
 .sq-panel__header > :last-child {
@@ -281,7 +281,7 @@
   align-items: center;
   padding-block-start: var(--sq-space-md);
   margin-block-start: var(--sq-space-md);
-  border-top: 1px solid var(--sq-color-divider);
+  border-block-start: 1px solid var(--sq-color-divider);
 }
 
 /* Nested surfaces: carved, not stamped. */
@@ -332,7 +332,7 @@
 
 .sq-divider {
   border: none;
-  border-top: 1px solid var(--sq-color-divider);
+  border-block-start: 1px solid var(--sq-color-divider);
   margin-block: var(--sq-space-md);
 }
 
@@ -341,7 +341,7 @@
 }
 
 .sq-divider--vertical {
-  border-top: none;
+  border-block-start: none;
   border-inline-start: 1px solid var(--sq-color-divider);
   align-self: stretch;
   margin-inline: var(--sq-space-sm);
@@ -394,7 +394,7 @@
 
 .sq-code {
   font-family: var(--sq-font-family-mono);
-  font-size: 0.9em;
+  font-size: var(--sq-font-size-code);
   background-color: var(--sq-color-background-sunken);
   border: 1px solid var(--sq-color-border);
   border-radius: var(--sq-radius-xs);
@@ -414,7 +414,7 @@
   gap: var(--sq-tab-gap);
   min-width: 0;
   overflow-x: auto;
-  border-bottom: 1px solid var(--sq-color-divider);
+  border-block-end: 1px solid var(--sq-color-divider);
   padding-block-end: var(--sq-space-2xs);
 }
 
@@ -430,7 +430,7 @@
   font-weight: var(--sq-font-weight-strong);
   white-space: nowrap;
   cursor: pointer;
-  box-shadow: inset 0 -3px 0 transparent;
+  box-shadow: inset 0 calc(var(--sq-tab-indicator-thickness) * -1) 0 transparent;
 }
 
 .sq-tab:hover {
@@ -441,7 +441,8 @@
 .sq-tab[aria-selected="true"] {
   color: var(--sq-color-text-primary);
   background-color: var(--sq-color-surface-elevated);
-  box-shadow: inset 0 -3px 0 var(--sq-tab-indicator-color);
+  box-shadow: inset 0 calc(var(--sq-tab-indicator-thickness) * -1) 0
+    var(--sq-tab-indicator-color);
 }
 
 .sq-tabpanel {
@@ -475,7 +476,7 @@
   color: var(--sq-color-text-primary);
   cursor: pointer;
   list-style: none;
-  min-height: 3rem;
+  min-height: var(--sq-disclosure-summary-min-height);
 }
 
 .sq-disclosure > summary::-webkit-details-marker {

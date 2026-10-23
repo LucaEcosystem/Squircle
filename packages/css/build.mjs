@@ -16,6 +16,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { transform } from "lightningcss";
+import { cssBanner } from "./banner.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const OFFLINE_FONTS = process.env.SQUIRCLE_OFFLINE_FONTS === "1";
@@ -44,14 +45,7 @@ function assemble() {
     : readFileSync(path.join(root, "src", "squircle.css"), "utf8")
         .split("\n")
         .find((line) => line.startsWith("@import url(")) + "\n";
-  // Version comes from this package's manifest (kept equal to every
-  // workspace package by the `squircle` check gate) — never hardcoded.
-  const version = JSON.parse(
-    readFileSync(path.join(root, "package.json"), "utf8"),
-  ).version;
-  let css =
-    `/* Squircle ${version} — MIT License — GENERATED, do not edit */\n` +
-    fontsImport;
+  let css = fontsImport;
   css += readFileSync(tokensCss, "utf8") + "\n";
   css += readFileSync(lucaCss, "utf8") + "\n";
   for (const [name, file] of layers) {
@@ -74,8 +68,16 @@ function compile(css, { minify }) {
 }
 
 const assembled = assemble();
-const readable = compile(assembled, { minify: false });
-const minified = compile(assembled, { minify: true });
+// Version comes from this package's manifest (kept equal to every
+// workspace package by the `squircle` check gate) — never hardcoded.
+const version = JSON.parse(
+  readFileSync(path.join(root, "package.json"), "utf8"),
+).version;
+// Lightning CSS strips regular comments, so the version banner is written
+// AFTER the transform at offset 0 (see banner.mjs) — it survives in the
+// shipped artifact and is polled by the `squircle` package gate.
+const readable = cssBanner(version) + compile(assembled, { minify: false });
+const minified = cssBanner(version) + compile(assembled, { minify: true });
 
 if (process.argv.includes("--check")) {
   const dist = path.join(root, "dist");

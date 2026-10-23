@@ -3,14 +3,15 @@
  *
  * - Tier references point at real values (no dangling aliases).
  * - Flattened output has unique, well-formed `--sq-*` names.
- * - The Luca contrast policy holds at WCAG 2.2 AA (4.5:1) for every
- *   text/background and contrast/fill pair. If a pair fails, the fix is
- *   to change the token value — never to weaken the assertion.
+ * - The Luca contrast policy holds at WCAG 2.2 AA (4.5:1) for every pair
+ *   in the canonical `aaContrastPairs` list (shared with
+ *   `@squircle/themes` validation). If a pair fails, the fix is to
+ *   change the token value — never to weaken the assertion.
  */
 
 import { describe, expect, it } from "vitest";
 import { component } from "../src/component.js";
-import { contrastRatio } from "../src/contrast.js";
+import { aaContrastPairs, contrastRatio } from "../src/contrast.js";
 import { flattenTokens } from "../src/flatten.js";
 import { primitives } from "../src/primitives.js";
 import { semantic } from "../src/semantic.js";
@@ -128,53 +129,28 @@ function isDerivedNeutral(value: string): boolean {
 
 describe("Luca contrast policy (WCAG 2.2 AA)", () => {
   const c = semantic.color;
-  const textPairs: Array<[string, string, string]> = [
-    ["textPrimary/background", c.textPrimary, c.background],
-    ["textSecondary/background", c.textSecondary, c.background],
-    ["textMuted/background", c.textMuted, c.background],
-    ["textPrimary/surface", c.textPrimary, c.surface],
-    ["textSecondary/surface", c.textSecondary, c.surface],
-    ["textMuted/surface", c.textMuted, c.surface],
-    ["textPrimary/surfaceElevated", c.textPrimary, c.surfaceElevated],
-    ["textSecondary/surfaceElevated", c.textSecondary, c.surfaceElevated],
-    // Cards and elevated panels carry muted text — axe caught this pair
-    // below 4.5:1 once, so it is pinned on every surface tier.
-    ["textMuted/surfaceElevated", c.textMuted, c.surfaceElevated],
-    ["textPrimary/backgroundSunken", c.textPrimary, c.backgroundSunken],
-    ["link/background", c.link, c.background],
-    ["linkHover/background", c.linkHover, c.background],
-    ["accentBright/background", c.accentBright, c.background],
-    ["successText/background", c.successText, c.background],
-    ["infoText/background", c.infoText, c.background],
-    ["warningText/background", c.warningText, c.background],
-    ["errorText/background", c.errorText, c.background],
-  ];
-  for (const [label, fg, bg] of textPairs) {
+  for (const { fg, bg } of aaContrastPairs) {
+    const label = `${fg}/${bg}`;
     it(`${label} meets 4.5:1`, () => {
-      const ratio = contrastRatio(fg, bg);
+      const ratio = contrastRatio(c[fg], c[bg]);
       expect(
         ratio,
-        `${label}: ${fg} on ${bg} = ${ratio.toFixed(2)}:1, need ≥ 4.5:1`,
+        `${label}: ${c[fg]} on ${c[bg]} = ${ratio.toFixed(2)}:1, need ≥ 4.5:1`,
       ).toBeGreaterThanOrEqual(AA_TEXT);
     });
   }
 
-  const fillPairs: Array<[string, string, string]> = [
-    ["accentContrast/accent", c.accentContrast, c.accent],
-    ["successContrast/success", c.successContrast, c.success],
-    ["infoContrast/info", c.infoContrast, c.info],
-    ["warningContrast/warning", c.warningContrast, c.warning],
-    ["errorContrast/error", c.errorContrast, c.error],
-  ];
-  for (const [label, fg, bg] of fillPairs) {
-    it(`${label} meets 4.5:1`, () => {
-      const ratio = contrastRatio(fg, bg);
-      expect(
-        ratio,
-        `${label}: ${fg} on ${bg} = ${ratio.toFixed(2)}:1, need ≥ 4.5:1`,
-      ).toBeGreaterThanOrEqual(AA_TEXT);
-    });
-  }
+  // The muted/surfaceOverlay claim in semantic.ts ("muted must clear
+  // 4.5:1 on the LIGHTEST surface it can sit on") is a fact about the
+  // built-in palette — custom themes retune both sides — so it is
+  // pinned here rather than in the shared canonical list.
+  it("textMuted/surfaceOverlay meets 4.5:1", () => {
+    const ratio = contrastRatio(c.textMuted, c.surfaceOverlay);
+    expect(
+      ratio,
+      `textMuted/surfaceOverlay: ${c.textMuted} on ${c.surfaceOverlay} = ${ratio.toFixed(2)}:1, need ≥ 4.5:1`,
+    ).toBeGreaterThanOrEqual(AA_TEXT);
+  });
 
   it("focus indicator meets 3:1 against page and surface", () => {
     expect(contrastRatio(c.focus, c.background)).toBeGreaterThanOrEqual(

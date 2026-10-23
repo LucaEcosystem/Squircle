@@ -2,7 +2,9 @@
  * Fast package gate for `squircle` (runs in `pnpm check`):
  *  - every `exports` target resolves to a real file in dist/
  *  - LICENSE matches the repo root byte-for-byte
- *  - version matches all workspace packages and the CSS banner
+ *  - version matches all workspace packages AND the dist CSS banner
+ *    (the `/*! Squircle <version> —` header of dist/squircle.css and
+ *    dist/squircle.min.css, written by the css build)
  *  - zero install-time dependencies (no deps, devDeps, peerDeps,
  *    optionalDeps, bundledDeps)
  */
@@ -10,6 +12,7 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { cssBannerVersion } from "../css/banner.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.join(root, "..", "..");
@@ -64,6 +67,22 @@ for (const dir of readdirSync(path.join(repo, "packages"))) {
 const css = readFileSync(path.join(root, "dist", "squircle.css"), "utf8");
 if (!css.includes("--sq-color-background")) {
   failures.push("dist/squircle.css does not look like a Squircle bundle");
+}
+
+// The version banner claim is REAL: every built stylesheet leads with
+// `/*! Squircle <version> —` (written post-transform by the css build),
+// and its version must equal the package manifest. (tokens.css carries
+// no version in its emit manifest, so there is nothing to compare there.)
+for (const stylesheet of ["squircle.css", "squircle.min.css"]) {
+  const sheet = readFileSync(path.join(root, "dist", stylesheet), "utf8");
+  const bannerVersion = cssBannerVersion(sheet);
+  if (bannerVersion === null) {
+    failures.push(`${stylesheet} has no "/*! Squircle <version> —" banner`);
+  } else if (bannerVersion !== pkg.version) {
+    failures.push(
+      `${stylesheet} banner version ${bannerVersion} != ${pkg.version}`,
+    );
+  }
 }
 
 for (const field of [

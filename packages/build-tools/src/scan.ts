@@ -8,8 +8,10 @@
  *    (template interpolation, concatenation, runtime construction).
  *    These never keep styles by themselves; the diagnostics tell the
  *    author exactly which safelist entry to add. Claiming detection here
- *    would be dishonest — a missed class ships broken CSS.
+ * would be dishonest — a missed class ships broken CSS.
  */
+
+import { SQ_CLASS_TOKEN } from "./classes.js";
 
 export interface ScanResult {
   /** Literally-written `sq-*` classes. */
@@ -31,7 +33,7 @@ export function mergeScan(into: ScanResult, from: ScanResult): ScanResult {
   return into;
 }
 
-const CLASS_TOKEN = /(?<![a-z]-)sq-[A-Za-z0-9-]+/g;
+const CLASS_TOKEN = SQ_CLASS_TOKEN;
 
 /** `class="…"` / `class='…'` attributes (HTML, Vue, Svelte, Astro). */
 export function scanHtml(source: string, filename: string): ScanResult {

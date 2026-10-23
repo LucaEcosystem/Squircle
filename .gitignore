@@ -40,3 +40,7 @@ tests/playwright.config.reuse.ts
 # Env
 .env
 .env.local
+
+# Generated docs-site output (static site, prettier-formatted)
+!docs-site/dist/
+

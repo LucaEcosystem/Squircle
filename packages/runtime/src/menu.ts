@@ -8,14 +8,18 @@
  * Menus are for ACTIONS — navigation uses links (LINKS.md).
  */
 
-import {
-  alreadyInitialized,
-  focusableChildren,
-  markInitialized,
-} from "./dom.js";
+import { focusableChildren, initMarks, INITIALIZED_ATTRS } from "./dom.js";
+
+export interface MenuOpenOptions {
+  /**
+   * Which menuitem receives focus on open. Default "first" (APG);
+   * "last" supports the standard ArrowUp-open affordance.
+   */
+  focus?: "first" | "last";
+}
 
 export interface MenuHandle {
-  open(): void;
+  open(options?: MenuOpenOptions): void;
   close(restoreFocus?: boolean): void;
   readonly isOpen: boolean;
   destroy(): void;
@@ -28,25 +32,40 @@ function menuItems(menu: HTMLElement): HTMLElement[] {
 }
 
 /**
+ * One binding per trigger: `createMenu` re-creating a handle for an
+ * already-bound trigger would double-bind clicks (toggle -> open ->
+ * close each press) and double-step arrow keys. First handle wins until
+ * `destroy()`; two DIFFERENT triggers may share one menu element (each
+ * gets its own handle).
+ */
+const menusByTrigger = new WeakMap<HTMLElement, MenuHandle>();
+
+/**
  * Binds a trigger to a menu. The menu starts `hidden`; the trigger needs
  * `aria-haspopup="menu"` and `aria-controls="<menu-id>"` in markup.
+ * Rebinding an already-bound trigger returns the existing handle.
  * Returns a handle; `destroy()` removes every listener.
  */
 export function createMenu(
   trigger: HTMLElement,
   menu: HTMLElement,
 ): MenuHandle {
+  const existing = menusByTrigger.get(trigger);
+  if (existing) return existing;
+
   const controller = new AbortController();
   const signal = controller.signal;
   let open = false;
 
   const api: MenuHandle = {
-    open() {
+    open(options: MenuOpenOptions = {}) {
       if (open) return;
       open = true;
       menu.hidden = false;
       trigger.setAttribute("aria-expanded", "true");
-      const first = menuItems(menu)[0];
+      const items = menuItems(menu);
+      const first =
+        options.focus === "last" ? items[items.length - 1] : items[0];
       if (first) first.focus();
     },
     close(restoreFocus = true) {
@@ -61,8 +80,11 @@ export function createMenu(
     },
     destroy() {
       controller.abort();
+      menusByTrigger.delete(trigger);
     },
   };
+
+  menusByTrigger.set(trigger, api);
 
   const toggle = (): void => {
     if (api.isOpen) api.close();
@@ -80,6 +102,10 @@ export function createMenu(
       ) {
         event.preventDefault();
         api.open();
+      } else if (event.key === "ArrowUp") {
+        // APG: ArrowUp opens the menu and focuses its LAST item.
+        event.preventDefault();
+        api.open({ focus: "last" });
       }
     },
     { signal },
@@ -143,15 +169,13 @@ export function createMenu(
  */
 export function initMenus(root: ParentNode = document): () => void {
   const handles: MenuHandle[] = [];
+  const marks = initMarks(INITIALIZED_ATTRS.menu);
   const scope: ParentNode = root;
   for (const trigger of scope.querySelectorAll("[data-sq-menu]")) {
-    if (!(trigger instanceof HTMLElement) || alreadyInitialized(trigger)) {
-      continue;
-    }
+    if (!(trigger instanceof HTMLElement)) continue;
     const menuId = trigger.getAttribute("aria-controls");
     const menu = menuId ? document.getElementById(menuId) : null;
-    if (!(menu instanceof HTMLElement)) continue;
-    markInitialized(trigger);
+    if (!(menu instanceof HTMLElement) || !marks.claim(trigger)) continue;
     trigger.setAttribute("aria-haspopup", "menu");
     if (!trigger.hasAttribute("aria-expanded")) {
       trigger.setAttribute("aria-expanded", "false");
@@ -160,5 +184,6 @@ export function initMenus(root: ParentNode = document): () => void {
   }
   return () => {
     for (const handle of handles) handle.destroy();
+    marks.release();
   };
 }

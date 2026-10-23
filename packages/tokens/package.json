@@ -1,6 +1,6 @@
 {
   "name": "@squircle/tokens",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "Squircle design-token source of truth (TypeScript) — emits CSS custom properties",
   "type": "module",

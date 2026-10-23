@@ -11,13 +11,22 @@
  * Exit codes: 0 success (even with diagnostics — diagnostics inform, they
  * do not fail); 1 usage/IO error; 2 the output would keep ZERO sq-*
  * rules, which means the sources almost certainly missed the project.
+ *
+ * Warnings (skipped directories, safelist ambiguity, malformed CSS tails)
+ * go to stderr with `sq-trim: warning:` and the file path; exit stays 0.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
-import { collectFiles, isFile } from "./index.js";
+import { collectFiles, isFile, readTextFile } from "./index.js";
 import { scanSource, emptyResult, mergeScan } from "./index.js";
-import { definedClasses, emptySafelist, trimCss } from "./index.js";
+import {
+  applySafelistEntry,
+  definedClasses,
+  emptySafelist,
+  trimCss,
+} from "./index.js";
+import type { Safelist } from "./index.js";
 
 interface Args {
   css?: string;
@@ -71,9 +80,24 @@ interface FileConfig {
   safelist?: Array<string | { prefix?: string; pattern?: string }>;
 }
 
-function applyConfig(args: Args, path: string): void {
-  const raw = readFileSync(path, "utf8");
-  const config = JSON.parse(raw) as FileConfig;
+function applyConfig(
+  args: Args,
+  path: string,
+  safelist: Safelist,
+  safelistWarnings: string[],
+): void {
+  // readTextFile throws naming path + errno cause; the parse phase's
+  // single catch in main() turns it into the clean CLI exit.
+  const raw = readTextFile(path, "config file");
+  let config: FileConfig;
+  try {
+    config = JSON.parse(raw) as FileConfig;
+  } catch (error) {
+    throw new Error(
+      `cannot parse config file "${path}": ${(error as Error).message}`,
+      { cause: error },
+    );
+  }
   if (args.css === undefined && config.css !== undefined) args.css = config.css;
   if (args.out === undefined && config.out !== undefined) args.out = config.out;
   if (args.report === undefined && config.report !== undefined) {
@@ -83,17 +107,27 @@ function applyConfig(args: Args, path: string): void {
     args.sources.push(...config.sources);
   }
   for (const entry of config.safelist ?? []) {
-    if (typeof entry === "string") args.safelist.push(entry);
-    else if (entry.prefix) args.safelistPrefix.push(entry.prefix);
-    else if (entry.pattern) args.safelistPattern.push(entry.pattern);
+    applySafelistEntry(safelist, entry, path, safelistWarnings);
+  }
+}
+
+/** Reads `path` as UTF-8, or prints a contextual error and exits 1. */
+function readOrExit(path: string, context: string): string {
+  try {
+    return readTextFile(path, context);
+  } catch (error) {
+    console.error(`sq-trim: ${(error as Error).message}`);
+    process.exit(1);
   }
 }
 
 function main(): void {
+  const safelist = emptySafelist();
+  const safelistWarnings: string[] = [];
   let args: Args;
   try {
     args = parseArgs(process.argv.slice(2));
-    if (args.config) applyConfig(args, args.config);
+    if (args.config) applyConfig(args, args.config, safelist, safelistWarnings);
     if (!args.css || args.sources.length === 0 || !args.out) {
       throw new Error("required: --css <file> --sources <glob>… --out <file>");
     }
@@ -108,7 +142,8 @@ function main(): void {
     console.error(`sq-trim: CSS not found: ${cssPath}`);
     process.exit(1);
   }
-  const files = collectFiles(root, args.sources);
+  const skippedDirectories: string[] = [];
+  const files = collectFiles(root, args.sources, skippedDirectories);
   if (files.length === 0) {
     console.error(
       `sq-trim: no source files matched: ${args.sources.join(", ")}`,
@@ -119,7 +154,8 @@ function main(): void {
   const scanned = emptyResult();
   const skipped: string[] = [];
   for (const file of files) {
-    const result = scanSource(readFileSync(file, "utf8"), file);
+    const source = readOrExit(file, "source file");
+    const result = scanSource(source, file);
     if (result === null) {
       skipped.push(file);
       continue;
@@ -127,21 +163,44 @@ function main(): void {
     mergeScan(scanned, result);
   }
 
-  const safelist = emptySafelist();
-  for (const cls of args.safelist) safelist.exact.add(cls);
-  safelist.prefixes.push(...args.safelistPrefix);
-  for (const source of args.safelistPattern) {
-    try {
-      safelist.patterns.push(new RegExp(source));
-    } catch {
-      console.error(`sq-trim: invalid --safelist-pattern: ${source}`);
-      process.exit(1);
+  try {
+    for (const cls of args.safelist) {
+      applySafelistEntry(safelist, cls, "--safelist", safelistWarnings);
     }
+    for (const prefix of args.safelistPrefix) {
+      applySafelistEntry(
+        safelist,
+        { prefix },
+        "--safelist-prefix",
+        safelistWarnings,
+      );
+    }
+    for (const source of args.safelistPattern) {
+      applySafelistEntry(
+        safelist,
+        { pattern: source },
+        "--safelist-pattern",
+        safelistWarnings,
+      );
+    }
+  } catch (error) {
+    console.error(`sq-trim: ${(error as Error).message}`);
+    process.exit(1);
   }
 
-  const complete = readFileSync(cssPath, "utf8");
+  const complete = readOrExit(cssPath, "CSS file");
   const defined = definedClasses(complete);
   const outcome = trimCss(complete, scanned.static, safelist);
+
+  // Warnings inform, they never fail (exit stays 0, output stays
+  // conservative): every one says exactly what was skipped or ignored.
+  for (const line of [
+    ...safelistWarnings,
+    ...skippedDirectories,
+    ...outcome.warnings.map((warning) => `${cssPath}: ${warning}`),
+  ]) {
+    console.error(`sq-trim: warning: ${line}`);
+  }
 
   const unknownClasses = [...scanned.static]
     .filter((cls) => !defined.has(cls))
@@ -169,6 +228,7 @@ function main(): void {
     css: cssPath,
     sources: files,
     skipped,
+    skippedDirectories,
     out: outPath,
     completeBytes: complete.length,
     trimmedBytes: outcome.css.length,
@@ -181,6 +241,7 @@ function main(): void {
     unknownClasses,
     safelistMisses,
     dynamicHints: scanned.dynamicHints,
+    parseWarnings: outcome.warnings,
     droppedSelectorsSample: outcome.droppedSelectors,
   };
   if (args.report) {

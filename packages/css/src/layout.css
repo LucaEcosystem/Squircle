@@ -76,6 +76,9 @@
 
 .sq-grid-auto {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(var(--sq-layout-tile-min), 100%), 1fr)
+  );
   gap: var(--sq-space-lg);
 }

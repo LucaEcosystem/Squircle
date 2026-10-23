@@ -37,6 +37,13 @@ const navClasses = [
   "sq-sidebar__title",
   "sq-sidebar--sticky",
   "sq-with-sidebar",
+  // 1.1 addition: stepper
+  "sq-stepper",
+  "sq-stepper__step",
+  "sq-stepper__step--done",
+  "sq-stepper__step--active",
+  "sq-stepper__marker",
+  "sq-stepper__label",
 ];
 
 const dataClasses = [
@@ -54,6 +61,16 @@ const dataClasses = [
   "sq-metric__delta",
   "sq-metric__delta--up",
   "sq-metric__delta--down",
+  // 1.1 addition: timeline
+  "sq-timeline",
+  "sq-timeline__entry",
+  "sq-timeline__entry--muted",
+  "sq-timeline__marker",
+  "sq-timeline__content",
+  "sq-timeline__time",
+  "sq-timeline__title",
+  "sq-timeline__detail",
+  "sq-timeline__meta",
 ];
 
 describe("stage 5 naming contract", () => {

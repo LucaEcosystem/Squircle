@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Links — Squircle docs</title>
+    <meta name="description" content="Purpose:  navigation. Anchors go places; buttons do things. This file" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Links</h1>
+      <p class="sq-lead">Purpose:  navigation. Anchors go places; buttons do things. This file</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: navigation. Anchors go places; buttons do things. This file keeps the two apart.</p>
+<h2 id="usage">Usage</h2>
+<pre tabindex="0" aria-label="Example code">&lt;p&gt;Read the &lt;a class=&quot;sq-link&quot; href=&quot;/docs&quot;&gt;documentation&lt;/a&gt; first.&lt;/p&gt;
+&lt;a class=&quot;sq-link sq-link--subtle&quot; href=&quot;/archive&quot;&gt;Older posts&lt;/a&gt;
+&lt;a class=&quot;sq-link sq-link--action&quot; href=&quot;/start&quot;&gt;Start building&lt;/a&gt;
+&lt;nav aria-label=&quot;Docs&quot;&gt;
+  &lt;a class=&quot;sq-nav-link&quot; href=&quot;/docs&quot;&gt;Docs&lt;/a&gt;
+  &lt;a class=&quot;sq-nav-link&quot; href=&quot;/themes&quot; aria-current=&quot;page&quot;&gt;Themes&lt;/a&gt;
+&lt;/nav&gt;</pre>
+<p>Bare <code>&lt;a&gt;</code> elements already receive the base treatment (color, offset underline, hover, visited); <code>.sq-link</code> makes the contract explicit and adds icon-gap support.</p>
+<h2 id="variants">Variants</h2>
+<div class="sq-table-scroll" role="region" tabindex="0" aria-label="Data table"><table class="sq-table"><thead><tr><th scope="col">Class</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>sq-link</code></td><td>Inline links in prose. Strong weight, themed color, visited state.</td></tr><tr><td><code>sq-link--subtle</code></td><td>Secondary links (meta rows, footers). Muted until hover.</td></tr><tr><td><code>sq-link--action</code></td><td>One prominent call per region. Animated arrow (decorative CSS, never announced).</td></tr><tr><td><code>sq-link--disabled</code></td><td>Presentation ONLY — see below.</td></tr><tr><td><code>sq-nav-link</code></td><td>Link rows (header/footer). Padded, squirclish, <code>aria-current</code> aware.</td></tr></tbody></table></div>
+<h2 id="states">States</h2>
+<p>Visited uses the theme's visited token. Hover brightens; focus-visible is the theme ring. There is no &quot;selected link&quot; — current pages use <code>aria-current=&quot;page&quot;</code> on <code>.sq-nav-link</code>.</p>
+<h2 id="disabled-like-links">Disabled-like links</h2>
+<p>Anchors cannot be disabled. If an action is unavailable, either remove the link or render it inert AND unreachable:</p>
+<pre tabindex="0" aria-label="Example code">&lt;a class=&quot;sq-link sq-link--disabled&quot; aria-disabled=&quot;true&quot; tabindex=&quot;-1&quot;
+  &gt;Export (no data yet)&lt;/a
+&gt;</pre>
+<p>Better: explain WHY next to it (&quot;Export unlocks after your first project&quot;). Never leave a dead control unexplained.</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li>Link text names its destination (&quot;Read the migration guide&quot;, never</li></ul>
+<p>&quot;click here&quot;). The action arrow is CSS <code>content</code> — never announced.</p>
+<ul><li><code>aria-disabled</code> alone does not remove tab stops or clicks; the class</li></ul>
+<p>adds <code>pointer-events: none</code>, the HTML must add <code>tabindex=&quot;-1&quot;</code>.</p>
+<ul><li>Color is never the only cue: links are also underlined (inline) or</li></ul>
+<p>padded surfaces (nav).</p>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>Link, hover, and visited colors are semantic tokens; both themes were contrast-checked for link text. The action arrow inherits <code>currentColor</code>.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li><code>&lt;a class=&quot;sq-button&quot;&gt;</code> for an in-page action — use <code>&lt;button&gt;</code>.</li><li><code>&lt;a href=&quot;#&quot;&gt;</code> as a button — same defect with extra steps.</li><li><code>aria-disabled</code> without <code>tabindex=&quot;-1&quot;</code> — still focusable, still announced as a link.</li></ul>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>No skip-to-content behavior beyond <code>.sq-skip-link</code> (utilities).</li><li>External-link indicators are not automatic; add &quot;(external)&quot; text</li></ul>
+<p>where the audience needs it.</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

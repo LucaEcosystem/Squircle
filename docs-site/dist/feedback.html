@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feedback — Squircle docs</title>
+    <meta name="description" content="Purpose:  tell users what happened. Persistent messages (alerts) and" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Feedback</h1>
+      <p class="sq-lead">Purpose:  tell users what happened. Persistent messages (alerts) and</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: tell users what happened. Persistent messages (alerts) and transient notifications (toasts) are different components with different announcement contracts — read both before choosing.</p>
+<h2 id="alerts-persistent-in-flow">Alerts (persistent, in-flow)</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-alert sq-alert--success&quot; role=&quot;status&quot;&gt;
+  &lt;span class=&quot;sq-alert__icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;!-- svg --&gt;&lt;/span&gt;
+  &lt;div class=&quot;sq-alert__body&quot;&gt;
+    &lt;p class=&quot;sq-alert__title&quot;&gt;Export ready&lt;/p&gt;
+    &lt;p class=&quot;sq-alert__text&quot;&gt;fleet-march.csv is in your downloads.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+<p>Tones: <code>--success/--info/--warning/--error</code>. Roles: <code>role=&quot;status&quot;</code> (completion, polite) or <code>role=&quot;alert&quot;</code> (errors that block, assertive). The tone border + icon + title triple Up the message — color is never alone. Alerts stay until resolved or dismissed by context (navigation, explicit close); they never auto-expire.</p>
+<h2 id="toasts-transient-live-region">Toasts (transient, live region)</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-toasts&quot; data-sq-toasts role=&quot;status&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+  Squircle.notify(&quot;Workspace saved.&quot;, { tone: &quot;success&quot; });
+  // { tone: &quot;info&quot;|&quot;success&quot;|&quot;warning&quot;|&quot;error&quot;, duration: 6000(ms, 0=persist),
+  //   region, dismissLabel } — dismissLabel (or the region's
+  //   data-sq-toast-dismiss-label) localizes the dismiss button for SRs.
+  const handle = Squircle.notify(&quot;Uploading…&quot;, { duration: 0 });
+  handle.dismiss(); // or Squircle.dismissAll();
+&lt;/script&gt;</pre>
+<p><code>notify()</code> takes plain text (never HTML — injection impossible by construction). Auto-dismiss pauses on hover/focus; an expiry that elapsed during the pause lands when the pause ends. Every toast has a dismiss button; errors assert (<code>role=&quot;alert&quot;</code>), the rest are polite. Entrance is the gentle <code>sq-rise-in</code> rise — flattened to instant under reduced motion. Region-less calls before <code>&lt;body&gt;</code> exists are deferred to DOMContentLoaded instead of throwing.</p>
+<p><strong>The toast rule:</strong> if the user must act on it or find it later, it is not a toast — use an alert or inline text. Toasts supplement; they never carry the only copy of anything essential.</p>
+<h2 id="progress-spinner-skeleton">Progress, spinner, skeleton</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-progress-label&quot;&gt;
+  &lt;span&gt;Uploading fleet.csv&lt;/span&gt;&lt;span&gt;62%&lt;/span&gt;
+&lt;/div&gt;
+&lt;progress class=&quot;sq-progress&quot; value=&quot;62&quot; max=&quot;100&quot;&gt;62%&lt;/progress&gt;
+
+&lt;div role=&quot;status&quot;&gt;
+  &lt;span class=&quot;sq-spinner&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;span class=&quot;sq-spinner__label&quot;&gt;Loading berth schedule…&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div role=&quot;status&quot; aria-label=&quot;Loading article…&quot;&gt;
+  &lt;div class=&quot;sq-skeleton&quot; style=&quot;height: 2rem; width: 60%&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;sq-skeleton&quot; style=&quot;height: 1rem&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;</pre>
+<ul><li><code>progress</code>/<code>meter</code> are native: labeled outside, values announced</li></ul>
+<p>natively, <code>sq-progress--large</code> for hero moments.</p>
+<ul><li>Spinners pair the visual with a visually-hidden status label; under</li></ul>
+<p>reduced motion the ring freezes (still labeled, still honest).</p>
+<ul><li>Skeletons reserve the space they will fill (explicit heights/widths</li></ul>
+<p>— never auto-height shift); the shimmer becomes a static wash under reduced motion; the container names what loads.</p>
+<h2 id="badges-status-empty-states">Badges, status, empty states</h2>
+<pre tabindex="0" aria-label="Example code">&lt;span class=&quot;sq-badge sq-badge--success&quot;&gt;Live&lt;/span&gt;
+&lt;span class=&quot;sq-status sq-status--warning&quot;
+  &gt;&lt;span class=&quot;sq-status__dot&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;Degraded&lt;/span
+&gt;
+
+&lt;div class=&quot;sq-empty&quot;&gt;
+  &lt;span class=&quot;sq-empty__icon&quot; aria-hidden=&quot;true&quot;&gt;&lt;!-- svg --&gt;&lt;/span&gt;
+  &lt;p class=&quot;sq-empty__title&quot;&gt;No exports yet&lt;/p&gt;
+  &lt;p class=&quot;sq-empty__text&quot;&gt;Exports you create appear here.&lt;/p&gt;
+  &lt;a class=&quot;sq-button sq-button--primary&quot; href=&quot;/export&quot;&gt;Create an export&lt;/a&gt;
+&lt;/div&gt;</pre>
+<p>Badge tones set fill + contrast ink; the LABEL carries meaning. Status dots are <code>aria-hidden</code> — the text announces. Empty states name what is missing, why, and the one next action (with a real link/button — never a dead end).</p>
+<h2 id="banners-page-level-dismissible">Banners (page-level, dismissible)</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-banner sq-banner--info&quot; id=&quot;maintenance-banner&quot;&gt;
+  &lt;span class=&quot;sq-banner__icon&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;svg
+      class=&quot;sq-icon&quot;
+      viewBox=&quot;0 0 24 24&quot;
+      fill=&quot;none&quot;
+      stroke=&quot;currentColor&quot;
+      stroke-width=&quot;2&quot;
+      stroke-linecap=&quot;round&quot;
+      stroke-linejoin=&quot;round&quot;
+      focusable=&quot;false&quot;
+    &gt;
+      &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; /&gt;
+      &lt;path d=&quot;M12 8h.01&quot; /&gt;
+      &lt;path d=&quot;M11 12h1v4h1&quot; /&gt;
+    &lt;/svg&gt;
+  &lt;/span&gt;
+  &lt;div class=&quot;sq-banner__body&quot;&gt;
+    &lt;p class=&quot;sq-banner__title&quot;&gt;Scheduled maintenance&lt;/p&gt;
+    &lt;p class=&quot;sq-banner__text&quot;&gt;
+      The dispatch API pauses Sunday 02:00–04:00 CET.
+    &lt;/p&gt;
+  &lt;/div&gt;
+  &lt;button
+    class=&quot;sq-banner__close&quot;
+    type=&quot;button&quot;
+    aria-label=&quot;Dismiss announcement&quot;
+    onclick=&quot;this.closest('.sq-banner').remove()&quot;
+  &gt;&lt;/button&gt;
+&lt;/div&gt;</pre>
+<p>Banner = alert styling at page level: <code>--{success,info,warning,error}</code> tones share the alert border system. Where it differs from an alert is intent: it sits ABOVE content, announces site-wide state (maintenance, bans, migrations), and dismisses with one button. Dismissal is HTML, not runtime state: the demo <code>onclick</code> removes the element; a real implementation moves it into your bundle (and may persist the choice in storage — an author decision, never Squircle's). Do not stack banners; the newest state replaces the older one.</p>
+<h2 id="chips-tags-with-removal">Chips (tags with removal)</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-chips&quot;&gt;
+  &lt;span class=&quot;sq-chip&quot;&gt;&lt;span class=&quot;sq-chip__text&quot;&gt;alloy&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;sq-chip sq-chip--success&quot;
+    &gt;&lt;span class=&quot;sq-chip__text&quot;&gt;in stock&lt;/span&gt;&lt;/span
+  &gt;
+  &lt;span class=&quot;sq-chip&quot;&gt;
+    &lt;span class=&quot;sq-chip__text&quot;&gt;removable&lt;/span&gt;
+    &lt;button
+      class=&quot;sq-chip__remove&quot;
+      type=&quot;button&quot;
+      aria-label=&quot;Remove chip removable&quot;
+    &gt;&lt;/button&gt;
+  &lt;/span&gt;
+&lt;/div&gt;</pre>
+<p>Chips are badges with room for content and (optionally) a remove button. The remove button is a REAL button whose accessible name names the chip (&quot;Remove chip alloy&quot;); the glyph is drawn by CSS. The list wrapper keeps the group from floating loosely. Tone chips reuse the badge fill pairs. Chips are content tags — form-driven token entry (input + paste + Enter) is a pattern to compose with <code>.sq-field</code>, not a separate component (documented limitation).</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li>Live regions: <code>status</code> (polite) vs <code>alert</code> (assertive) chosen by</li></ul>
+<p>urgency, not by habit. Dynamic content injected into a region on the page announces; regions created at notify-time announce on insertion.</p>
+<ul><li>Dismissal: toasts dismiss (button + timeout); alerts persist until</li></ul>
+<p>their context resolves.</p>
+<ul><li>Reduced motion: shimmer static, spinner frozen-but-labeled, toast</li></ul>
+<p>entrance instant. Nothing essential animates.</p>
+<ul><li>Contrast: all tones checked in both themes (fills + inks are</li></ul>
+<p>contrast-paired tokens).</p>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>Tones, washes, inks, and shimmers are tokens. Error red is semantic-only (documented in tokens); everything else re-maps per theme without markup changes.</p>
+<h2 id="customization">Customization</h2>
+<p>Override <code>--sq-alert-*</code>, <code>--sq-badge-*</code>, <code>--sq-toast-*</code>, <code>--sq-skeleton-*</code> or restyle tones later. Keep the border+icon+text triple — dropping to color-only breaks the contract.</p>
+<h2 id="responsive-behavior">Responsive behavior</h2>
+<p>Alerts grid (icon/text/action) wraps naturally; toasts center on narrow, dock right at 48rem+; empty states cap at measure. Toast max-width guards small viewports.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li>Toast for errors the user must fix — alerts or inline errors.</li><li><code>role=&quot;alert&quot;</code> on every status — assertive interrupts; most news is polite.</li><li>Skeletons with no dimensions — layout shift is the bug skeletons exist to prevent.</li><li>Badge without text (&quot;●&quot; alone) — the dot is decoration; the label is the message.</li><li>Spinner without a status label — motion-only loading excludes everyone who cannot see it.</li><li>Banner for role-scoped state — banners are site-wide; use alerts in flow.</li><li>Chips whose remove button is an unlabeled glyph — name the chip.</li></ul>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>Toast stacking beyond ~4 is untested visually (regions scroll; keep counts low).</li><li><code>progress</code> indeterminate state styling is platform-default (correct, unthemed).</li><li>No confirm-dialog patterns here — destructive confirmations live in OVERLAYS.md dialogs.</li></ul></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

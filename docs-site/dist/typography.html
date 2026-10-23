@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Typography — Squircle docs</title>
+    <meta name="description" content="Purpose:  one voice for every word. Bare elements (`h1–h6`, `p`, `code`," />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Typography</h1>
+      <p class="sq-lead">Purpose:  one voice for every word. Bare elements (<code>h1–h6</code>, <code>p</code>, <code>code</code>,</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: one voice for every word. Bare elements (<code>h1–h6</code>, <code>p</code>, <code>code</code>, <code>pre</code>, <code>blockquote</code>, lists) already carry the full treatment — these classes extend the same voice to other elements and document the patterns.</p>
+<h2 id="elements-no-classes-needed">Elements (no classes needed)</h2>
+<p>Headings <code>h1–h6</code> (Manrope 800, fluid, balanced, generous arrival space), paragraphs (DM Sans 500, 1.65, 68ch), <code>.sq-lead</code>, lists with gold markers, blockquotes with accent rules, <code>pre</code> code blocks, <code>small</code>.</p>
+<h2 id="classes-same-voice-other-elements">Classes (same voice, other elements)</h2>
+<div class="sq-table-scroll" role="region" tabindex="0" aria-label="Data table"><table class="sq-table"><thead><tr><th scope="col">Class</th><th scope="col">Mirrors</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>sq-heading--1…4</code></td><td><code>h1</code>, <code>h2</code>, <code>h3</code>, <code>h2-size</code>…</td><td>Heading treatment on non-<code>h</code> elements</td></tr><tr><td><code>sq-text</code></td><td><code>p</code></td><td>Body text on other elements</td></tr><tr><td><code>sq-label</code></td><td>form <code>&lt;label&gt;</code></td><td>Label treatment (pairs with inputs, Stage 4)</td></tr><tr><td><code>sq-code</code></td><td><code>code</code></td><td>Inline code chip on any element</td></tr><tr><td><code>sq-lead</code></td><td>—</td><td>Standfirst paragraphs</td></tr><tr><td><code>sq-muted</code> / <code>sq-small</code></td><td>—</td><td>Supporting text (utilities)</td></tr><tr><td><code>sq-truncate</code> / <code>sq-clamp-2/3</code></td><td>—</td><td>Single-line / N-line clamping (utilities)</td></tr></tbody></table></div>
+<p>Base <code>.sq-heading</code> sets family/weight/leading; the numbered modifier sets size and spacing. Always pair them: <code>&lt;p class=&quot;sq-heading sq-heading--3&quot;&gt;</code>.</p>
+<h2 id="patterns">Patterns</h2>
+<ul><li><strong>Page title</strong>: one <code>h1</code> per page, <code>sq-lead</code> after it, actions in a</li></ul>
+<p><code>sq-cluster</code> below. Never two <code>h1</code>s.</p>
+<ul><li><strong>Section</strong>: <code>h2</code> + supporting <code>p</code>, then content. Headings arrive</li></ul>
+<p>with space (<code>xl/lg</code> above) and hand off cleanly (<code>sm/xs</code> below).</p>
+<ul><li><strong>Long content</strong>: <code>sq-text</code>/<code>p</code> cap at 68ch automatically. In wide</li></ul>
+<p>containers, constrain the prose column (<code>sq-max-w-measure</code>), not the reader's patience.</p>
+<ul><li><strong>Code</strong>: inline `<code> </code>code<code> </code><code> gets </code>.sq-code` treatment natively;</li></ul>
+<p>blocks use <code>pre</code> (sunken, bordered, horizontal scroll, never wrap).</p>
+<ul><li><strong>Clamping</strong>: <code>sq-clamp-2/3</code> for previews only — full text always</li></ul>
+<p>exists one link away. Never clamp the only copy.</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li>Heading levels order (<code>h1→h2→h3</code>, no skipping for size — size with</li></ul>
+<p>classes, outline with levels).</p>
+<ul><li><code>sq-heading--*</code> on a non-heading element does NOT confer heading</li></ul>
+<p>semantics; in third-party markup prefer native elements, classes are the fallback.</p>
+<ul><li>Truncated/clamped text keeps its full string in the accessibility</li></ul>
+<p>tree (CSS clipping only) — still, link to the full copy.</p>
+<ul><li>Code blocks get <code>aria-label</code> or a preceding heading naming the language.</li></ul>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>All type color is semantic (<code>text-primary/secondary/muted</code>, accent markers, link tokens). Manrope/DM Sans load per FONTS config with system fallbacks; the scale is fluid and viewport-relative.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li><code>h3</code> chosen because &quot;it looks right&quot; — outline first, style second.</li><li><code>sq-heading--2</code> without <code>.sq-heading</code> — size without the voice.</li><li>Clamping body copy with no full-text path.</li><li>Centered paragraphs longer than a line or two — center labels and</li></ul>
+<p>headings, left-align reading text.</p>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li><code>text-wrap: balance</code> is progressive (unsupported engines fall back</li></ul>
+<p>to normal wrapping — never broken, just less even).</p>
+<ul><li>CJK/RTL specifics are untested in 1.0 scope; logical properties are</li></ul>
+<p>used throughout (<code>margin-inline</code>, <code>padding-block</code>, <code>inset</code>).</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

@@ -13,11 +13,13 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "test": "vitest run",
-    "test:e2e": "playwright test",
+    "test:e2e": "corepack pnpm --filter squircle-e2e test",
+    "site:build": "node docs-site/build.mjs",
     "clean": "corepack pnpm --recursive clean"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@changesets/cli": "^3.0.3",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.55.0",
     "eslint": "^9.34.0",

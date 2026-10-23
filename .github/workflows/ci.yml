@@ -64,16 +64,16 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Browser tests (chromium)
-        run: pnpm exec playwright test --project=chromium
+        run: pnpm --filter squircle-e2e test --project=chromium
 
       - name: Browser tests (webkit)
-        run: pnpm exec playwright test --project=webkit
+        run: pnpm --filter squircle-e2e test --project=webkit
 
       - name: Browser tests (firefox)
-        run: pnpm exec playwright test --project=firefox
+        run: pnpm --filter squircle-e2e test --project=firefox
 
       - name: Browser tests (mobile)
-        run: pnpm exec playwright test --project=mobile
+        run: pnpm --filter squircle-e2e test --project=mobile
 
       - name: Upload Playwright report (on failure)
         if: failure()
@@ -83,9 +83,6 @@ jobs:
           path: |
             test-results/
             playwright-report/
-
-      - name: Repack the fixture consumer tarball (regenerate committed artifact)
-        run: pnpm -C packages/squircle exec npm pack --pack-destination ../../fixtures/consumers/_tarball
 
       - name: npm pack dry-run (public package)
         working-directory: packages/squircle

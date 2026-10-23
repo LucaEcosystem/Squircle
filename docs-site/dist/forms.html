@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Forms &amp; inputs — Squircle docs</title>
+    <meta name="description" content="Purpose:  collect input with native controls, dressed in tokens. The" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Forms &amp; inputs</h1>
+      <p class="sq-lead">Purpose:  collect input with native controls, dressed in tokens. The</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: collect input with native controls, dressed in tokens. The browser owns behavior (validation, pickers, keyboard, AT mappings); Squircle styles the surface and associates the messages.</p>
+<h2 id="the-row-pattern">The row pattern</h2>
+<p>Every field is a <code>.sq-field</code>: label above, control in the middle, help and error below. Labels stay close to their fields; fields stay far from each other.</p>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-field&quot;&gt;
+  &lt;label for=&quot;signup-name&quot;&gt;Full name&lt;/label&gt;
+  &lt;input
+    class=&quot;sq-input&quot;
+    id=&quot;signup-name&quot;
+    name=&quot;name&quot;
+    type=&quot;text&quot;
+    autocomplete=&quot;name&quot;
+    aria-describedby=&quot;signup-name-help&quot;
+  /&gt;
+  &lt;p class=&quot;sq-field__help&quot; id=&quot;signup-name-help&quot;&gt;Shown on confirmations.&lt;/p&gt;
+&lt;/div&gt;</pre>
+<h2 id="controls">Controls</h2>
+<div class="sq-table-scroll" role="region" tabindex="0" aria-label="Data table"><table class="sq-table"><thead><tr><th scope="col">Markup</th><th scope="col">Notes</th></tr></thead><tbody><tr><td><code>&lt;input class=&quot;sq-input&quot; type=&quot;text | email | …&quot;&gt;</code></td><td>All text-like types, <code>date</code>, <code>time</code>, <code>color</code>, <code>file</code>. 48px default; <code>--small</code> (40px, dense rows only), <code>--large</code> (56px).</td></tr><tr><td><code>&lt;textarea class=&quot;sq-input&quot;&gt;</code></td><td>8rem minimum, vertical resize.</td></tr><tr><td><code>&lt;select class=&quot;sq-input&quot;&gt;</code> inside <code>&lt;div class=&quot;sq-select&quot;&gt;</code></td><td>Dressed select: painted token-colored, em-scaled chevron; native popup always. <code>.sq-select--native</code> opts back out.</td></tr><tr><td><code>.sq-combobox</code> + input + list</td><td>Typeahead: native input with <code>role=&quot;combobox&quot;</code>; list is <code>role=&quot;listbox&quot;</code> (see below).</td></tr><tr><td><code>.sq-file</code> label + input + zone</td><td>File input presented as a drop zone (see below).</td></tr><tr><td><code>.sq-rating</code> radio group</td><td>Radio stars: DOM order is highest-first; visual fill is left-to-right 1…n (see below).</td></tr><tr><td><code>&lt;select class=&quot;sq-input&quot;&gt;</code> (bare)</td><td>Native indicator kept deliberately. First-option placeholder: <code>&lt;option value=&quot;&quot; disabled selected&gt;Choose…&lt;/option&gt;</code>.</td></tr><tr><td><code>.sq-check</code> / <code>.sq-radio</code> label rows</td><td>Native input + themed <code>accent-color</code>; the padded ROW is the target. Optional <code>.sq-check__description</code> underneath.</td></tr><tr><td><code>.sq-switch</code> label + <code>input[type=checkbox]</code> + <code>.sq-switch__track</code></td><td>Input carries state in the tab order; track is presentation. 56×32px.</td></tr><tr><td><code>&lt;input class=&quot;sq-range&quot; type=&quot;range&quot;&gt;</code></td><td>Native slider, themed accent, full width. Pair with <code>.sq-range__value</code> + <code>aria-live=&quot;polite&quot;</code> for the readout.</td></tr><tr><td><code>&lt;fieldset class=&quot;sq-fieldset&quot;&gt;</code> + <code>&lt;legend&gt;</code></td><td>Checkbox/radio groups. Borderless; legend reads as the group label.</td></tr></tbody></table></div>
+<h2 id="states">States</h2>
+<ul><li><code>disabled</code> / <code>readonly</code>: native attributes, dimmed, <code>not-allowed</code>.</li></ul>
+<p>Never fake these with classes.</p>
+<ul><li>Invalid: <code>aria-invalid=&quot;true&quot;</code> (or <code>.sq-input--invalid</code> — the runtime</li></ul>
+<p>sets both). The border widens without moving layout (padding compensates). An invalid field MUST have an associated message (below).</p>
+<ul><li>Focus: border warms to accent AND the global focus ring shows for</li></ul>
+<p>keyboard users. Neither is ever removed.</p>
+<h2 id="required-marks">Required marks</h2>
+<pre tabindex="0" aria-label="Example code">&lt;label for=&quot;f-email&quot;
+  &gt;Email address
+  &lt;span class=&quot;sq-required-mark&quot; aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;
+&lt;/label&gt;</pre>
+<p>The asterisk is decorative (<code>required</code> announces natively). Never rely on the mark alone: the attribute + native validation do the work.</p>
+<h2 id="validation-native-first">Validation (native-first)</h2>
+<ol><li>Write constraints in HTML: <code>required</code>, <code>type=&quot;email&quot;</code>,</li></ol>
+<p><code>minlength</code>, <code>pattern</code>, <code>min</code>/<code>max</code>. The browser validates.</p>
+<ol><li>Associate every error: <code>aria-describedby=&quot;&lt;input-id&gt;-error&quot;</code> +</li></ol>
+<p><code>&lt;p class=&quot;sq-field__error&quot; id=&quot;&lt;input-id&gt;-error&quot;&gt;</code> with a message that names the fix (&quot;Enter an address like ada@example.com&quot;). The message text — not the red border — carries the meaning.</p>
+<ol><li>Optional enhancement: <code>Squircle.enhanceForm(form)</code> moves focus to</li></ol>
+<p>the first invalid field on submit. It never prevents or replaces native UI. <code>setFieldError</code>/<code>clearFieldError</code> manage the <code>aria-invalid</code> + <code>describedby</code> + message wiring for custom (e.g. server-side) errors. For native errors, reveal pre-rendered messages and toggle <code>.sq-input--invalid</code> on <code>invalid</code> (capture — <code>submit</code> does not fire while validation blocks) and re-sync on <code>input</code>, as <code>examples/forms.html</code> demonstrates.</p>
+<pre tabindex="0" aria-label="Example code">&lt;form id=&quot;signup&quot;&gt;
+  &lt;div class=&quot;sq-field&quot;&gt;
+    &lt;label for=&quot;f-email&quot;
+      &gt;Email address
+      &lt;span class=&quot;sq-required-mark&quot; aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;input
+      class=&quot;sq-input&quot;
+      id=&quot;f-email&quot;
+      name=&quot;email&quot;
+      type=&quot;email&quot;
+      required
+      autocomplete=&quot;email&quot;
+      aria-describedby=&quot;f-email-help f-email-error&quot;
+    /&gt;
+    &lt;p class=&quot;sq-field__help&quot; id=&quot;f-email-help&quot;&gt;We never share it.&lt;/p&gt;
+    &lt;p class=&quot;sq-field__error&quot; id=&quot;f-email-error&quot;&gt;
+      Enter an address like ada@example.com.
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+&lt;script&gt;
+  Squircle.enhanceForm(document.getElementById(&quot;signup&quot;));
+&lt;/script&gt;</pre>
+<p>Pre-rendered error text (as above) suits server-rendered forms; the runtime creates the message element when it does not exist.</p>
+<h2 id="switch-range-and-checks-keyboard">Switch, range, and checks: keyboard</h2>
+<p>All are native inputs: Tab reaches them, Space toggles checks/switches, arrows move radios and sliders. Nothing to wire. The switch track shows the global focus ring via <code>:focus-visible</code> on the (visually hidden but focusable) input.</p>
+<h2 id="select-dressed">Select, dressed</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-field&quot;&gt;
+  &lt;label for=&quot;order-currency&quot;&gt;Billing currency&lt;/label&gt;
+  &lt;div class=&quot;sq-select&quot;&gt;
+    &lt;select class=&quot;sq-input&quot; id=&quot;order-currency&quot; name=&quot;currency&quot;&gt;
+      &lt;option value=&quot;usd&quot; selected&gt;USD — US Dollar&lt;/option&gt;
+      &lt;option value=&quot;eur&quot;&gt;EUR — Euro&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+<p>The wrapper paints a chevron from tokens; the select itself stays a native <code>&lt;select&gt;</code> — the popup list, its fonts, and its zoom are the browser's, always. The chevron is em-scaled (scales with zoom) and token-colored (contrast-checked), so the classic broken-custom-chevron failure modes don't apply. <code>multiple</code> and <code>size</code> selects, and <code>.sq-select--native</code>, keep the browser's own indicator: that chrome is part of the control there.</p>
+<h2 id="combobox">Combobox</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-field&quot;&gt;
+  &lt;label for=&quot;cb-country&quot;&gt;Country&lt;/label&gt;
+  &lt;div class=&quot;sq-combobox&quot;&gt;
+    &lt;input
+      class=&quot;sq-input&quot;
+      id=&quot;cb-country&quot;
+      name=&quot;country&quot;
+      type=&quot;text&quot;
+      role=&quot;combobox&quot;
+      aria-expanded=&quot;false&quot;
+      aria-controls=&quot;cb-country-list&quot;
+      aria-autocomplete=&quot;list&quot;
+      autocomplete=&quot;off&quot;
+      data-sq-combobox
+    /&gt;
+    &lt;ul
+      class=&quot;sq-combobox__list&quot;
+      id=&quot;cb-country-list&quot;
+      role=&quot;listbox&quot;
+      aria-label=&quot;Countries&quot;
+      hidden
+    &gt;
+      &lt;li role=&quot;option&quot; data-value=&quot;de&quot;&gt;Germany&lt;/li&gt;
+      &lt;li role=&quot;option&quot; data-value=&quot;jp&quot;&gt;Japan&lt;/li&gt;
+      &lt;li class=&quot;sq-combobox__empty&quot; hidden&gt;No countries match.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+  Squircle.init(); // or Squircle.initComboboxes(document)
+&lt;/script&gt;</pre>
+<p>The input is the value carrier: options may carry <code>data-value</code> to write back a machine value (the label stays what was shown while browsing). Behavior, served by the runtime:</p>
+<ul><li>Typing opens the panel and filters options by label text</li></ul>
+<p>(<code>data-sq-combobox-filter=&quot;off&quot;</code> keeps server-driven lists intact — the runtime then only navigates).</p>
+<ul><li><code>ArrowDown</code>/<code>ArrowUp</code> move (wrapping); <code>Home</code>/<code>End</code> jump; <code>PageUp</code>/</li></ul>
+<p><code>PageDown</code> move five; <code>Enter</code> commits the active option; <code>Escape</code> closes and restores the pre-open value; <code>Tab</code> closes and lets focus travel.</p>
+<ul><li>The active option is announced through <code>aria-activedescendant</code></li></ul>
+<p>(options receive ids automatically when missing); the panel hides on outside clicks and on focus leaving the group.</p>
+<p>Keyboard typing is native (the input does the announcing); the panel is presentation.</p>
+<h2 id="file-upload">File upload</h2>
+<pre tabindex="0" aria-label="Example code">&lt;label class=&quot;sq-file&quot; data-sq-file&gt;
+  &lt;input
+    class=&quot;sq-file__input&quot;
+    id=&quot;upload-logo&quot;
+    name=&quot;logo&quot;
+    type=&quot;file&quot;
+    accept=&quot;image/*&quot;
+    multiple
+  /&gt;
+  &lt;span class=&quot;sq-file__zone&quot;&gt;
+    &lt;span class=&quot;sq-file__icon&quot; aria-hidden=&quot;true&quot;&gt;
+      &lt;svg
+        class=&quot;sq-icon&quot;
+        viewBox=&quot;0 0 24 24&quot;
+        fill=&quot;none&quot;
+        stroke=&quot;currentColor&quot;
+        stroke-width=&quot;2&quot;
+        stroke-linecap=&quot;round&quot;
+        stroke-linejoin=&quot;round&quot;
+        focusable=&quot;false&quot;
+      &gt;
+        &lt;path d=&quot;M12 15V4&quot; /&gt;
+        &lt;path d=&quot;m7 8 5-5 5 5&quot; /&gt;
+        &lt;path d=&quot;M5 20h14&quot; /&gt;
+      &lt;/svg&gt;
+    &lt;/span&gt;
+    &lt;span class=&quot;sq-file__title&quot;&gt;Choose files or drop them&lt;/span&gt;
+    &lt;span class=&quot;sq-file__hint&quot;&gt;PNG, JPEG, SVG.&lt;/span&gt;
+  &lt;/span&gt;
+&lt;/label&gt;
+&lt;script&gt;
+  Squircle.init(); // or Squircle.initUploads(document)
+&lt;/script&gt;</pre>
+<p>The input stays a real file input (Tab reaches it; the focus ring lands on the zone). The runtime binds the label as a drop target: dragging over adds <code>sq-file__zone--hover</code> to the zone, dropping feeds <code>dataTransfer.files</code> into the input (single-file inputs keep the first file), and a <code>change</code> event fires — the author's handler then runs the same way it does for a picker pick. The zone also picks up <code>sq-file__zone--filled</code> for styling completeness. Disabled is the native attribute on the input; the zone dims through it.</p>
+<h2 id="rating">Rating</h2>
+<pre tabindex="0" aria-label="Example code">&lt;fieldset class=&quot;sq-fieldset&quot;&gt;
+  &lt;legend&gt;Rate your onboarding&lt;/legend&gt;
+  &lt;div class=&quot;sq-rating&quot;&gt;
+    &lt;label class=&quot;sq-rating__star&quot;&gt;
+      &lt;input class=&quot;sq-rating__input&quot; type=&quot;radio&quot; name=&quot;rating&quot; value=&quot;5&quot; /&gt;
+      &lt;span class=&quot;sq-sr-only&quot;&gt;5 stars&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;sq-rating__star&quot;&gt;
+      &lt;input class=&quot;sq-rating__input&quot; type=&quot;radio&quot; name=&quot;rating&quot; value=&quot;4&quot; /&gt;
+      &lt;span class=&quot;sq-sr-only&quot;&gt;4 stars&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;sq-rating__star&quot;&gt;
+      &lt;input class=&quot;sq-rating__input&quot; type=&quot;radio&quot; name=&quot;rating&quot; value=&quot;3&quot; /&gt;
+      &lt;span class=&quot;sq-sr-only&quot;&gt;3 stars&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;sq-rating__star&quot;&gt;
+      &lt;input class=&quot;sq-rating__input&quot; type=&quot;radio&quot; name=&quot;rating&quot; value=&quot;2&quot; /&gt;
+      &lt;span class=&quot;sq-sr-only&quot;&gt;2 stars&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;sq-rating__star&quot;&gt;
+      &lt;input
+        class=&quot;sq-rating__input&quot;
+        type=&quot;radio&quot;
+        name=&quot;rating&quot;
+        value=&quot;1&quot;
+        checked
+      /&gt;
+      &lt;span class=&quot;sq-sr-only&quot;&gt;1 star&lt;/span&gt;
+    &lt;/label&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</pre>
+<p>Stars are painted by the CSS (token-colored mask, em-scaled); the author never draws one. Options are native radios: DOM order is highest-first so that &quot;fill everything before the checked one&quot; paints a left-to-right 1..n visually; each option announces its label (&quot;5 stars&quot;); arrows move as radios always do. Pre-select a default to communicate an existing value; leave all unchecked for no default.</p>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>Surfaces, borders, placeholders, help/error text, accents, and the switch track/knob are tokens; both themes were contrast-checked including invalid and disabled states. The select chevron, rating stars, and combobox panel all follow the active theme the same way.</p>
+<h2 id="customization">Customization</h2>
+<p>Override <code>--sq-input-*</code>, <code>--sq-check-*</code>, <code>--sq-switch-*</code> tokens, or restyle in a later stylesheet. Keep the 3rem default heights unless a documented dense context justifies <code>small</code>.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li>Placeholder as label — labels are always visible.</li><li><code>.sq-input--invalid</code> without a message element — color alone.</li><li><code>novalidate</code> + an incomplete custom engine — keep native validation.</li><li>Custom chevrons that break zoom or contrast — the dressed select</li></ul>
+<p>paints from tokens and scales with text; opt out with <code>.sq-select--native</code> (or bare <code>select.sq-input</code>) when unsure.</p>
+<ul><li>Errors announced only via <code>role=&quot;alert&quot;</code> on every keystroke — associate</li></ul>
+<p>with <code>describedby</code>; reserve live regions for submit summaries.</p>
+<ul><li>Fake drop zones with hashes of JS that never touch the input — the</li></ul>
+<p>input stays the value carrier; the runtime feeds it, it doesn't replace it.</p>
+<ul><li>Rating as clickable hearts/dots divs — the radios ARE the control;</li></ul>
+<p>every star is a real labeled option.</p>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>No date-picker theming beyond the surface (picker chrome is native).</li><li>The combobox list has no built-in result-count live region (the active</li></ul>
+<p>option is announced; add one if your lists are long).</p>
+<ul><li>Combobox multi-select is out of scope for now — one selection at a</li></ul>
+<p>time.</p>
+<ul><li>No character counters or password-strength meters (later stages).</li><li><code>enhanceForm</code> focuses but does not scroll custom containers — native</li></ul>
+<p><code>scrollIntoView</code> behavior applies.</p>
+<ul><li>The dressed select cannot style the popup list (that is native</li></ul>
+<p>chrome, deliberately).</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

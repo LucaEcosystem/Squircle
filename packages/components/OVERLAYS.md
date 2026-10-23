@@ -49,6 +49,7 @@ Escape, backdrop, and focus containment free).
   // Or explicitly:
   Squircle.openDialog(document.getElementById("confirm-delete"));
   Squircle.closeDialog(document.getElementById("confirm-delete")); // restores invoker focus
+  Squircle.closeDialog(document.getElementById("confirm-delete"), false); // closes without restoring focus
 </script>
 ```
 
@@ -66,8 +67,11 @@ its visible close control (tested behavior, not an omission).
 
 **Focus:** opens on `[autofocus]`, else the first focusable control,
 else the dialog itself (never lost to `<body>`). Closes restore the
-invoker. No traps: Tab cycles natively in modal dialogs; non-modal
-dialogs never capture Tab.
+invoker without scrolling the page (an overlay closing must not jump
+the viewport). `closeDialog(el, false)` skips restoration — honored
+both for API calls and the declarative wiring's own close listener.
+No traps: Tab cycles natively in modal dialogs; non-modal dialogs
+never capture Tab.
 
 ## Menu (actions, not navigation)
 
@@ -114,11 +118,20 @@ dialogs never capture Tab.
 ```
 
 `data-sq-menu` + `aria-controls` binds trigger to menu (also via
-`createMenu(trigger, menu)`). Opens on click/ArrowDown/Enter/Space;
-ArrowUp/Down/Home/End move; Enter/Space activate natively; Escape
-closes and restores; Tab closes WITHOUT restoring (focus travels
-naturally — never trapped); click-outside closes. Disabled items use
+`createMenu(trigger, menu)`). Opens on click/ArrowDown/Enter/Space —
+ArrowUp opens with the LAST item focused (APG dropdown pattern);
+ArrowDown/Up/Home/End move within the open menu; Enter/Space activate
+natively (authors' handlers run unmodified); Escape closes and
+restores; Tab closes WITHOUT restoring (focus travels naturally —
+never trapped); click-outside closes. Disabled items use
 `aria-disabled="true"` (skipped by arrows, not activated).
+
+**Positioning:** `.sq-menu` overlays — positioned absolute at the
+`--sq-z-index-dropdown` tier, so opening never pushes content down.
+The menu anchors to its nearest positioned ancestor: author it beside
+its trigger inside a positioned container (a relative wrapper or the
+nav/section it belongs to). Coarse placement stays author-owned by
+design; the runtime keeps it stacked and out of flow.
 
 `sq-menu__item--danger` pairs the error color with an explicit verb —
 never color alone. `sq-menu__hint` shows shortcut text (informational,
@@ -158,10 +171,15 @@ own the roles, the runtime owns the behavior.
 
 Show/hide/light-dismiss stay native. Without the anchor attribute the
 popover centers (platform default — complete alone). With it,
-`positionPopover` places it beside the trigger, flips when space runs
-out, and clamps inside the viewport (`data-sq-popover-placement="top"`
-opts into above-first). No animation (instant both ways —
-reduced-motion safe by construction).
+`positionPopover` places it beside the trigger and works out the
+placement in a resolved order — requested first, then its opposite,
+then the perpendicular pair — so it flips any direction when space
+runs out, clamping inside the viewport as the last resort
+(`data-sq-popover-placement="top|bottom|left|right"` picks the
+requested side; unknown values warn and fall back to `"bottom"`).
+While a popover stays open, scrolling or resizing the page
+repositions it, so it never visually detaches from its trigger. No
+animation (instant both ways — reduced-motion safe by construction).
 
 ## Tooltip (hints, never essentials)
 
@@ -179,9 +197,11 @@ reduced-motion safe by construction).
 ```
 
 Plain-text content, one shared live element, shown on hover AND focus,
-hidden on leave/blur/Escape/scroll. Wired into `aria-describedby`
-(preserving author descriptions). The page must make full sense with
-tooltips disabled — if the information is essential, print it inline.
+hidden on leave/blur/Escape/scroll. `aria-describedby` wiring is
+transient — the tooltip's id is added while shown and removed when
+hidden, preserving any author-provided descriptions. The page must
+make full sense with tooltips disabled — if the information is
+essential, print it inline.
 
 ## Accessibility notes (all four)
 

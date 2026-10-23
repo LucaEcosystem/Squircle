@@ -61,6 +61,25 @@ test.describe("landing template", () => {
     ).toBeVisible();
   });
 
+  test("nav links recover after widening past the collapse point", async ({
+    page,
+  }) => {
+    // Collapse the details nav while narrow, then widen: the summary
+    // disappears without reopening anything, so the recovery rule must
+    // show the links anyway (otherwise they strand forever — CSS-only).
+    await page.setViewportSize({ width: 360, height: 800 });
+    const menu = page.locator(".sq-nav-menu");
+    await expect(menu).toHaveAttribute("open", "");
+    await menu.locator("> summary").click();
+    const docs = page
+      .getByRole("navigation", { name: "Primary" })
+      .getByRole("link", { name: "Docs" });
+    await expect(docs).toBeHidden();
+    await page.setViewportSize({ width: 1024, height: 800 });
+    await expect(menu.locator("> summary")).toBeHidden();
+    await expect(docs).toBeVisible();
+  });
+
   test("no overflow at any review width", async ({ page }) => {
     for (const width of [360, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 800 });

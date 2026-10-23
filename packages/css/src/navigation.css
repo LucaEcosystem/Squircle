@@ -14,7 +14,7 @@
 
 .sq-navbar {
   background-color: var(--sq-nav-background);
-  border-bottom: 1px solid var(--sq-nav-border-color);
+  border-block-end: 1px solid var(--sq-nav-border-color);
 }
 
 .sq-navbar__inner {
@@ -66,7 +66,7 @@
   color: var(--sq-color-text-secondary);
   text-decoration: none;
   font-weight: var(--sq-font-weight-strong);
-  min-height: 2.75rem;
+  min-height: var(--sq-nav-item-min-height);
 }
 
 .sq-nav__link:hover {
@@ -103,7 +103,7 @@
   font-weight: var(--sq-font-weight-strong);
   cursor: pointer;
   list-style: none;
-  min-height: 3rem;
+  min-height: var(--sq-nav-summary-min-height);
 }
 
 .sq-nav-menu > summary::-webkit-details-marker {
@@ -143,6 +143,14 @@
   }
   .sq-nav-menu > summary + * {
     padding-block-start: 0;
+  }
+  /* Recovery: a nav collapsed while narrow has no toggle once the
+   * summary is display:none here, so its links would strand in a
+   * closed <details> forever. content-visibility re-renders the
+   * details-content slot regardless of the open attribute; where
+   * ::details-content is unsupported this no-ops harmlessly. */
+  .sq-nav-menu::details-content {
+    content-visibility: visible;
   }
 }
 
@@ -212,8 +220,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 3rem;
-  min-height: 3rem;
+  min-width: var(--sq-pagination-target);
+  min-height: var(--sq-pagination-target);
   padding-inline: var(--sq-space-xs);
   border-radius: var(--sq-radius-sm);
   font-weight: var(--sq-font-weight-strong);
@@ -285,4 +293,119 @@
   .sq-with-sidebar {
     grid-template-columns: var(--sq-nav-sidebar-width) minmax(0, 1fr);
   }
+}
+
+/* -- Stepper --------------------------------------------------------------------------------------------
+ * Progressive flow: markers connected by a rail. State comes from
+ * markup (`aria-current="step"` for the active one, `--done` for
+ * completed); CSS never invents state. Wraps to a column when steps
+ * run out of width.
+ */
+
+.sq-stepper {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  counter-reset: sq-step;
+  /* Narrow by default: a vertical flow the rail can't escape. */
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sq-space-xs);
+}
+
+.sq-stepper__step {
+  counter-increment: sq-step;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--sq-stepper-gap);
+  padding-block: var(--sq-space-3xs);
+  position: relative;
+  min-width: 0;
+}
+
+/* Wide layouts switch to the classic horizontal rail; steps keep their
+ * natural width and wrap when they outgrow it. */
+@media (min-width: 48rem) {
+  .sq-stepper {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .sq-stepper__step {
+    grid-template-columns: auto auto;
+  }
+
+  .sq-stepper__step::before {
+    content: "";
+    width: 0.75rem;
+    align-self: center;
+    height: var(--sq-stepper-rail-width);
+    background-color: var(--sq-stepper-rail-color);
+    border-radius: var(--sq-stepper-rail-width);
+    display: block;
+  }
+
+  .sq-stepper__step:first-child::before {
+    content: none;
+  }
+}
+
+.sq-stepper__marker {
+  display: grid;
+  place-items: center;
+  width: var(--sq-stepper-marker-size);
+  height: var(--sq-stepper-marker-size);
+  border-radius: var(--sq-stepper-marker-radius);
+  border: 1px solid var(--sq-stepper-marker-border);
+  color: var(--sq-color-text-secondary);
+  font-weight: var(--sq-font-weight-strong);
+  font-size: var(--sq-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  background-color: var(--sq-color-surface-elevated);
+  flex: none;
+}
+
+/* Numbered steps without explicit marker text: the counter prints. */
+.sq-stepper__marker:empty::before {
+  content: counter(sq-step);
+  color: var(--sq-color-text-secondary);
+}
+
+.sq-stepper__label {
+  color: var(--sq-color-text-secondary);
+  font-size: var(--sq-font-size-sm);
+  min-width: 0;
+}
+
+/* The active step: class variant and aria-current share one appearance. */
+.sq-stepper__step--active .sq-stepper__marker,
+.sq-stepper__step[aria-current="step"] .sq-stepper__marker {
+  background-color: var(--sq-color-accent);
+  border-color: var(--sq-color-accent);
+  color: var(--sq-color-accent-contrast);
+}
+
+.sq-stepper__step--active .sq-stepper__marker:empty::before,
+.sq-stepper__step[aria-current="step"] .sq-stepper__marker:empty::before {
+  color: var(--sq-color-accent-contrast);
+}
+
+.sq-stepper__step--active .sq-stepper__label,
+.sq-stepper__step[aria-current="step"] .sq-stepper__label {
+  color: var(--sq-color-text-primary);
+  font-weight: var(--sq-font-weight-strong);
+}
+
+.sq-stepper__step--done .sq-stepper__marker {
+  background-color: var(--sq-color-surface-elevated);
+  border-color: var(--sq-color-border-strong);
+  color: var(--sq-color-success-text);
+}
+
+.sq-stepper__step--done .sq-stepper__label {
+  color: var(--sq-color-text-secondary);
 }

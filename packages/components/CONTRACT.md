@@ -48,11 +48,14 @@ All motion honors `prefers-reduced-motion`.
   2. Active theme tokens (`:root` / `[data-sq-theme]`).
   3. Component variant defaults (`.sq-button--primary`, …).
   4. Consumer overrides (later stylesheets, higher-or-equal specificity).
-     Qualifications: variant defaults (3) beat theme tokens (2) ONLY for the
-     properties the variant sets — e.g. a primary button keeps its accent
-     fill under Ocean (the fill IS the variant), while its text, radius, and
-     spacing still follow the theme. Consumers (4) win by source order at
-     equal specificity; Squircle never uses `!important`, so one consumer
+     Qualifications: variant defaults (3) beat theme tokens (2) where the
+     variant's appearance is its own defaults (shape, spacing, ring) — text,
+     radius, and spacing still follow the theme. Fills that DERIVE from a
+     semantic token follow the theme's retune of that token: Ocean retunes
+     `--sq-color-accent`, so accent-derived fills (primary button, switch
+     track, tab indicator) ride along; tokens Ocean does not retune (danger
+     red, success green) keep their values. Consumers (4) win by source order
+     at equal specificity; Squircle never uses `!important`, so one consumer
      rule always suffices.
 
 ## 5. Spacing and density
@@ -74,6 +77,29 @@ All motion honors `prefers-reduced-motion`.
   never duplicated ad-hoc media queries per instance.
 - Touch targets stay ≥44px on coarse pointers; hover-only affordances
   always have a touch/keyboard path.
+
+## 6b. Motion
+
+- Durations and easings come from the motion tier (five durations,
+  instant→slower; four easings) or an established component-duration
+  token (`--sq-spinner-speed`, `--sq-skeleton-shimmer-duration`). No
+  literal `ms`/`s` timing outside the base gate (enforced by
+  `packages/css/test/motion.test.ts`).
+- Reduced motion is gated exactly once, at the base layer: all
+  `animation-*` and `transition-*` collapse to a 0.01ms no-op and
+  `scroll-behavior` becomes instant. Components never re-gate
+  globally; per-component PRM blocks only harden layer specifics
+  (carousel instant scroll, shimmer/spinner rest states, switch
+  thumb) or are unnecessary because motion survives as state feedback
+  (instant-duration transitions).
+- Keyframes live in the `sq-` namespace; author-facing entries
+  (`.sq-fade-in`, `.sq-rise-in`, `.sq-hover-lift`, `.sq-active-press`,
+  `.sq-motion-none`) ride the same tokens.
+- New components land motion-silent by default: toggles/openers flip
+  via `hidden`, animations must state a reason. If a transition is
+  justified, it starts at `--sq-motion-duration-quick` with
+  `--sq-motion-easing-out` and gets no special PRM treatment — the
+  base gate already covers it.
 
 ## 7. Documentation requirements (per component)
 

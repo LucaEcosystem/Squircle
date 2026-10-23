@@ -1,6 +1,6 @@
 {
   "name": "@squircle/themes",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "Squircle theme registry, validation, and the Luca Ecosystem Theme",
   "type": "module",

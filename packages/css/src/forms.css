@@ -46,7 +46,7 @@
 .sq-input:disabled,
 .sq-input[readonly] {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--sq-opacity-disabled-field);
 }
 
 .sq-input:disabled {
@@ -58,7 +58,7 @@
 }
 
 textarea.sq-input {
-  min-height: 8rem;
+  min-height: var(--sq-input-min-height-multiline);
   line-height: var(--sq-font-line-body);
   resize: vertical;
 }
@@ -207,7 +207,7 @@ select.sq-input:has(option:checked:disabled) {
 .sq-check:has(> input:disabled),
 .sq-radio:has(> input:disabled) {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--sq-opacity-disabled-field);
 }
 
 .sq-check__text,
@@ -267,7 +267,8 @@ select.sq-input:has(option:checked:disabled) {
   border-radius: 50%;
   background-color: var(--sq-switch-knob-background);
   transform: translateY(-50%);
-  transition: left var(--sq-motion-duration-quick) var(--sq-motion-easing-out);
+  transition: transform var(--sq-motion-duration-quick)
+    var(--sq-motion-easing-out);
 }
 
 .sq-switch > input:checked + .sq-switch__track {
@@ -276,10 +277,13 @@ select.sq-input:has(option:checked:disabled) {
 }
 
 .sq-switch > input:checked + .sq-switch__track::after {
-  left: calc(
-    var(--sq-switch-width) - var(--sq-switch-knob) -
-      ((var(--sq-switch-height) - var(--sq-switch-knob)) / 2 - 1px)
-  );
+  transform: translateX(
+      calc(
+        (var(--sq-switch-width) - var(--sq-switch-knob)) - 2 *
+          ((var(--sq-switch-height) - var(--sq-switch-knob)) / 2 - 1px)
+      )
+    )
+    translateY(-50%);
   background-color: var(--sq-switch-knob-checked-background);
 }
 
@@ -291,7 +295,7 @@ select.sq-input:has(option:checked:disabled) {
 .sq-switch > input:disabled ~ .sq-switch__text,
 .sq-switch:has(> input:disabled) {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--sq-opacity-disabled-field);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -318,11 +322,269 @@ select.sq-input:has(option:checked:disabled) {
 
 .sq-range:disabled {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: var(--sq-opacity-disabled-field);
 }
 
 .sq-range__value {
   font-size: var(--sq-font-size-sm);
   color: var(--sq-color-text-secondary);
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * Select, dressed: the input skin plus a painted indicator. The select stays
+ * a native select — popup list, fonts, and zoom are the browser's, always.
+ * The painted chevron is em-scaled (scrolls with zoom) and token-colored
+ * (contrast-checked); `.sq-select--native` opts back out to the browser's
+ * own indicator whenever an author prefers it.
+ * ------------------------------------------------------------------------ */
+
+.sq-select {
+  position: relative;
+}
+
+.sq-select > select.sq-input {
+  appearance: none;
+  width: 100%;
+  padding-inline-end: calc(var(--sq-input-padding-x) + 1.75em);
+}
+
+/* The wrapper paints the chevron: the select itself cannot host a
+ * pseudo-element. Positioned inline-end so RTL simply mirrors. */
+.sq-select::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--sq-input-padding-x);
+  width: 0.875em;
+  height: 0.875em;
+  margin-block: auto;
+  pointer-events: none;
+  background-color: var(--sq-select-indicator);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.sq-select:hover::after,
+.sq-select:focus-within::after {
+  background-color: var(--sq-select-indicator-hover);
+}
+
+.sq-select:has(select:disabled)::after {
+  opacity: var(--sq-opacity-disabled-field);
+}
+
+/* `multiple` and `size` selects keep the browser chrome: the native
+ * scrollbar row is part of the control there. */
+.sq-select:has(select[multiple]) > select.sq-input,
+.sq-select:has(select[size]) > select.sq-input {
+  appearance: auto;
+}
+
+.sq-select--native > select.sq-input {
+  appearance: auto;
+}
+
+/* ---------------------------------------------------------------------------
+ * File upload: a label wraps the (never-fake-disabled) file input; the zone
+ * is presentation. The runtime adds `--hover` while dragging over and
+ * `--filled` once a file is chosen; the CSS prepares both. Keyboard users
+ * reach the real input (via Tab), so the focus ring lands on the zone.
+ * ------------------------------------------------------------------------ */
+.sq-file {
+  display: block;
+}
+
+.sq-file__input {
+  /* Focusable, announced, invisible: same pattern as the switch input. */
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  position: absolute;
+  opacity: 0;
+}
+
+.sq-file__zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sq-space-2xs);
+  text-align: center;
+  padding: var(--sq-file-padding);
+  border: 1px dashed var(--sq-file-border-color);
+  border-radius: var(--sq-input-radius);
+  background-color: var(--sq-file-background);
+  color: var(--sq-color-text-secondary);
+  cursor: pointer;
+  transition:
+    border-color var(--sq-motion-duration-quick),
+    background-color var(--sq-motion-duration-quick);
+}
+
+.sq-file__zone:hover,
+.sq-file__zone--hover {
+  background-color: var(--sq-file-hover-background);
+  border-color: var(--sq-color-accent);
+}
+
+/* Disabled files: the native side stays native (nothing moves), the
+ * zone dims to the shared disabled treatment. */
+.sq-file:has(.sq-file__input:disabled) .sq-file__zone {
+  opacity: var(--sq-opacity-disabled-field);
+  cursor: not-allowed;
+}
+
+.sq-file__input:focus-visible ~ .sq-file__zone {
+  outline: var(--sq-focus-width) solid var(--sq-focus-color);
+  outline-offset: var(--sq-focus-offset);
+}
+
+.sq-file__icon {
+  display: inline-flex;
+  color: var(--sq-color-text-muted);
+}
+
+.sq-file__title {
+  color: var(--sq-color-text-primary);
+  font-weight: var(--sq-font-weight-strong);
+}
+
+.sq-file__hint {
+  font-size: var(--sq-font-size-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-file__zone {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Rating: a radio fieldset with masked stars. DOM order is highest-value
+ * first and the row lays out reversed, so "fill everything before the
+ * checked one" paints left-to-right 1..n visually; radios keep the native
+ * arrow-key navigation and the screen reader announces each option's label.
+ * ------------------------------------------------------------------------ */
+
+.sq-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: var(--sq-rating-gap);
+}
+
+.sq-rating__star {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  padding-block: var(--sq-space-xs);
+}
+
+/* The star glyph: token-colored mask, sized in em so zoom scales it. */
+.sq-rating__star::after {
+  content: "";
+  width: 1.5em;
+  height: 1.5em;
+  background-color: var(--sq-rating-idle-color);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 2.5 14.9 8.6 21.5 9.5 16.7 14.2 17.9 20.8 12 17.6 6.1 20.8 7.3 14.2 2.5 9.5 9.1 8.6Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.sq-rating__input {
+  /* Focusable, announced, invisible: the ring lands on the star. */
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  position: absolute;
+  opacity: 0;
+}
+
+/* Everything AFTER the checked input in DOM (visually LEFT of it — the
+ * row is reversed) fills up to and including the selection. */
+.sq-rating__input:checked ~ .sq-rating__star::after {
+  background-color: var(--sq-rating-accent-color);
+}
+
+/* Keyboard ring: the star of the focused option warms to accent. Half
+ * of the a11y contract — the other half is the label's readable text. */
+.sq-rating__input:focus-visible ~ .sq-rating__star::after {
+  background-color: var(--sq-color-focus);
+}
+
+/* ---------------------------------------------------------------------------
+ * Combobox: native input + an absolutely positioned list panel. The trigger
+ * keeps every native input behavior; the list panel is presentation only —
+ * options are `role="option"` items the runtime navigates with
+ * aria-activedescendant. Below live only the surface styles; the keyboard
+ * and live region wiring is the runtime's.
+ * ------------------------------------------------------------------------ */
+
+.sq-combobox {
+  position: relative;
+}
+
+.sq-combobox > .sq-input {
+  width: 100%;
+}
+
+.sq-combobox__list {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + var(--sq-space-2xs));
+  z-index: var(--sq-z-index-dropdown);
+  max-height: var(--sq-combobox-max-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--sq-menu-padding);
+  background-color: var(--sq-menu-background);
+  border: 1px solid var(--sq-menu-border-color);
+  border-radius: var(--sq-menu-radius);
+  box-shadow: var(--sq-shadow-md);
+  list-style: none;
+  margin: 0;
+}
+
+.sq-combobox__option {
+  display: flex;
+  align-items: center;
+  gap: var(--sq-space-2xs);
+  padding: var(--sq-menu-item-padding-y) var(--sq-menu-item-padding-x);
+  border-radius: var(--sq-menu-item-radius);
+  min-height: var(--sq-menu-item-min-height);
+  cursor: pointer;
+  line-height: var(--sq-font-line-snug);
+}
+
+.sq-combobox__option:hover,
+.sq-combobox__option[aria-selected="true"] {
+  background-color: var(--sq-menu-item-hover-background);
+}
+
+/* Active option's ring follows the activedescendant the runtime moves —
+ * visible even on non-hovered options for keyboard navigation. */
+.sq-combobox__option[aria-selected="true"] {
+  font-weight: var(--sq-font-weight-strong);
+}
+
+.sq-combobox__option[aria-selected="true"]:hover {
+  background-color: var(--sq-menu-item-hover-background);
+}
+
+.sq-combobox__option--active {
+  background-color: var(--sq-menu-item-hover-background);
+}
+
+.sq-combobox__meta {
+  margin-inline-start: auto;
+  color: var(--sq-color-text-muted);
+  font-size: var(--sq-font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.sq-combobox__empty {
+  padding: var(--sq-space-sm);
+  color: var(--sq-color-text-muted);
+  font-size: var(--sq-font-size-sm);
+  text-align: center;
 }

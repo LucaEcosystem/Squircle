@@ -13,9 +13,10 @@
  */
 
 import {
-  alreadyInitialized,
+  focusWithoutScroll,
   focusableChildren,
-  markInitialized,
+  INITIALIZED_ATTRS,
+  initMarks,
 } from "./dom.js";
 
 export interface DialogOptions {
@@ -32,15 +33,23 @@ export interface DialogOptions {
 
 const invokers = new WeakMap<HTMLDialogElement, Element | null>();
 
+/**
+ * One-shot suppression flag: `closeDialog(dialog, false)` closes without
+ * restoring focus, but the module's own `close` listener (Esc, backdrop,
+ * nesting) would still restore. `closeDialog` plants the flag; the next
+ * `close` event consumes it.
+ */
+const suppressRestore = new WeakSet<HTMLDialogElement>();
+
 function placeInitialFocus(dialog: HTMLDialogElement): void {
   const autofocus = dialog.querySelector("[autofocus]");
   if (autofocus instanceof HTMLElement) {
-    autofocus.focus();
+    autofocus.focus({ preventScroll: true });
     return;
   }
   const first = focusableChildren(dialog)[0];
   if (first) {
-    first.focus();
+    first.focus({ preventScroll: true });
     return;
   }
   // Nothing focusable: make the dialog itself the target so focus is
@@ -48,7 +57,7 @@ function placeInitialFocus(dialog: HTMLDialogElement): void {
   if (!dialog.hasAttribute("tabindex")) {
     dialog.setAttribute("tabindex", "-1");
   }
-  dialog.focus();
+  dialog.focus({ preventScroll: true });
 }
 
 /** Opens a dialog (idempotent — opening an open dialog is a no-op). */
@@ -70,16 +79,42 @@ export function openDialog(
   placeInitialFocus(dialog);
 }
 
-/** Closes a dialog and restores focus to its invoker (unless disabled). */
+/**
+ * Closes a dialog. Restores focus to the invoker by default;
+ * `restoreFocus: false` closes without moving focus — which drops the
+ * platform's own close-restoration as well (Chromium refocuses the
+ * opener natively). Leaving or closing an overlay never scrolls the
+ * page: an engine-baked scroll inside `close()` is set back.
+ */
 export function closeDialog(
   dialog: HTMLDialogElement,
   restoreFocus = true,
 ): void {
   if (!dialog.open) return;
-  dialog.close();
-  if (!restoreFocus) return;
+  const wakeup = !restoreFocus;
+  if (wakeup) suppressRestore.add(dialog);
   const invoker = invokers.get(dialog);
-  if (invoker instanceof HTMLElement) invoker.focus();
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
+  dialog.close();
+  if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
+    window.scrollTo({ left: scrollX, top: scrollY, behavior: "instant" });
+  }
+  if (!wakeup) {
+    if (invoker instanceof HTMLElement) focusWithoutScroll(invoker);
+    return;
+  }
+  // Chromium hands focus back to the opener inside close(); drop it so
+  // "restore: false" lands on a clean, unfocused page state.
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+  // The suppression flag was either consumed by the wiring's close
+  // listener (synchronously during close()) or nobody will ever fire —
+  // drop it so unwired dialogs' future closes restore normally.
+  if (!dialog.hasAttribute(INITIALIZED_ATTRS.dialog)) {
+    suppressRestore.delete(dialog);
+  }
 }
 
 /** True while the dialog is open (modal or not). */
@@ -103,10 +138,10 @@ function dialogFromId(id: string): HTMLDialogElement | null {
 export function initDialogs(root: ParentNode = document): () => void {
   const controller = new AbortController();
   const signal = controller.signal;
+  const marks = initMarks(INITIALIZED_ATTRS.dialog);
 
   for (const opener of root.querySelectorAll("[data-sq-dialog-open]")) {
-    if (alreadyInitialized(opener)) continue;
-    markInitialized(opener);
+    if (!marks.claim(opener)) continue;
     opener.addEventListener(
       "click",
       () => {
@@ -123,19 +158,21 @@ export function initDialogs(root: ParentNode = document): () => void {
   }
 
   for (const dialog of root.querySelectorAll("dialog.sq-dialog")) {
-    if (alreadyInitialized(dialog)) continue;
-    markInitialized(dialog);
+    if (!(dialog instanceof HTMLDialogElement)) continue;
+    if (!marks.claim(dialog)) continue;
     // Native `close` (Escape, API, backdrop) restores the invoker on
     // every engine: Chromium does this natively, WebKit leaves focus
     // on <body>. Double-focus with closeDialog() is harmless (same
     // element), and the map entry is consumed to avoid stale refs.
+    // Scrolling is suppressed: closing an overlay must not jump the
+    // viewport back to the opener.
     dialog.addEventListener(
       "close",
       () => {
-        if (!(dialog instanceof HTMLDialogElement)) return;
         const invoker = invokers.get(dialog);
         invokers.delete(dialog);
-        if (invoker instanceof HTMLElement) invoker.focus();
+        if (suppressRestore.delete(dialog)) return;
+        if (invoker instanceof HTMLElement) focusWithoutScroll(invoker);
       },
       { signal },
     );
@@ -162,5 +199,6 @@ export function initDialogs(root: ParentNode = document): () => void {
 
   return () => {
     controller.abort();
+    marks.release();
   };
 }

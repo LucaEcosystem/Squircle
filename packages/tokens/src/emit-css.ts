@@ -1,10 +1,12 @@
 /**
- * Emits `dist/tokens.css`: all three tiers as `:root` custom properties.
- * Run as the second half of the tokens build (`tsc && node emit-css.js`).
+ * Emits `dist/tokens.css`: the semantic and component tiers as `:root`
+ * custom properties. Run as the second half of the tokens build
+ * (`tsc && node emit-css.js`).
  *
- * The emitted file is committed to `dist/` (build output, gitignored) and
- * consumed by `@squircle/css` and by anyone importing tokens directly.
- * Consumers never run TypeScript — they load plain CSS.
+ * The emitted file is build output: `dist/` is gitignored and nothing
+ * is committed — every package build regenerates it. `@squircle/css`
+ * and the aggregated `squircle` package consume it (consumers never run
+ * TypeScript — they load plain CSS).
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";

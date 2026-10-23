@@ -19,7 +19,7 @@ utilities.
 | Display / visibility     | `sq-block`, `sq-flex`, `sq-grid`, `sq-hidden`, `sq-visible`, `sq-invisible`                                                                                                |
 | Flexbox / grid           | `sq-flex-row/col`, `sq-flex-wrap`, `sq-flex-1`, `sq-grow`, `sq-shrink-0`, `sq-grid-cols-1…4`, `sq-col-span-full`                                                           |
 | Alignment / gap          | `sq-items-center`, `sq-justify-between`, `sq-self-start`, `sq-place-center`, `sq-gap-xs…xl`                                                                                |
-| Margin / padding         | `sq-m-*`, `sq-mt/mb/ml/mr/ms/me-*`, `sq-mx-auto`, `sq-p-*`, `sq-px/py/pt/pb-*`                                                                                             |
+| Margin / padding         | `sq-m-*`, `sq-mt/mb/mr/ms/me-*`, `sq-mx-auto`, `sq-p-*`, `sq-px/py/pt/pb-*`                                                                                                |
 | Sizing                   | `sq-w-full`, `sq-h-full`, `sq-min-h-screen`, `sq-max-w-measure/narrow/base/wide`, `sq-aspect-video/square`, `sq-object-cover`                                              |
 | Position / stacking      | `sq-relative/absolute/fixed/sticky`, `sq-inset-0`, `sq-top-0…`, `sq-z-dialog…` (token order)                                                                               |
 | Typography               | `sq-text-xs…5xl`, `sq-font-display/body/mono`, `sq-weight-*`, `sq-leading-*`, `sq-text-left/center/right`, `sq-truncate`, `sq-clamp-2/3`, `sq-measure`                     |

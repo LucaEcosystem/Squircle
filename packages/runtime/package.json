@@ -1,6 +1,6 @@
 {
   "name": "@squircle/runtime",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "description": "Squircle browser runtime (framework-independent): theme switching and environment helpers. No TypeScript required by consumers.",
   "type": "module",

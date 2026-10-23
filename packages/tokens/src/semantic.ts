@@ -17,8 +17,10 @@
  *   red); it is documented as such and never presented as a brand color.
  *
  * Contrast policy: every `text* on background/surface` pair and every
- * `*Contrast on *fill` pair must meet WCAG 2.2 AA (4.5:1). Enforced by
- * `test/contrast.test.ts` — change values, not assertions.
+ * `*Contrast on *fill` pair must meet WCAG 2.2 AA (4.5:1) — enforced
+ * from the shared pair list in `contrast.ts`, pinned in the tokens
+ * suite (`test/tokens.test.ts`) and applied to custom themes by
+ * `@squircle/themes`. Change values, not assertions.
  */
 
 import { primitives } from "./primitives.js";
@@ -110,6 +112,11 @@ export const semantic = {
     size4xl: "3.75rem",
     size5xl: "5rem",
 
+    // Relative (not on the rem scale): inline code/keyboard text grows
+    // and shrinks with its surrounding font size instead of jumping to
+    // a fixed rem step.
+    sizeCode: "0.9em",
+
     fluidXl: "clamp(1.375rem, 1.1rem + 1.4vw, 1.75rem)",
     fluid2xl: "clamp(1.625rem, 1.25rem + 2vw, 2.25rem)",
     fluid3xl: "clamp(2rem, 1.4rem + 3.2vw, 3rem)",
@@ -134,6 +141,17 @@ export const semantic = {
     lg: "2rem",
     xl: "2.75rem",
     full: "999px",
+  },
+
+  // Structural state opacities (not colors): how far disabled/parked
+  // controls recede, and how faint a loading glyph freezes under
+  // reduced motion. Named by role, not number, so a theme retunes the
+  // washes without touching component rules.
+  opacity: {
+    disabledAction: "0.55",
+    disabledField: "0.65",
+    still: "0.45",
+    stillNested: "0.6",
   },
 
   shadow: {
@@ -170,6 +188,13 @@ export const semantic = {
     narrow: "48rem",
     base: "72rem",
     wide: "88rem",
+  },
+
+  // Content-size floor for layout primitives (the container group holds
+  // max-widths): an auto-fill grid tile never shrinks below this, so
+  // grids wrap instead of crushing card content.
+  layout: {
+    tileMin: "18rem",
   },
 
   zIndex: {

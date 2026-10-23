@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tabs — Squircle docs</title>
+    <meta name="description" content="Purpose:  switch between associated panels in place. Automatic" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Tabs</h1>
+      <p class="sq-lead">Purpose:  switch between associated panels in place. Automatic</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: switch between associated panels in place. Automatic activation — arrows move AND select, so focus, selection, and content never disagree.</p>
+<h2 id="usage">Usage</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div data-sq-tabs&gt;
+  &lt;div class=&quot;sq-tablist&quot; role=&quot;tablist&quot; aria-label=&quot;Project views&quot;&gt;
+    &lt;button
+      class=&quot;sq-tab&quot;
+      role=&quot;tab&quot;
+      type=&quot;button&quot;
+      aria-controls=&quot;tab-overview&quot;
+      aria-selected=&quot;true&quot;
+    &gt;
+      Overview
+    &lt;/button&gt;
+    &lt;button
+      class=&quot;sq-tab&quot;
+      role=&quot;tab&quot;
+      type=&quot;button&quot;
+      aria-controls=&quot;tab-activity&quot;
+      aria-selected=&quot;false&quot;
+      tabindex=&quot;-1&quot;
+    &gt;
+      Activity
+    &lt;/button&gt;
+    &lt;button
+      class=&quot;sq-tab&quot;
+      role=&quot;tab&quot;
+      type=&quot;button&quot;
+      aria-controls=&quot;tab-settings&quot;
+      aria-selected=&quot;false&quot;
+      tabindex=&quot;-1&quot;
+    &gt;
+      Settings
+    &lt;/button&gt;
+  &lt;/div&gt;
+  &lt;section class=&quot;sq-tabpanel&quot; role=&quot;tabpanel&quot; id=&quot;tab-overview&quot; tabindex=&quot;0&quot;&gt;
+    &lt;p class=&quot;sq-text&quot;&gt;…&lt;/p&gt;
+  &lt;/section&gt;
+  &lt;section class=&quot;sq-tabpanel&quot; role=&quot;tabpanel&quot; id=&quot;tab-activity&quot; hidden&gt;
+    …
+  &lt;/section&gt;
+  &lt;section class=&quot;sq-tabpanel&quot; role=&quot;tabpanel&quot; id=&quot;tab-settings&quot; hidden&gt;
+    …
+  &lt;/section&gt;
+&lt;/div&gt;
+&lt;script&gt;
+  Squircle.initTabs();
+&lt;/script&gt;</pre>
+<p><code>data-sq-tabs</code> binds the tablist (<code>createTabs(el)</code> for explicit use). Missing tab ids are generated (<code>sq-tab-N</code>); missing <code>aria-labelledby</code> on panels is backfilled. Explicit ids preferred.</p>
+<h2 id="keyboard">Keyboard</h2>
+<p>Left/Right (Up/Down) select the neighbor with wrapping; Home/End jump; click selects and focuses. <code>tabindex</code> roves (selected tab is <code>0</code>, the rest <code>-1</code>), so Tab enters the set once, not once per tab.</p>
+<h2 id="panels">Panels</h2>
+<p>Panels hide with <code>hidden</code> — out of the tab order AND the accessibility tree, no ARIA needed. Give scrollable panels <code>tabindex=&quot;0&quot;</code>; static panels need no tabindex. Long tab labels never wrap: the tablist scrolls horizontally (<code>overflow-x: auto</code>) instead of squeezing.</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li><code>aria-selected</code> mirrors selection; <code>aria-controls</code>/<code>aria-labelledby</code></li></ul>
+<p>bind tabs to panels (generated when omitted, explicit preferred).</p>
+<ul><li>Never skip heading levels to fake tab size; never use tabs for</li></ul>
+<p>sequential steps (that is a stepper, later stage) or for navigation between pages (those are links).</p>
+<ul><li>Content under tabs must be reachable another way when it matters</li></ul>
+<p>(deep-linking tabs is out of 1.0 scope — document the limitation to users when panels hold shareable content).</p>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>Tab text, hover wash, selected wash, and the accent indicator are tokens; the indicator clears 3:1 against both themes' washes (non-text). Selected state pairs the indicator with <code>aria-selected</code> — never color alone.</p>
+<h2 id="responsive-behavior">Responsive behavior</h2>
+<p>Labels truncate by scroll, not by ellipsis: the tablist scrolls. Panels reflow like any stacked content. At 360px the set stays one thumb-reachable row — verified, not assumed.</p>
+<h2 id="customization">Customization</h2>
+<p>Override <code>--sq-tab-*</code> tokens or restyle <code>.sq-tab[aria-selected]</code> states in a later stylesheet. Keep the indicator visible in every theme; keep unselected tabs at ≥4.5:1.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li>Manual activation expectations (arrows move but do not select) —</li></ul>
+<p>Squircle tabs are automatic; say so in user docs.</p>
+<ul><li><code>hidden</code> replaced with <code>display:none</code> utilities on panels — same</li></ul>
+<p>effect, but <code>hidden</code> is the contract the runtime toggles.</p>
+<ul><li>Tab lists for wizards or page navigation.</li></ul>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>No vertical tablists (write page CSS; the runtime is orientation-agnostic).</li><li>No deep-linking / hash routing for panels.</li><li>No animated panel transitions (instant swap; reduced-motion safe).</li></ul></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

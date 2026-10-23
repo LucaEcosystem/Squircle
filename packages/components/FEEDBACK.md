@@ -28,16 +28,21 @@ explicit close); they never auto-expire.
 <div class="sq-toasts" data-sq-toasts role="status"></div>
 <script>
   Squircle.notify("Workspace saved.", { tone: "success" });
-  // { tone: "info"|"success"|"warning"|"error", duration: 6000(ms, 0=persist) }
+  // { tone: "info"|"success"|"warning"|"error", duration: 6000(ms, 0=persist),
+  //   region, dismissLabel } — dismissLabel (or the region's
+  //   data-sq-toast-dismiss-label) localizes the dismiss button for SRs.
   const handle = Squircle.notify("Uploading…", { duration: 0 });
   handle.dismiss(); // or Squircle.dismissAll();
 </script>
 ```
 
 `notify()` takes plain text (never HTML — injection impossible by
-construction). Auto-dismiss pauses on hover/focus; every toast has a
+construction). Auto-dismiss pauses on hover/focus; an expiry that
+elapsed during the pause lands when the pause ends. Every toast has a
 dismiss button; errors assert (`role="alert"`), the rest are polite.
-Instant appearance — no animation to gate.
+Entrance is the gentle `sq-rise-in` rise — flattened to instant under
+reduced motion. Region-less calls before `<body>` exists are deferred
+to DOMContentLoaded instead of throwing.
 
 **The toast rule:** if the user must act on it or find it later, it is
 not a toast — use an alert or inline text. Toasts supplement; they
@@ -91,6 +96,77 @@ dots are `aria-hidden` — the text announces. Empty states name what is
 missing, why, and the one next action (with a real link/button — never
 a dead end).
 
+## Banners (page-level, dismissible)
+
+```html
+<div class="sq-banner sq-banner--info" id="maintenance-banner">
+  <span class="sq-banner__icon" aria-hidden="true">
+    <svg
+      class="sq-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 8h.01" />
+      <path d="M11 12h1v4h1" />
+    </svg>
+  </span>
+  <div class="sq-banner__body">
+    <p class="sq-banner__title">Scheduled maintenance</p>
+    <p class="sq-banner__text">
+      The dispatch API pauses Sunday 02:00–04:00 CET.
+    </p>
+  </div>
+  <button
+    class="sq-banner__close"
+    type="button"
+    aria-label="Dismiss announcement"
+    onclick="this.closest('.sq-banner').remove()"
+  ></button>
+</div>
+```
+
+Banner = alert styling at page level: `--{success,info,warning,error}`
+tones share the alert border system. Where it differs from an alert is
+intent: it sits ABOVE content, announces site-wide state (maintenance,
+bans, migrations), and dismisses with one button. Dismissal is HTML,
+not runtime state: the demo `onclick` removes the element; a real
+implementation moves it into your bundle (and may persist the choice in
+storage — an author decision, never Squircle's). Do not stack banners;
+the newest state replaces the older one.
+
+## Chips (tags with removal)
+
+```html
+<div class="sq-chips">
+  <span class="sq-chip"><span class="sq-chip__text">alloy</span></span>
+  <span class="sq-chip sq-chip--success"
+    ><span class="sq-chip__text">in stock</span></span
+  >
+  <span class="sq-chip">
+    <span class="sq-chip__text">removable</span>
+    <button
+      class="sq-chip__remove"
+      type="button"
+      aria-label="Remove chip removable"
+    ></button>
+  </span>
+</div>
+```
+
+Chips are badges with room for content and (optionally) a remove
+button. The remove button is a REAL button whose accessible name names
+the chip ("Remove chip alloy"); the glyph is drawn by CSS. The list
+wrapper keeps the group from floating loosely. Tone chips reuse the
+badge fill pairs. Chips are content tags — form-driven token entry
+(input + paste + Enter) is a pattern to compose with `.sq-field`, not a
+separate component (documented limitation).
+
 ## Accessibility
 
 - Live regions: `status` (polite) vs `alert` (assertive) chosen by
@@ -98,8 +174,8 @@ a dead end).
   page announces; regions created at notify-time announce on insertion.
 - Dismissal: toasts dismiss (button + timeout); alerts persist until
   their context resolves.
-- Reduced motion: shimmer static, spinner frozen-but-labeled, toasts
-  instant. Nothing essential animates.
+- Reduced motion: shimmer static, spinner frozen-but-labeled, toast
+  entrance instant. Nothing essential animates.
 - Contrast: all tones checked in both themes (fills + inks are
   contrast-paired tokens).
 
@@ -128,6 +204,8 @@ max-width guards small viewports.
 - Skeletons with no dimensions — layout shift is the bug skeletons exist to prevent.
 - Badge without text ("●" alone) — the dot is decoration; the label is the message.
 - Spinner without a status label — motion-only loading excludes everyone who cannot see it.
+- Banner for role-scoped state — banners are site-wide; use alerts in flow.
+- Chips whose remove button is an unlabeled glyph — name the chip.
 
 ## Tested limitations
 

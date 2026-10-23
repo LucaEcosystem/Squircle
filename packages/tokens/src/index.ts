@@ -12,4 +12,5 @@ export type { Semantic } from "./semantic.js";
 export { component } from "./component.js";
 export type { ComponentTokens } from "./component.js";
 export { flattenTokens, tokenVarName } from "./flatten.js";
-export { contrastRatio, luminance } from "./contrast.js";
+export { aaContrastPairs, contrastRatio, luminance } from "./contrast.js";
+export type { ContrastPair } from "./contrast.js";

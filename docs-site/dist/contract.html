@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Component contract — Squircle docs</title>
+    <meta name="description" content="Purpose: · semantic HTML · attributes · variants/sizes · states ·" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Component contract</h1>
+      <p class="sq-lead">Purpose: · semantic HTML · attributes · variants/sizes · states ·</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Every Squircle component obeys this contract. Read it before adding or changing a component. Stages 3+ implement against it; tests enforce the mechanical parts (naming, token references, documented-class coverage).</p>
+<h2 id="1-naming">1. Naming</h2>
+<ul><li><code>sq-&lt;component&gt;</code> for the block (<code>.sq-button</code>, <code>.sq-panel</code>, <code>.sq-card</code>).</li><li><code>sq-&lt;component&gt;--&lt;variant&gt;</code> for variants and sizes, double hyphen</li></ul>
+<p>(<code>.sq-button--primary</code>, <code>.sq-button--large</code>).</p>
+<ul><li><code>sq-&lt;component&gt;__&lt;element&gt;</code> for internal parts, double underscore</li></ul>
+<p>(<code>.sq-button__icon</code>, <code>.sq-panel__header</code>). Parts are never used alone; they inherit the block's context.</p>
+<ul><li>Utilities (<code>sq-p-md</code>, <code>sq-hidden</code>) compose with components but never</li></ul>
+<p>replace them: state, semantics, and accessibility live in the component.</p>
+<h2 id="2-semantics-first">2. Semantics first</h2>
+<ul><li>The HTML element carries the meaning; classes carry the appearance.</li></ul>
+<p>Actions are <code>&lt;button&gt;</code>, navigation is <code>&lt;a href&gt;</code>, headings are <code>h1–h6</code>.</p>
+<ul><li>Never use an anchor as a button or a button as a link. Never add ARIA</li></ul>
+<p>that duplicates native semantics (<code>role=&quot;button&quot;</code> on a <code>&lt;button&gt;</code> is a defect, not diligence).</p>
+<ul><li>Icon-only controls MUST have an accessible name (<code>aria-label</code>);</li></ul>
+<p>decorative icons MUST be hidden (<code>aria-hidden=&quot;true&quot;</code>, <code>focusable=&quot;false&quot;</code>).</p>
+<ul><li>Disabled is <code>disabled</code> (form controls) or <code>aria-disabled=&quot;true&quot;</code> plus</li></ul>
+<p>non-activation (links — see LINKS.md). Never communicate state by color alone: pair every color cue with text, shape, or position.</p>
+<h2 id="3-states">3. States</h2>
+<p>Every interactive component specifies, implements, and tests: default, hover, <code>:focus-visible</code>, active, disabled, and loading/busy where it can occur. <code>:focus-visible</code> is always the 3px azure ring (or the theme's focus token) — components never remove or restyle it into invisibility. All motion honors <code>prefers-reduced-motion</code>.</p>
+<h2 id="4-tokens-and-theme-behavior">4. Tokens and theme behavior</h2>
+<ul><li>Components reference semantic or component-tier tokens — never brand</li></ul>
+<p>hex, never another component's tokens.</p>
+<ul><li>No Luca-specific values in generic rules. A component must render</li></ul>
+<p>correctly under any theme that passes <code>checkThemeContrast</code>; Luca and Ocean are both tested.</p>
+<ul><li>Customization precedence (verified by cascade test in <code>components.spec.ts</code>):</li></ul>
+<ol><li>Framework defaults (this layer).</li><li>Active theme tokens (<code>:root</code> / <code>[data-sq-theme]</code>).</li><li>Component variant defaults (<code>.sq-button--primary</code>, …).</li><li>Consumer overrides (later stylesheets, higher-or-equal specificity).</li></ol>
+<p>Qualifications: variant defaults (3) beat theme tokens (2) where the variant's appearance is its own defaults (shape, spacing, ring) — text, radius, and spacing still follow the theme. Fills that DERIVE from a semantic token follow the theme's retune of that token: Ocean retunes <code>--sq-color-accent</code>, so accent-derived fills (primary button, switch track, tab indicator) ride along; tokens Ocean does not retune (danger red, success green) keep their values. Consumers (4) win by source order at equal specificity; Squircle never uses <code>!important</code>, so one consumer rule always suffices.</p>
+<h2 id="5-spacing-and-density">5. Spacing and density</h2>
+<ul><li>Internal padding, gaps, and section rhythm come from <code>--sq-space-*</code>.</li></ul>
+<p>Comfortable defaults are the DEFAULT — there is no compact density.</p>
+<ul><li>Related elements group tightly (<code>2xs–sm</code>); content groups separate</li></ul>
+<p>(<code>md–lg</code>); sections separate generously (<code>section</code> token).</p>
+<ul><li>Long labels wrap; controls never clip text. Minimum target height for</li></ul>
+<p>interactive controls is 44px (Squircle default: 48px/3rem, 40px/2.5rem for <code>sm</code> size only where justified).</p>
+<ul><li>Every component passes the §8.6 density gate at 360/768/1024/1440 in</li></ul>
+<p>both Luca and Ocean before it is marked complete.</p>
+<h2 id="6-responsive-behavior">6. Responsive behavior</h2>
+<ul><li>Components reflow or stack; they never squeeze. Breakpoint-specific</li></ul>
+<p>changes use the documented responsive utilities or component rules — never duplicated ad-hoc media queries per instance.</p>
+<ul><li>Touch targets stay ≥44px on coarse pointers; hover-only affordances</li></ul>
+<p>always have a touch/keyboard path.</p>
+<h2 id="6b-motion">6b. Motion</h2>
+<ul><li>Durations and easings come from the motion tier (five durations,</li></ul>
+<p>instant→slower; four easings) or an established component-duration token (<code>--sq-spinner-speed</code>, <code>--sq-skeleton-shimmer-duration</code>). No literal <code>ms</code>/<code>s</code> timing outside the base gate (enforced by <code>packages/css/test/motion.test.ts</code>).</p>
+<ul><li>Reduced motion is gated exactly once, at the base layer: all</li></ul>
+<p><code>animation-*</code> and <code>transition-*</code> collapse to a 0.01ms no-op and <code>scroll-behavior</code> becomes instant. Components never re-gate globally; per-component PRM blocks only harden layer specifics (carousel instant scroll, shimmer/spinner rest states, switch thumb) or are unnecessary because motion survives as state feedback (instant-duration transitions).</p>
+<ul><li>Keyframes live in the <code>sq-</code> namespace; author-facing entries</li></ul>
+<p>(<code>.sq-fade-in</code>, <code>.sq-rise-in</code>, <code>.sq-hover-lift</code>, <code>.sq-active-press</code>, <code>.sq-motion-none</code>) ride the same tokens.</p>
+<ul><li>New components land motion-silent by default: toggles/openers flip</li></ul>
+<p>via <code>hidden</code>, animations must state a reason. If a transition is justified, it starts at <code>--sq-motion-duration-quick</code> with <code>--sq-motion-easing-out</code> and gets no special PRM treatment — the base gate already covers it.</p>
+<h2 id="7-documentation-requirements-per-component">7. Documentation requirements (per component)</h2>
+<p>Purpose · semantic HTML · attributes · variants/sizes · states · accessibility guidance · theme behavior · customization · responsive notes · common mistakes · tested limitations. Examples in docs MUST be copy-pasteable and MUST match the implementation (the coverage test fails otherwise).</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

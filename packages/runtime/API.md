@@ -57,30 +57,59 @@ Squircle.onReducedMotionChange((reduced) => {
 ```
 
 CSS already gates entrances and transitions under
-`prefers-reduced-motion`; these helpers cover JS-driven motion, which
-arrives with component behaviors in Stage 4.
+`prefers-reduced-motion`; these helpers cover JS-driven motion and
+environment reactions for code that animates outside the CSS system.
 
-## Component behaviors (Stage 4)
+## Component behaviors
 
 Plain HTML + CSS stay first-class — nothing below is required for
 styling or for native controls. Each `init*()` is idempotent (marks
 elements, safe to run repeatedly) and returns a cleanup function;
 `init()` runs them all and returns a combined cleanup.
 
+Re-initialization is supported: cleanups release the idempotency
+marks, so a cleanup→`init*()` cycle rebinds (the SPA/HMR-remount
+case). Marks are per-behavior (`data-sq-dialogs-initialized`,
+`data-sq-menus-…`, `data-sq-popovers-…`, `data-sq-tooltips-…`,
+`data-sq-tabs-…`, `data-sq-forms-…`) so co-located features that share
+an element — a dialog opener that also carries a tooltip — never
+block each other. `createMenu`/`createTabs` return the existing handle
+when an element is already bound (first binding wins until `destroy()`).
+
 ```js
-Squircle.init(); // dialogs + menus + popovers + tooltips + tabs
+Squircle.init(); // dialogs + menus + popovers + tooltips + tabs + comboboxes + carousels + uploads
 const cleanup = Squircle.init(document.getElementById("app"));
 ```
 
-| API                                                                                     | Purpose                                                                                                               |
-| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `openDialog(el, { modal, invoker })` / `closeDialog(el, restore?)` / `isDialogOpen(el)` | Native `<dialog>` with invoker focus restoration (explicit `invoker` or opener-tracked) and opt-in backdrop dismissal |
-| `initDialogs(root?)`                                                                    | Wires `[data-sq-dialog-open]` / `[data-sq-dialog-close]`                                                              |
-| `createMenu(trigger, menu)` / `initMenus(root?)`                                        | Action menus: arrows/Home/End, Escape/Tab dismissal, click-outside, focus restore                                     |
-| `positionPopover(trigger, popover, { placement, offset })` / `initPopovers(root?)`      | Edge-aware placement over the native popover API                                                                      |
-| `initTooltips(root?)`                                                                   | `[data-sq-tooltip]` hints on hover/focus, `aria-describedby` wiring                                                   |
-| `createTabs(tablist)` / `initTabs(root?)`                                               | Automatic-activation tabs with roving tabindex                                                                        |
-| `setFieldError(input, msg)` / `clearFieldError(input)`                                  | `aria-invalid` + `describedby` + message management                                                                   |
-| `notify(msg, { tone, duration, region })` / `dismissAll(region?)`                       | Transient toasts (plain text, live region, pause on hover/focus, cleanup handles)                                     |
-| `enhanceForm(form)`                                                                     | Focuses the first invalid field on submit; native UI untouched                                                        |
-| `focusableChildren(root)`                                                               | Tab-order focusable descendants (shared helper)                                                                       |
+| API                                                                                     | Purpose                                                                                                                                                                                                                     |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `openDialog(el, { modal, invoker })` / `closeDialog(el, restore?)` / `isDialogOpen(el)` | Native `<dialog>` with invoker focus restoration that never scrolls the page; `restore: false` skips restoration entirely (wiring + platform close-fallback) and opt-in backdrop dismissal                                  |
+| `initDialogs(root?)`                                                                    | Wires `[data-sq-dialog-open]` / `[data-sq-dialog-close]`                                                                                                                                                                    |
+| `createMenu(trigger, menu, …)` / `initMenus(root?)`                                     | Action menus: click/ArrowDown/Enter/Space open (ArrowUp opens on the last item), arrows/Home/End, Escape/Tab dismissal, click-outside, focus restore                                                                        |
+| `positionPopover(trigger, popover, { placement, offset })` / `initPopovers(root?)`      | Placement over the native popover API: requested → opposite → perpendicular flip order, viewport clamp, repositions on scroll/resize while open                                                                             |
+| `initTooltips(root?)`                                                                   | `[data-sq-tooltip]` hints on hover/focus; transient `aria-describedby` (added on show, removed on hide)                                                                                                                     |
+| `createTabs(tablist)` / `initTabs(root?)`                                               | Automatic-activation tabs with roving tabindex; arrows follow `aria-orientation` (vertical: ↑/↓, horizontal: ←/→)                                                                                                           |
+| `initComboboxes(root?)`                                                                 | ARIA 1.2 listbox autocomplete: type-to-open, filter (`"off"` for server-driven), ArrowUp/Down wrap + Home/End/PageUp/Down, Enter commits (`data-value ?? label`), Escape closes then restores open-time text, outside close |
+| `initCarousels(root?)`                                                                  | `[data-sq-carousel]` tracks: prev/next page by snap position (in-flight safe), disable at the ends, sign-agnostic RTL, `prefers-reduced-motion` becomes instant                                                             |
+| `initUploads(root?)`                                                                    | `[data-sq-file]` drop zones: drag hover/filled presentation classes, dropped files assigned to the input with a real `change` event                                                                                         |
+| `setFieldError(input, msg)` / `clearFieldError(input)`                                  | `aria-invalid` + `describedby` + message management; message ids scoped per form                                                                                                                                            |
+| `notify(msg, { tone, duration, region, dismissLabel })` / `dismissAll(region?)`         | Transient toasts (plain text, live region, pause on hover/focus, localized dismiss button, cleanup incl. timers)                                                                                                            |
+| `enhanceForm(form)`                                                                     | Focuses the first invalid field on submit; native UI untouched                                                                                                                                                              |
+| `focusableChildren(root)`                                                               | Tab-order focusable descendants (shared helper)                                                                                                                                                                             |
+
+## Verb contract
+
+The surface follows one naming contract — when adding APIs, keep the
+verb families separate:
+
+| Family       | Verbs                                          | Meaning                                                                     |
+| ------------ | ---------------------------------------------- | --------------------------------------------------------------------------- |
+| Lifecycle    | `init*`                                        | Wire declarative behaviors under a root; idempotent; returns a cleanup      |
+| Construction | `create*`                                      | Bind one element pair imperatively; returns a handle; singleton per element |
+| Control      | `open*` / `close*`                             | State transition on a handle or native element                              |
+| State        | `setTheme` / `getTheme` / `resetTheme`         | Theme state (attribute + storage backed)                                    |
+| Subscription | `on*Change` / `prefers*` / `is*Open`           | Environment observation and state queries                                   |
+| Injection    | `notify` / `setFieldError` / `clearFieldError` | Put content into a region or wire field state                               |
+| Clearing     | `dismissAll`                                   | Bulk dismissal of injected toasts (timers included)                         |
+| Placement    | `positionPopover`                              | One-shot geometry; no state retained                                        |
+| Scanning     | `focusableChildren`                            | Pure query helper                                                           |

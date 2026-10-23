@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>North Pier Chandlery — Squircle consumer test</title>
+    <meta
+      name="description"
+      content="Clean-room consumer project: installs squircle from a packed tarball via npm, uses only public entry points."
+    />
+    <!-- Public entry points only: installed package + consumer overrides. -->
+    <link
+      rel="stylesheet"
+      href="./node_modules/@luca-ecosystem/squircle/dist/squircle.min.css"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#shop-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Chandlery</a>
+        <nav aria-label="Primary">
+          <details class="sq-nav-menu" open>
+            <summary>Menu</summary>
+            <ul class="sq-nav">
+              <li>
+                <a class="sq-nav__link" href="index.html" aria-current="page"
+                  >Shop</a
+                >
+              </li>
+              <li>
+                <a class="sq-nav__link" href="module.html">Module demo</a>
+              </li>
+            </ul>
+          </details>
+        </nav>
+      </div>
+    </header>
+
+    <main id="shop-main">
+      <section class="sq-section">
+        <div class="sq-container sq-stack--loose sq-stack">
+          <nav aria-label="Breadcrumb">
+            <ol class="sq-breadcrumbs">
+              <li><a href="index.html">Home</a></li>
+              <li aria-current="page">Shop</li>
+            </ol>
+          </nav>
+
+          <div class="sq-stack sq-max-w-measure">
+            <h1>Rope, canvas &amp; brass.</h1>
+            <p class="sq-lead">
+              A consumer project installed from a packed tarball — every
+              component family on one page.
+            </p>
+            <div class="sq-cluster">
+              <button
+                class="sq-button sq-button--primary"
+                type="button"
+                id="toast-demo"
+              >
+                Announce restock
+              </button>
+              <button
+                class="sq-button sq-button--secondary"
+                type="button"
+                data-sq-dialog-open="hours-dialog"
+                id="open-hours"
+              >
+                Opening hours
+              </button>
+              <button
+                class="sq-button sq-button--danger"
+                type="button"
+                id="tone-cycle"
+              >
+                Cycle badge tone
+              </button>
+            </div>
+          </div>
+
+          <div class="sq-alert sq-alert--info" role="status">
+            <span class="sq-alert__icon" aria-hidden="true">
+              <svg
+                class="sq-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                focusable="false"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 11v5" />
+              </svg>
+            </span>
+            <div class="sq-alert__body">
+              <p class="sq-alert__title">Saturday delivery</p>
+              <p class="sq-alert__text">Orders before noon arrive Monday.</p>
+            </div>
+          </div>
+
+          <div class="sq-grid sq-grid-cols-1 sq-md-grid-cols-2 sq-gap-lg">
+            <article class="sq-card">
+              <div class="sq-stack">
+                <h2 class="sq-heading--3">
+                  Manila rope
+                  <span class="sq-badge sq-badge--success" id="stock-badge"
+                    >In stock</span
+                  >
+                </h2>
+                <p class="sq-text sq-muted">
+                  Three-strand, 24mm, sold by the metre.
+                </p>
+                <p><span class="sq-badge" id="dynamic-badge">Pending</span></p>
+                <p class="sq-text">
+                  <svg class="sq-icon" aria-hidden="true" focusable="false">
+                    <use
+                      href="./node_modules/@luca-ecosystem/squircle/dist/squircle-icons.svg#sq-i-check"
+                    />
+                  </svg>
+                  Served from the installed sprite.
+                </p>
+              </div>
+            </article>
+            <section class="sq-panel" aria-labelledby="order-title">
+              <div class="sq-panel__header">
+                <h2 class="sq-heading--3" id="order-title">Order pickup</h2>
+              </div>
+              <div class="sq-panel__body">
+                <form id="pickup-form" action="#" method="get">
+                  <div class="sq-field">
+                    <label for="c-name">Full name</label>
+                    <input
+                      class="sq-input"
+                      id="c-name"
+                      name="name"
+                      type="text"
+                      required
+                      autocomplete="name"
+                      aria-describedby="c-name-error"
+                    />
+                    <p class="sq-field__error" id="c-name-error" hidden>
+                      Tell us who is collecting.
+                    </p>
+                  </div>
+                  <label class="sq-check">
+                    <input type="checkbox" id="c-wrap" />
+                    <span class="sq-check__text">Wrap in canvas</span>
+                  </label>
+                  <label class="sq-switch" for="c-notify">
+                    <input
+                      type="checkbox"
+                      role="switch"
+                      id="c-notify"
+                      checked
+                    />
+                    <span class="sq-switch__track" aria-hidden="true"></span>
+                    <span class="sq-check__text">Text when ready</span>
+                  </label>
+                  <div class="sq-cluster">
+                    <button
+                      class="sq-button sq-button--primary"
+                      type="submit"
+                      id="pickup-submit"
+                    >
+                      Reserve order
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </section>
+          </div>
+
+          <div class="sq-grid sq-grid-cols-1 sq-md-grid-cols-2 sq-gap-lg">
+            <section class="sq-panel" aria-labelledby="tabs-title">
+              <div class="sq-stack">
+                <h2 class="sq-heading--3" id="tabs-title">Departments</h2>
+                <div data-sq-tabs>
+                  <div
+                    class="sq-tablist"
+                    role="tablist"
+                    aria-label="Departments"
+                  >
+                    <button
+                      class="sq-tab"
+                      role="tab"
+                      type="button"
+                      aria-controls="dept-rope"
+                      aria-selected="true"
+                    >
+                      Rope
+                    </button>
+                    <button
+                      class="sq-tab"
+                      role="tab"
+                      type="button"
+                      aria-controls="dept-brass"
+                      aria-selected="false"
+                      tabindex="-1"
+                    >
+                      Brass
+                    </button>
+                  </div>
+                  <section
+                    class="sq-tabpanel"
+                    role="tabpanel"
+                    id="dept-rope"
+                    tabindex="0"
+                  >
+                    <p class="sq-text">Manila, hemp, and polypropylene.</p>
+                  </section>
+                  <section
+                    class="sq-tabpanel"
+                    role="tabpanel"
+                    id="dept-brass"
+                    hidden
+                  >
+                    <p class="sq-text">Cleats, bells, and fittings.</p>
+                  </section>
+                </div>
+              </div>
+            </section>
+            <section class="sq-panel" aria-labelledby="data-title">
+              <div class="sq-stack">
+                <h2 class="sq-heading--3" id="data-title">This week</h2>
+                <div class="sq-metric">
+                  <p class="sq-metric__value">312</p>
+                  <p class="sq-metric__label">Orders reserved</p>
+                  <p class="sq-metric__delta sq-metric__delta--up">
+                    ↑ 18 vs last week
+                  </p>
+                </div>
+                <div
+                  class="sq-table-scroll"
+                  role="region"
+                  aria-label="Top goods"
+                  tabindex="0"
+                >
+                  <table class="sq-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Good</th>
+                        <th scope="col" class="sq-table__number">Sold</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Manila 24mm</th>
+                        <td class="sq-table__number">96</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Brass cleat</th>
+                        <td class="sq-table__number">61</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p>
+                  <span class="sq-avatar" role="img" aria-label="Shopkeeper Ada"
+                    >A</span
+                  >
+                  <span class="sq-status sq-status--success"
+                    ><span class="sq-status__dot" aria-hidden="true"></span
+                    >Counter open</span
+                  >
+                </p>
+                <details class="sq-disclosure">
+                  <summary>Returns policy</summary>
+                  <div class="sq-disclosure__content">
+                    <p class="sq-text">
+                      Unused rope returns within thirty days.
+                    </p>
+                  </div>
+                </details>
+              </div>
+            </section>
+          </div>
+
+          <div class="sq-cluster">
+            <button
+              class="sq-button sq-button--secondary"
+              type="button"
+              data-sq-menu
+              aria-controls="shop-menu"
+              id="shop-menu-trigger"
+            >
+              More actions
+            </button>
+            <ul
+              class="sq-menu"
+              id="shop-menu"
+              role="menu"
+              aria-label="More actions"
+              hidden
+            >
+              <li role="none">
+                <button class="sq-menu__item" role="menuitem" type="button">
+                  Print list
+                </button>
+              </li>
+              <li role="none">
+                <button class="sq-menu__item" role="menuitem" type="button">
+                  Share shop
+                </button>
+              </li>
+            </ul>
+            <button
+              class="sq-button sq-button--tertiary"
+              type="button"
+              data-sq-tooltip="Restocks land every Tuesday."
+            >
+              When is rope back?
+            </button>
+          </div>
+
+          <div>
+            <div class="sq-progress-label">
+              <span>Shelf restock</span><span>40%</span>
+            </div>
+            <progress class="sq-progress" value="40" max="100">40%</progress>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog
+      class="sq-dialog"
+      id="hours-dialog"
+      aria-labelledby="hours-title"
+      data-sq-dismiss="backdrop"
+    >
+      <button
+        class="sq-button sq-button--secondary sq-button--icon-only sq-dialog__close"
+        type="button"
+        data-sq-dialog-close
+        aria-label="Close dialog"
+      >
+        ✕
+      </button>
+      <div class="sq-stack">
+        <h2 class="sq-heading--3" id="hours-title">Opening hours</h2>
+        <p class="sq-text">
+          Monday to Saturday, eight till six. Closed Sundays.
+        </p>
+        <div class="sq-cluster">
+          <button
+            class="sq-button sq-button--primary"
+            type="button"
+            data-sq-dialog-close
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="./node_modules/@luca-ecosystem/squircle/dist/squircle-runtime.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

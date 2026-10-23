@@ -21,8 +21,8 @@
 .sq-figure video {
   width: 100%;
   height: auto;
-  border-radius: var(--sq-radius-md);
-  border: 1px solid var(--sq-color-border);
+  border-radius: var(--sq-media-radius);
+  border: 1px solid var(--sq-media-border-color);
 }
 
 .sq-figure figcaption {
@@ -41,9 +41,9 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: var(--sq-radius-md);
-  border: 1px solid var(--sq-color-border);
-  background-color: var(--sq-color-background-sunken);
+  border-radius: var(--sq-media-radius);
+  border: 1px solid var(--sq-media-border-color);
+  background-color: var(--sq-media-background);
 }
 
 .sq-media--square {
@@ -76,7 +76,7 @@
 .sq-audio {
   display: block;
   width: 100%;
-  min-height: 3rem;
+  min-height: var(--sq-audio-min-height);
 }
 
 /* -- Placeholders ----------------------------------------------------------------------------------
@@ -90,11 +90,77 @@
   gap: var(--sq-space-2xs);
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: var(--sq-radius-md);
-  border: 1px dashed var(--sq-color-border-strong);
-  background-color: var(--sq-color-background-sunken);
+  border-radius: var(--sq-media-radius);
+  border: 1px dashed var(--sq-media-placeholder-border);
+  background-color: var(--sq-media-background);
   color: var(--sq-color-text-muted);
   font-size: var(--sq-font-size-sm);
   padding: var(--sq-space-md);
   text-align: center;
+}
+
+/* -- Carousel --------------------------------------------------------------------------------------------
+ * Horizontal scroll with snap. The track is the keyboard target
+ * (tabindex, region + roledescription in markup); slides are flex items
+ * snap-start by default, and the runtime (optional) drives the controls.
+ * All scrolling behavior honors prefers-reduced-motion.
+ */
+
+.sq-carousel {
+  display: grid;
+  gap: var(--sq-carousel-gap);
+}
+
+.sq-carousel__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: var(--sq-carousel-gap);
+  border-radius: var(--sq-carousel-radius);
+  scroll-behavior: smooth;
+  /* Keep the focus ring visible but unintrusive on mouse scroll. */
+  scrollbar-gutter: stable;
+  -webkit-overflow-touch-scrolling: touch;
+}
+
+.sq-carousel__slide {
+  /* Default: one slide per page. Composition sizes longer tracks. */
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  margin: 0;
+  min-width: 0;
+}
+
+/* Slide content fills the slide: media at the top, caption below. */
+.sq-carousel__slide > * {
+  min-width: 0;
+}
+
+/* Multi-up variant: two slides visible per page. */
+.sq-carousel__slide--half {
+  flex-basis: calc((100% - var(--sq-carousel-gap)) / 2);
+  scroll-snap-stop: normal;
+}
+
+.sq-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sq-space-xs);
+}
+
+/* The control hooks live on top of the button surface; their own job is
+ * the square 48px tap floor (button--icon-only narrows content, the
+ * floor keeps touch targets honest). */
+.sq-carousel__prev,
+.sq-carousel__next {
+  min-width: var(--sq-button-min-height);
+  min-height: var(--sq-button-min-height);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sq-carousel__track {
+    scroll-behavior: auto;
+  }
 }

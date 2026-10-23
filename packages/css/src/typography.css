@@ -106,7 +106,7 @@ blockquote {
 code,
 kbd {
   font-family: var(--sq-font-family-mono);
-  font-size: 0.9em;
+  font-size: var(--sq-font-size-code);
 }
 
 pre {

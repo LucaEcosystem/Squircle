@@ -91,6 +91,45 @@ sticky beside it at 64rem+:
 </div>
 ```
 
+**Stepper** — progressive flow (checkout, onboarding). Active step is
+`aria-current="step"`, finished steps take `--done`; empty markers
+print their DOM position automatically:
+
+```html
+<ol class="sq-stepper">
+  <li class="sq-stepper__step sq-stepper__step--done">
+    <span class="sq-stepper__marker" aria-hidden="true">
+      <svg
+        class="sq-icon sq-icon--small"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        focusable="false"
+      >
+        <path d="m5 12 5 5 9-11" />
+      </svg>
+    </span>
+    <span class="sq-stepper__label">Delivery window</span>
+  </li>
+  <li class="sq-stepper__step" aria-current="step">
+    <span class="sq-stepper__marker"></span>
+    <span class="sq-stepper__label">Address</span>
+  </li>
+  <li class="sq-stepper__step">
+    <span class="sq-stepper__marker"></span>
+    <span class="sq-stepper__label">Payment</span>
+  </li>
+</ol>
+```
+
+The stepper is a status display, not an interactive control: steps are
+list items, never buttons or links to click themselves into place. The
+form that drives the flow does the navigating. Steps go vertical below
+48rem and horizontal at 48rem+ (connectors per the wide layout only).
+
 ## Variants and states
 
 `sq-nav--vertical` (stacked links); `sq-sidebar--sticky` (opt-in
@@ -136,6 +175,11 @@ breakpoint-gated change is the `details` collapse at 48rem.
   announced slashes are noise; CSS `::before` is silent.
 - JavaScript hamburger toggles with hand-rolled `aria-expanded` when
   `details` does it natively.
+- Stepper steps as clickable "skip ahead" buttons — the status display
+  and the navigation stay separate; a skip action is a button beside
+  it, not step markup.
+- Steppers invented in markup without `aria-current="step"` — the
+  class alone styles but does not announce.
 
 ## Tested limitations
 
@@ -143,4 +187,5 @@ breakpoint-gated change is the `details` collapse at 48rem.
   simple cases; complex cases need page CSS).
 - `position: sticky` sidebar needs a scrolling ancestor without
   `overflow: hidden` (platform constraint).
+- The stepper cannot tick "done" by itself — that state is author data.
 - Single-open accordion sidebar groups are out of 1.0 scope.

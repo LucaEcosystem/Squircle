@@ -208,6 +208,102 @@
             </div>
           </section>
 
+          <section class="sq-panel" aria-labelledby="journey-title">
+            <div class="sq-stack">
+              <h2 class="sq-heading--3" id="journey-title">Cargo journey</h2>
+              <ol class="sq-stepper">
+                <li class="sq-stepper__step sq-stepper__step--done">
+                  <span class="sq-stepper__marker" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      focusable="false"
+                      width="1em"
+                      height="1em"
+                    >
+                      <path d="m5 12 5 5 9-11" />
+                    </svg>
+                  </span>
+                  <span class="sq-stepper__label">Arrived</span>
+                </li>
+                <li class="sq-stepper__step sq-stepper__step--done">
+                  <span class="sq-stepper__marker" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      focusable="false"
+                      width="1em"
+                      height="1em"
+                    >
+                      <path d="m5 12 5 5 9-11" />
+                    </svg>
+                  </span>
+                  <span class="sq-stepper__label">Moored</span>
+                </li>
+                <li
+                  class="sq-stepper__step sq-stepper__step--active"
+                  aria-current="step"
+                >
+                  <span class="sq-stepper__marker" aria-hidden="true">3</span>
+                  <span class="sq-stepper__label">Unloading</span>
+                </li>
+                <li class="sq-stepper__step">
+                  <span class="sq-stepper__marker" aria-hidden="true">4</span>
+                  <span class="sq-stepper__label">Cleared</span>
+                </li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="sq-panel" aria-labelledby="log-title">
+            <div class="sq-stack">
+              <h2 class="sq-heading--3" id="log-title">Today at the harbor</h2>
+              <ol class="sq-timeline">
+                <li class="sq-timeline__entry">
+                  <div class="sq-timeline__marker" aria-hidden="true"></div>
+                  <div class="sq-timeline__content">
+                    <time
+                      class="sq-timeline__time"
+                      datetime="2026-10-23T09:41:00+02:00"
+                      >09:41</time
+                    >
+                    <p class="sq-timeline__title">Meridian Star all fast</p>
+                    <p class="sq-timeline__detail">
+                      Lines up on berth 7; discharge starts 10:10.
+                    </p>
+                    <div class="sq-timeline__meta">
+                      <span class="sq-chip sq-chip--success"
+                        ><span class="sq-chip__text">on schedule</span></span
+                      >
+                    </div>
+                  </div>
+                </li>
+                <li class="sq-timeline__entry sq-timeline__entry--muted">
+                  <div class="sq-timeline__marker" aria-hidden="true"></div>
+                  <div class="sq-timeline__content">
+                    <time
+                      class="sq-timeline__time"
+                      datetime="2026-10-23T08:15:00+02:00"
+                      >08:15</time
+                    >
+                    <p class="sq-timeline__title">Crew change on Berth 12</p>
+                    <p class="sq-timeline__detail">
+                      Cape Laurel stays on standby until the fog window closes.
+                    </p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </section>
+
           <section class="sq-panel" aria-labelledby="unload-title">
             <div class="sq-stack">
               <h2 class="sq-heading--3" id="unload-title">Overnight unload</h2>

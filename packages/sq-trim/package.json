@@ -1,0 +1,36 @@
+{
+  "name": "@luca-ecosystem/sq-trim",
+  "version": "1.1.0",
+  "license": "MIT",
+  "description": "sq-trim — conservative unused-CSS removal for Squircle stylesheets, on its own npm handle for projects that don't need the full build toolchain",
+  "keywords": [
+    "css",
+    "purge",
+    "treeshake",
+    "unused-css",
+    "optimization",
+    "squircle"
+  ],
+  "homepage": "https://github.com/LucaEcosystem/Squircle",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LucaEcosystem/Squircle.git",
+    "directory": "Framework/packages/sq-trim"
+  },
+  "type": "module",
+  "main": "./dist/cli.js",
+  "bin": {
+    "sq-trim": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@squircle/build-tools": "workspace:*"
+  }
+}

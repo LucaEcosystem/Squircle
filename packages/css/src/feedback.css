@@ -157,12 +157,12 @@
 .sq-progress {
   display: block;
   width: 100%;
-  min-height: 0.75rem;
-  accent-color: var(--sq-check-accent-color);
+  min-height: var(--sq-progress-min-height);
+  accent-color: var(--sq-progress-accent-color);
 }
 
 .sq-progress--large {
-  min-height: 1rem;
+  min-height: var(--sq-progress-min-height-large);
 }
 
 .sq-progress-label {
@@ -183,19 +183,19 @@
  */
 
 .sq-spinner {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: var(--sq-spinner-size);
+  height: var(--sq-spinner-size);
   border-radius: 50%;
-  border: 4px solid var(--sq-color-border);
-  border-top-color: var(--sq-color-accent);
-  animation: sq-spin var(--sq-motion-duration-slower)
-    var(--sq-motion-easing-linear) infinite;
+  border: var(--sq-spinner-border-width) solid var(--sq-spinner-border-color);
+  border-top-color: var(--sq-spinner-accent-color);
+  animation: sq-spin var(--sq-spinner-speed) var(--sq-motion-easing-linear)
+    infinite;
 }
 
 .sq-spinner--small {
-  width: 1.5rem;
-  height: 1.5rem;
-  border-width: 3px;
+  width: var(--sq-spinner-size-small);
+  height: var(--sq-spinner-size-small);
+  border-width: var(--sq-spinner-border-width-small);
 }
 
 .sq-spinner__label {
@@ -211,7 +211,7 @@
   .sq-spinner {
     animation: none;
     border-color: var(--sq-color-accent);
-    opacity: 0.45;
+    opacity: var(--sq-opacity-still);
   }
 }
 
@@ -233,7 +233,8 @@
     var(--sq-skeleton-highlight) 50%,
     transparent 80%
   );
-  animation: sq-shimmer 1600ms var(--sq-motion-easing-linear) infinite;
+  animation: sq-shimmer var(--sq-skeleton-shimmer-duration)
+    var(--sq-motion-easing-linear) infinite;
 }
 
 @keyframes sq-shimmer {
@@ -373,4 +374,209 @@
 .sq-empty__text {
   color: var(--sq-color-text-secondary);
   max-width: var(--sq-font-measure);
+}
+
+/* -- Chips ---------------------------------------------------------------------------------------------
+ * Tag-like elements with optional remove buttons; a list wrapper keeps
+ * the group from being a stray float soup. Tones reuse the badge fill
+ * pair system (label carries meaning; never color alone).
+ */
+
+.sq-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sq-chip-gap);
+}
+
+.sq-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sq-chip-gap);
+  padding: var(--sq-chip-padding-y) var(--sq-chip-padding-x);
+  border: 1px solid var(--sq-chip-border-color);
+  border-radius: var(--sq-chip-radius);
+  background-color: var(--sq-chip-background);
+  color: var(--sq-chip-text-color);
+  font-size: var(--sq-font-size-sm);
+  line-height: var(--sq-font-line-snug);
+  max-width: 100%;
+}
+
+.sq-chip__text {
+  /* Long tags wrap instead of blowing out a row. */
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* Removing a chip is an action: a real button. The glyph stays small
+ * but the hit area meets the 44px target through symmetric padding +
+ * negative margins, so chips stay visualy tight. */
+.sq-chip__remove {
+  appearance: none;
+  border: 0;
+  padding: calc(var(--sq-space-xl) / 2);
+  margin: calc(var(--sq-space-xl) / -2);
+  background: transparent;
+  color: var(--sq-color-text-muted);
+  cursor: pointer;
+  border-radius: var(--sq-chip-radius);
+}
+
+.sq-chip__remove::after {
+  content: "";
+  display: block;
+  width: 0.875rem;
+  height: 0.875rem;
+  background-color: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.sq-chip__remove:hover {
+  color: var(--sq-color-error-text);
+}
+
+.sq-chip__remove:focus-visible {
+  outline: var(--sq-focus-width) solid var(--sq-focus-color);
+  outline-offset: var(--sq-focus-offset);
+}
+
+/* Tone chips reuse the badge fill pairs (fill + contrast ink). */
+.sq-chip--accent {
+  background-color: var(--sq-color-accent);
+  color: var(--sq-color-accent-contrast);
+  border-color: transparent;
+}
+
+.sq-chip--success {
+  background-color: var(--sq-color-success);
+  color: var(--sq-color-success-contrast);
+  border-color: transparent;
+}
+
+.sq-chip--info {
+  background-color: var(--sq-color-info);
+  color: var(--sq-color-info-contrast);
+  border-color: transparent;
+}
+
+.sq-chip--warning {
+  background-color: var(--sq-color-warning);
+  color: var(--sq-color-warning-contrast);
+  border-color: transparent;
+}
+
+.sq-chip--error {
+  background-color: var(--sq-color-error);
+  color: var(--sq-color-error-contrast);
+  border-color: transparent;
+}
+
+/* -- Banners --------------------------------------------------------------------------------------------
+ * Page-level announcement above content: grid body + dismiss action.
+ * Dismissal is HTML (a button the author removes with), not runtime
+ * state; the CSS only shapes the banner. Tones mirror alerts.
+ */
+
+.sq-banner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--sq-banner-gap);
+  align-items: start;
+  padding: var(--sq-banner-padding-y) var(--sq-banner-padding-x);
+  border: var(--sq-alert-border-width) solid var(--sq-color-border-strong);
+  border-inline-start-width: 4px;
+  border-radius: var(--sq-banner-radius);
+  background-color: var(--sq-color-surface);
+}
+
+.sq-banner__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sq-space-3xs);
+  min-width: 0;
+}
+
+.sq-banner__icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-block-start: 0.125em;
+  color: var(--sq-color-info-text);
+}
+
+.sq-banner__title {
+  font-weight: var(--sq-font-weight-strong);
+  color: var(--sq-color-text-primary);
+}
+
+.sq-banner__text {
+  color: var(--sq-color-text-secondary);
+  font-size: var(--sq-font-size-sm);
+  max-width: var(--sq-font-measure);
+}
+
+.sq-banner__close {
+  /* Same treatment as a chip remove: bordered, real button. */
+  appearance: none;
+  border: 0;
+  padding: calc(var(--sq-space-sm));
+  margin: calc(var(--sq-space-sm) * -1);
+  background: transparent;
+  color: var(--sq-color-text-muted);
+  cursor: pointer;
+  border-radius: var(--sq-banner-radius);
+}
+
+.sq-banner__close::after {
+  content: "";
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  background-color: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.sq-banner__close:hover {
+  color: var(--sq-color-text-primary);
+}
+
+.sq-banner__close:focus-visible {
+  outline: var(--sq-focus-width) solid var(--sq-focus-color);
+  outline-offset: var(--sq-focus-offset);
+}
+
+.sq-banner--success {
+  border-inline-start-color: var(--sq-color-success);
+}
+.sq-banner--success .sq-banner__icon {
+  color: var(--sq-color-success-text);
+}
+
+.sq-banner--info {
+  border-inline-start-color: var(--sq-color-info);
+}
+.sq-banner--info .sq-banner__icon {
+  color: var(--sq-color-info-text);
+}
+
+.sq-banner--warning {
+  border-inline-start-color: var(--sq-color-warning);
+}
+.sq-banner--warning .sq-banner__icon {
+  color: var(--sq-color-warning-text);
+}
+
+.sq-banner--error {
+  border-inline-start-color: var(--sq-color-error);
+}
+.sq-banner--error .sq-banner__icon {
+  color: var(--sq-color-error-text);
+}
+
+.sq-banner__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

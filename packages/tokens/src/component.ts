@@ -50,6 +50,8 @@ export const component = {
     tertiaryHoverBackground: `var(--sq-color-surface-elevated)`,
     dangerBackground: `var(--sq-color-error)`,
     dangerText: `var(--sq-color-error-contrast)`,
+    hoverBrightness: "1.08",
+    dangerHoverBrightness: "1.1",
   },
   input: {
     background: `var(--sq-color-background-sunken)`,
@@ -65,6 +67,7 @@ export const component = {
     minHeight: "3rem",
     minHeightSmall: "2.5rem",
     minHeightLarge: "3.5rem",
+    minHeightMultiline: "8rem",
     textColor: `var(--sq-color-text-primary)`,
     placeholderColor: `var(--sq-color-text-muted)`,
   },
@@ -91,6 +94,7 @@ export const component = {
     itemPaddingY: s["2xs"],
     itemPaddingX: s.sm,
     itemRadius: r.sm,
+    itemMinHeight: "2.75rem",
     itemHoverBackground: `var(--sq-color-surface-overlay)`,
     minWidth: "14rem",
   },
@@ -105,6 +109,7 @@ export const component = {
   },
   tab: {
     indicatorColor: `var(--sq-color-accent)`,
+    indicatorThickness: "3px",
     gap: s["2xs"],
     paddingY: s.sm,
     paddingX: s.md,
@@ -118,8 +123,13 @@ export const component = {
     itemPaddingY: s["2xs"],
     itemPaddingX: s.sm,
     itemRadius: r.sm,
+    itemMinHeight: "2.75rem",
+    summaryMinHeight: "3rem",
     activeBackground: `var(--sq-color-surface-elevated)`,
     sidebarWidth: "17rem",
+  },
+  pagination: {
+    target: "3rem",
   },
   alert: {
     radius: r.md,
@@ -140,17 +150,48 @@ export const component = {
     background: `var(--sq-color-surface-overlay)`,
     textColor: `var(--sq-color-text-primary)`,
   },
+  // Media families: one surface treatment shared by <audio>, figures,
+  // ratio boxes, and placeholders. Placeholder borders stay one grade
+  // stronger for the dashed "not arrived yet" affordance.
+  audio: {
+    minHeight: "3rem",
+  },
+  media: {
+    radius: r.md,
+    borderColor: `var(--sq-color-border)`,
+    placeholderBorder: `var(--sq-color-border-strong)`,
+    background: `var(--sq-color-background-sunken)`,
+  },
   table: {
     headerBackground: `var(--sq-color-surface-elevated)`,
     rowBorderColor: `var(--sq-color-divider)`,
     cellPaddingY: s.xs,
     cellPaddingX: s.sm,
     radius: r.md,
+    minWidth: "36rem",
   },
   skeleton: {
     background: `var(--sq-color-surface-elevated)`,
     highlight: `var(--sq-color-surface-overlay)`,
     radius: r.sm,
+    shimmerDuration: "1600ms",
+  },
+  // Loading affordances (audit F15): heights track the forms-tier touch
+  // rhythm; spinner speed is a semantic motion reference, not a local
+  // constant, so themes can slow or skip the rotation.
+  progress: {
+    minHeight: "0.75rem",
+    minHeightLarge: "1rem",
+    accentColor: `var(--sq-color-accent)`,
+  },
+  spinner: {
+    size: "2.5rem",
+    sizeSmall: "1.5rem",
+    borderWidth: "4px",
+    borderWidthSmall: "3px",
+    borderColor: `var(--sq-color-border)`,
+    accentColor: `var(--sq-color-accent)`,
+    speed: `var(--sq-motion-duration-slower)`,
   },
   toast: {
     background: `var(--sq-color-surface-elevated)`,
@@ -160,12 +201,76 @@ export const component = {
     gap: s.sm,
     maxWidth: "24rem",
   },
+  // 1.1 components tier family. The select keeps the input surface
+  // contract (forms.css) and only owns what is genuinely select-shaped:
+  // the painted indicator, which must stay em-scaled and token-colored
+  // (zoom and contrast are the documented constraint).
+  select: {
+    indicator: `var(--sq-color-text-muted)`,
+    indicatorHover: `var(--sq-color-text-primary)`,
+  },
+  combobox: {
+    // List panel height: enough rows to be useful, few enough to keep
+    // the virtual focus ring visible while scrolling.
+    maxHeight: "16rem",
+  },
+  file: {
+    // Drop zone surface: sunken like an input, dashed like a media
+    // placeholder ("not arrived yet" affordance), and a hover target.
+    padding: s.lg,
+    borderColor: `var(--sq-color-border-strong)`,
+    background: `var(--sq-color-background-sunken)`,
+    hoverBackground: `var(--sq-color-surface-overlay)`,
+  },
+  stepper: {
+    markerSize: "2.25rem",
+    markerRadius: r.full,
+    markerBorder: `var(--sq-color-border-strong)`,
+    railColor: `var(--sq-color-border-strong)`,
+    railWidth: "2px",
+    gap: s.xs,
+  },
+  chip: {
+    background: `var(--sq-color-surface-elevated)`,
+    borderColor: `var(--sq-color-border)`,
+    textColor: `var(--sq-color-text-primary)`,
+    radius: r.full,
+    paddingY: "0.25rem",
+    paddingX: s.xs,
+    gap: s["2xs"],
+    hoverBackground: `var(--sq-color-surface-overlay)`,
+  },
+  banner: {
+    radius: r.md,
+    paddingY: s.sm,
+    paddingX: s.md,
+    gap: s.sm,
+  },
+  rating: {
+    size: "1.75rem",
+    gap: "0.125rem",
+    accentColor: `var(--sq-color-accent)`,
+    idleColor: `var(--sq-color-surface-overlay)`,
+  },
+  timeline: {
+    railColor: `var(--sq-color-border-strong)`,
+    railWidth: "2px",
+    marker: "0.75rem",
+    markerColor: `var(--sq-color-accent)`,
+    markerBorder: `var(--sq-color-border-strong)`,
+    gap: s.xs,
+  },
+  carousel: {
+    radius: r.md,
+    gap: s.sm,
+  },
   disclosure: {
     gap: s["2xs"],
     paddingY: s.sm,
     paddingX: s.md,
     radius: r.md,
     contentPadding: s.md,
+    summaryMinHeight: "3rem",
   },
   focus: {
     width: "3px",

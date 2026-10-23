@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Navigation — Squircle docs</title>
+    <meta name="description" content="Purpose:  move between pages and places. Every pattern here is real" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Navigation</h1>
+      <p class="sq-lead">Purpose:  move between pages and places. Every pattern here is real</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: move between pages and places. Every pattern here is real links in semantic landmarks — never buttons pretending to navigate, never action menus pretending to be navigation.</p>
+<h2 id="patterns">Patterns</h2>
+<p><strong>Navbar</strong> — brand + link group + optional actions:</p>
+<pre tabindex="0" aria-label="Example code">&lt;header class=&quot;sq-navbar&quot;&gt;
+  &lt;div class=&quot;sq-container sq-navbar__inner&quot;&gt;
+    &lt;a class=&quot;sq-navbar__brand&quot; href=&quot;/&quot;&gt;Harbor Notes&lt;/a&gt;
+    &lt;nav aria-label=&quot;Primary&quot;&gt;
+      &lt;ul class=&quot;sq-nav&quot;&gt;
+        &lt;li&gt;&lt;a class=&quot;sq-nav__link&quot; href=&quot;/articles&quot;&gt;Articles&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;
+          &lt;a class=&quot;sq-nav__link&quot; href=&quot;/about&quot; aria-current=&quot;page&quot;&gt;About&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</pre>
+<p><strong>Collapsible mobile nav</strong> — <code>&lt;details class=&quot;sq-nav-menu&quot; open&gt;</code> wraps the link list; below 48rem it toggles behind a &quot;Menu&quot; summary, at 48rem+ the summary hides and links show inline. Zero JavaScript:</p>
+<pre tabindex="0" aria-label="Example code">&lt;nav aria-label=&quot;Primary&quot;&gt;
+  &lt;details class=&quot;sq-nav-menu&quot; open&gt;
+    &lt;summary&gt;Menu&lt;/summary&gt;
+    &lt;ul class=&quot;sq-nav&quot;&gt;
+      &lt;li&gt;&lt;a class=&quot;sq-nav__link&quot; href=&quot;/articles&quot;&gt;Articles&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/details&gt;
+&lt;/nav&gt;</pre>
+<p>The <code>open</code> attribute is load-bearing, not a default to strip: closed <code>&lt;details&gt;</code> content stays hidden from assistive technology even when CSS displays it, so removing <code>open</code> would show links to sighted users at wide viewports while hiding them from screen readers. Default-open keeps both trees in agreement at every width; mobile users collapse with one toggle.</p>
+<p><strong>Breadcrumbs</strong> — ordered trail; separators are CSS (never announced); the current page is plain text with <code>aria-current=&quot;page&quot;</code>:</p>
+<pre tabindex="0" aria-label="Example code">&lt;nav aria-label=&quot;Breadcrumb&quot;&gt;
+  &lt;ol class=&quot;sq-breadcrumbs&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;/articles&quot;&gt;Articles&lt;/a&gt;&lt;/li&gt;
+    &lt;li aria-current=&quot;page&quot;&gt;The 64-pixel rule&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;</pre>
+<p><strong>Pagination</strong> — page navigation with <code>rel</code>, visible prev/next labels, current page as text:</p>
+<pre tabindex="0" aria-label="Example code">&lt;nav aria-label=&quot;Articles pages&quot;&gt;
+  &lt;ul class=&quot;sq-pagination&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;/articles?p=1&quot; rel=&quot;prev&quot;&gt;← Newer&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;/articles?p=1&quot;&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li aria-current=&quot;page&quot;&gt;2&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;/articles?p=3&quot;&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;/articles?p=3&quot; rel=&quot;next&quot;&gt;Older →&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</pre>
+<p><strong>Sidebar</strong> — vertical nav column; stacks above content on narrow, sticky beside it at 64rem+:</p>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-with-sidebar&quot;&gt;
+  &lt;nav class=&quot;sq-sidebar sq-sidebar--sticky&quot; aria-label=&quot;Docs&quot;&gt;
+    &lt;p class=&quot;sq-sidebar__title&quot;&gt;Guides&lt;/p&gt;
+    &lt;ul class=&quot;sq-nav sq-nav--vertical&quot;&gt;
+      &lt;li&gt;
+        &lt;a class=&quot;sq-nav__link&quot; href=&quot;/docs&quot; aria-current=&quot;page&quot;&gt;Start&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+  &lt;div&gt;&lt;!-- content --&gt;&lt;/div&gt;
+&lt;/div&gt;</pre>
+<p><strong>Stepper</strong> — progressive flow (checkout, onboarding). Active step is <code>aria-current=&quot;step&quot;</code>, finished steps take <code>--done</code>; empty markers print their DOM position automatically:</p>
+<pre tabindex="0" aria-label="Example code">&lt;ol class=&quot;sq-stepper&quot;&gt;
+  &lt;li class=&quot;sq-stepper__step sq-stepper__step--done&quot;&gt;
+    &lt;span class=&quot;sq-stepper__marker&quot; aria-hidden=&quot;true&quot;&gt;
+      &lt;svg
+        class=&quot;sq-icon sq-icon--small&quot;
+        viewBox=&quot;0 0 24 24&quot;
+        fill=&quot;none&quot;
+        stroke=&quot;currentColor&quot;
+        stroke-width=&quot;2&quot;
+        stroke-linecap=&quot;round&quot;
+        stroke-linejoin=&quot;round&quot;
+        focusable=&quot;false&quot;
+      &gt;
+        &lt;path d=&quot;m5 12 5 5 9-11&quot; /&gt;
+      &lt;/svg&gt;
+    &lt;/span&gt;
+    &lt;span class=&quot;sq-stepper__label&quot;&gt;Delivery window&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;sq-stepper__step&quot; aria-current=&quot;step&quot;&gt;
+    &lt;span class=&quot;sq-stepper__marker&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;sq-stepper__label&quot;&gt;Address&lt;/span&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;sq-stepper__step&quot;&gt;
+    &lt;span class=&quot;sq-stepper__marker&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;sq-stepper__label&quot;&gt;Payment&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</pre>
+<p>The stepper is a status display, not an interactive control: steps are list items, never buttons or links to click themselves into place. The form that drives the flow does the navigating. Steps go vertical below 48rem and horizontal at 48rem+ (connectors per the wide layout only).</p>
+<h2 id="variants-and-states">Variants and states</h2>
+<p><code>sq-nav--vertical</code> (stacked links); <code>sq-sidebar--sticky</code> (opt-in stickiness); hover/active via <code>aria-current=&quot;page&quot;</code> (also <code>&quot;true&quot;</code>). Disabled-like nav links follow the LINKS.md pattern (<code>aria-disabled</code> + <code>tabindex=&quot;-1&quot;</code> + explanation nearby).</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li>Landmarks (<code>nav</code> + <code>aria-label</code>) name each navigation region —</li></ul>
+<p>&quot;Primary&quot;, &quot;Breadcrumb&quot;, &quot;Docs&quot; — never two unlabeled navs.</p>
+<ul><li><code>aria-current=&quot;page&quot;</code> marks the current location (CSS hooks the same</li></ul>
+<p>attribute — state and style cannot disagree).</p>
+<ul><li>The <code>details</code> toggle is keyboard-native (Enter/Space on summary);</li></ul>
+<p>Escape is not needed (nothing traps, nothing overlays).</p>
+<ul><li>Breadcrumb separators and pagination ellipses are CSS/text without</li></ul>
+<p>link semantics — screen readers hear the trail, not the slashes.</p>
+<ul><li>44px+ targets everywhere (pagination cells are 48px).</li></ul>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>Surfaces, borders, active washes, and the current-page ring are tokens; Ocean re-skins without markup changes. Focus is the global ring in both themes.</p>
+<h2 id="customization">Customization</h2>
+<p>Override <code>--sq-nav-*</code> tokens or restyle <code>.sq-nav__link</code> states in a later stylesheet. Keep current-page indication visible in every theme (wash + ring + <code>aria-current</code>, never color alone).</p>
+<h2 id="responsive-behavior">Responsive behavior</h2>
+<p>Navbars wrap; nav lists wrap; sidebars stack below 64rem; long labels wrap or scroll the page — never clipped, never squeezed. The only breakpoint-gated change is the <code>details</code> collapse at 48rem.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li><code>role=&quot;menu&quot;</code> for site navigation — menus are for actions (OVERLAYS.md).</li><li>Links to the current page as clickable links — current page is text.</li><li>Breadcrumb separators as characters in markup (&quot;Home / Articles&quot;) —</li></ul>
+<p>announced slashes are noise; CSS <code>::before</code> is silent.</p>
+<ul><li>JavaScript hamburger toggles with hand-rolled <code>aria-expanded</code> when</li></ul>
+<p><code>details</code> does it natively.</p>
+<ul><li>Stepper steps as clickable &quot;skip ahead&quot; buttons — the status display</li></ul>
+<p>and the navigation stay separate; a skip action is a button beside it, not step markup.</p>
+<ul><li>Steppers invented in markup without <code>aria-current=&quot;step&quot;</code> — the</li></ul>
+<p>class alone styles but does not announce.</p>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>No mega-menus or dropdown navigation (links + disclosure compose for</li></ul>
+<p>simple cases; complex cases need page CSS).</p>
+<ul><li><code>position: sticky</code> sidebar needs a scrolling ancestor without</li></ul>
+<p><code>overflow: hidden</code> (platform constraint).</p>
+<ul><li>The stepper cannot tick &quot;done&quot; by itself — that state is author data.</li><li>Single-open accordion sidebar groups are out of 1.0 scope.</li></ul></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

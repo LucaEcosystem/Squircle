@@ -19,15 +19,62 @@ export function focusableChildren(root: ParentNode): HTMLElement[] {
   return found;
 }
 
-/** Marks an element initialized so repeated `init*()` calls are safe. */
-const INITIALIZED = "data-sq-initialized";
+/**
+ * Marks distinguishing one behavior's wiring from another's. They are
+ * per-behavior on purpose: co-located features share elements (a dialog
+ * opener may also carry a tooltip), and a single shared mark would make
+ * the first `init*()` to touch an element silently block every other.
+ */
+export const INITIALIZED_ATTRS = {
+  dialog: "data-sq-dialogs-initialized",
+  menu: "data-sq-menus-initialized",
+  popover: "data-sq-popovers-initialized",
+  tooltip: "data-sq-tooltips-initialized",
+  tab: "data-sq-tabs-initialized",
+  form: "data-sq-forms-initialized",
+  combobox: "data-sq-comboboxes-initialized",
+  carousel: "data-sq-carousels-initialized",
+  file: "data-sq-files-initialized",
+} as const;
 
-export function alreadyInitialized(el: Element): boolean {
-  return el.hasAttribute(INITIALIZED);
+export interface InitClaims {
+  /**
+   * Claims `el` for this `init*()` pass: marks it in the DOM and
+   * remembers it. Returns false when an earlier, un-cleaned-up pass
+   * already owns the element.
+   */
+  claim(el: Element): boolean;
+  /**
+   * Releases everything this pass claimed. Cleanup functions call this
+   * so a subsequent `init*()` can re-bind after listeners were removed.
+   */
+  release(): void;
 }
 
-export function markInitialized(el: Element): void {
-  el.setAttribute(INITIALIZED, "");
+/** Creates one `init*()` pass's claim set for a given behavior mark. */
+export function initMarks(attribute: string): InitClaims {
+  const claimed: Element[] = [];
+  return {
+    claim(el: Element): boolean {
+      if (el.hasAttribute(attribute)) return false;
+      el.setAttribute(attribute, "");
+      claimed.push(el);
+      return true;
+    },
+    release(): void {
+      for (const el of claimed) el.removeAttribute(attribute);
+      claimed.length = 0;
+    },
+  };
+}
+
+/**
+ * Programmatic focus without page scroll: restores a dialog's invoker
+ * (or any other target) without the browser scrolling it into view —
+ * an unwanted viewport jump right as the overlay closes.
+ */
+export function focusWithoutScroll(target: HTMLElement): void {
+  target.focus({ preventScroll: true });
 }
 
 /** Clamps a popup rect inside the viewport with a margin. */

@@ -4,13 +4,16 @@
  * Arrows move AND select (Home/End jump, click selects). Automatic
  * activation keeps focus and selection together — predictable for
  * keyboard, pointer, touch, and screen-reader users alike.
- * Authors write `role=tablist/tab/tabpanel` with `aria-controls`;
- * missing tab/panel ids are generated deterministically (`sq-tab-N`).
- * Panels hide with `hidden` (removes from tab order AND the
- * accessibility tree — no ARIA needed for that).
+ * Navigation follows `aria-orientation`: vertical tablists use
+ * ArrowUp/ArrowDown, horizontal ones ArrowLeft/ArrowRight (APG; the
+ * perpendicular pair is inert). Authors write
+ * `role=tablist/tab/tabpanel` with `aria-controls`; missing tab/panel
+ * ids are generated deterministically (`sq-tab-N`). Panels hide with
+ * `hidden` (removes from tab order AND the accessibility tree — no
+ * ARIA needed for that).
  */
 
-import { alreadyInitialized, markInitialized } from "./dom.js";
+import { initMarks, INITIALIZED_ATTRS } from "./dom.js";
 
 export interface TabsHandle {
   /** Selects a tab by index (clamped). Focus follows. */
@@ -21,6 +24,21 @@ export interface TabsHandle {
 }
 
 let tabsSerial = 0;
+
+/**
+ * One binding per tablist: binding twice would double-step arrows (two
+ * selects per keypress). First handle wins until `destroy()`.
+ */
+const tabsByTablist = new WeakMap<HTMLElement, TabsHandle>();
+
+/** Vertical navigation only when the tablist (or its wrapper) says so. */
+function isVertical(container: HTMLElement): boolean {
+  const list =
+    container.getAttribute("role") === "tablist"
+      ? container
+      : container.querySelector('[role="tablist"]');
+  return list?.getAttribute("aria-orientation") === "vertical";
+}
 
 function tabsIn(tablist: Element): HTMLElement[] {
   return [...tablist.querySelectorAll('[role="tab"]')].filter(
@@ -36,10 +54,16 @@ function panelFor(tab: HTMLElement): HTMLElement | null {
 
 /**
  * Binds one tablist. Requires `role=tablist` with `role=tab` children
- * carrying `aria-controls`; panels need `role=tabpanel`. Returns a
- * handle; `destroy()` removes every listener.
+ * carrying `aria-controls`; panels need `role=tabpanel`. Rebinding an
+ * already-bound tablist returns the existing handle. Returns a handle;
+ * `destroy()` removes every listener.
  */
 export function createTabs(tablist: HTMLElement): TabsHandle {
+  const existing = tabsByTablist.get(tablist);
+  if (existing) return existing;
+
+  const vertical = isVertical(tablist);
+
   const controller = new AbortController();
   const signal = controller.signal;
   const tabs = tabsIn(tablist);
@@ -76,8 +100,11 @@ export function createTabs(tablist: HTMLElement): TabsHandle {
     },
     destroy() {
       controller.abort();
+      tabsByTablist.delete(tablist);
     },
   };
+
+  tabsByTablist.set(tablist, api);
 
   for (const [i, tab] of tabs.entries()) {
     const on = i === selected;
@@ -89,10 +116,17 @@ export function createTabs(tablist: HTMLElement): TabsHandle {
     tab.addEventListener(
       "keydown",
       (event) => {
-        if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        // APG: one arrow pair per orientation — the other pair is inert.
+        const forward = vertical
+          ? event.key === "ArrowDown"
+          : event.key === "ArrowRight";
+        const back = vertical
+          ? event.key === "ArrowUp"
+          : event.key === "ArrowLeft";
+        if (forward) {
           event.preventDefault();
           api.select((i + 1) % tabs.length);
-        } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        } else if (back) {
           event.preventDefault();
           api.select((i - 1 + tabs.length) % tabs.length);
         } else if (event.key === "Home") {
@@ -112,18 +146,18 @@ export function createTabs(tablist: HTMLElement): TabsHandle {
 
 /**
  * Declarative wiring (idempotent): every `[data-sq-tabs]` tablist binds.
- * Returns a cleanup function.
+ * Returns a cleanup function removing listeners and releasing the idempotency marks, so a later pass can rebind.
  */
 export function initTabs(root: ParentNode = document): () => void {
   const handles: TabsHandle[] = [];
+  const marks = initMarks(INITIALIZED_ATTRS.tab);
   for (const tablist of root.querySelectorAll("[data-sq-tabs]")) {
-    if (!(tablist instanceof HTMLElement) || alreadyInitialized(tablist)) {
-      continue;
-    }
-    markInitialized(tablist);
+    if (!(tablist instanceof HTMLElement)) continue;
+    if (!marks.claim(tablist)) continue;
     handles.push(createTabs(tablist));
   }
   return () => {
     for (const handle of handles) handle.destroy();
+    marks.release();
   };
 }

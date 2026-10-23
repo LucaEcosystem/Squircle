@@ -15,6 +15,7 @@ export {
 } from "./scan.js";
 export type { ScanResult } from "./scan.js";
 export {
+  applySafelistEntry,
   definedClasses,
   emptySafelist,
   isSafelisted,
@@ -22,4 +23,4 @@ export {
   trimCss,
 } from "./trim.js";
 export type { Safelist, TrimOutcome } from "./trim.js";
-export { collectFiles, isFile } from "./files.js";
+export { collectFiles, isFile, readTextFile } from "./files.js";

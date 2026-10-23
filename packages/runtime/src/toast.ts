@@ -5,10 +5,14 @@
  * the only copy of essential information (that belongs in alerts or
  * inline text). The region is a live area; assertion level follows the
  * tone (error asserts, everything else is polite). Auto-dismiss pauses
- * while the toast is hovered or focused, and every toast has a dismiss
- * button. No slide/fade animation — instant both ways, reduced-motion
- * safe by construction. Deterministic cleanup: each `notify()` returns
- * a dismiss function, and `dismissAll()` clears a region.
+ * while the toast is hovered or focused; an auto-dismiss that expired
+ * during such a pause takes effect when the pause ends (never stays
+ * hidden forever, never lingers frozen). Every toast has a dismiss
+ * button — `dismissLabel`, or the region's
+ * `data-sq-toast-dismiss-label` attribute for localized UIs. Entrance
+ * uses the `sq-rise-in` animation, flattened under reduced motion.
+ * Deterministic cleanup: each `notify()` returns a dismiss function,
+ * and `dismissAll()` clears a region INCLUDING its pending timers.
  */
 
 export type ToastTone = "info" | "success" | "warning" | "error";
@@ -20,12 +24,21 @@ export interface ToastOptions {
   duration?: number;
   /** Region to append to. Defaults to `[data-sq-toasts]`, created if missing. */
   region?: HTMLElement;
+  /**
+   * Dismiss button label for screen readers. Defaults to the region's
+   * `data-sq-toast-dismiss-label` attribute, then "Dismiss notification".
+   */
+  dismissLabel?: string;
 }
 
 export interface ToastHandle {
   readonly element: HTMLElement;
   dismiss(): void;
 }
+
+/** Live toasts by handle, with their region — `dismissAll` uses this to
+ * cancel not just the DOM nodes but each toast's pending auto-dismiss. */
+const liveToasts = new Map<ToastHandle, HTMLElement>();
 
 function ensureRegion(preferred?: HTMLElement): HTMLElement {
   if (preferred instanceof HTMLElement) return preferred;
@@ -39,6 +52,13 @@ function ensureRegion(preferred?: HTMLElement): HTMLElement {
   return region;
 }
 
+/** Repairs a live region the author forgot to role (announcements
+ * silently fail without `role="status"`); labeled/roled regions are
+ * left untouched. */
+function repairLiveRegion(region: HTMLElement): void {
+  if (!region.hasAttribute("role")) region.setAttribute("role", "status");
+}
+
 /**
  * Shows a toast with plain-text `message` (never HTML — callers pass
  * strings, so injection is impossible by construction). Returns a
@@ -49,9 +69,28 @@ export function notify(
   message: string,
   options: ToastOptions = {},
 ): ToastHandle {
+  // Called before <body> exists (early <head> scripts): defer the whole
+  // build to DOMContentLoaded instead of crashing on the region append.
+  // The returned handle stays functional: `dismiss()` cancels the
+  // deferred toast, `element` resolves once it exists.
+  if (!document.body && options.region === undefined) {
+    const flush = (): void => void notify(message, options);
+    document.addEventListener("DOMContentLoaded", flush, { once: true });
+    const placeholder = document.createElement("div");
+    return {
+      get element(): HTMLElement {
+        return placeholder;
+      },
+      dismiss() {
+        document.removeEventListener("DOMContentLoaded", flush);
+      },
+    };
+  }
+
   const tone = options.tone ?? "info";
   const duration = options.duration ?? 6000;
   const region = ensureRegion(options.region);
+  repairLiveRegion(region);
 
   const toast = document.createElement("div");
   toast.className = `sq-toast${tone === "info" ? "" : ` sq-toast--${tone}`}`;
@@ -66,7 +105,12 @@ export function notify(
   const dismissButton = document.createElement("button");
   dismissButton.className = "sq-button sq-button--tertiary sq-button--small";
   dismissButton.type = "button";
-  dismissButton.setAttribute("aria-label", "Dismiss notification");
+  dismissButton.setAttribute(
+    "aria-label",
+    options.dismissLabel ??
+      region.getAttribute("data-sq-toast-dismiss-label") ??
+      "Dismiss notification",
+  );
   dismissButton.textContent = "✕";
   toast.append(dismissButton);
 
@@ -85,36 +129,46 @@ export function notify(
     element: toast,
     dismiss() {
       clear();
+      liveToasts.delete(handle);
       toast.remove();
     },
   };
 
+  liveToasts.set(handle, region);
   dismissButton.addEventListener("click", () => handle.dismiss());
 
   if (remaining > 0) {
     const arm = (): void => {
       clear();
       startedAt = Date.now();
-      timer = setTimeout(() => handle.dismiss(), remaining);
+      timer = setTimeout(() => {
+        if (!toast.isConnected) return; // already removed another way
+        handle.dismiss();
+      }, remaining);
     };
-    // Pause the countdown while the user reads or hovers.
+    // Pause the countdown while the user reads or hovers; an expiry
+    // that elapsed during the pause lands when the pause ends.
     toast.addEventListener("mouseenter", () => {
       if (timer !== null) {
-        remaining -= Date.now() - startedAt;
+        remaining = Math.max(0, remaining - (Date.now() - startedAt));
         clear();
       }
     });
     toast.addEventListener("mouseleave", () => {
+      if (!toast.isConnected) return;
       if (remaining > 0) arm();
+      else handle.dismiss();
     });
     toast.addEventListener("focusin", () => {
       if (timer !== null) {
-        remaining -= Date.now() - startedAt;
+        remaining = Math.max(0, remaining - (Date.now() - startedAt));
         clear();
       }
     });
     toast.addEventListener("focusout", () => {
+      if (!toast.isConnected) return;
       if (remaining > 0) arm();
+      else handle.dismiss();
     });
     arm();
   }
@@ -123,14 +177,18 @@ export function notify(
   return handle;
 }
 
-/** Dismisses every toast in `region` (default: the shared region). */
+/**
+ * Dismisses every toast in `region` (default: the shared region) —
+ * including toasts whose auto-dismiss timer is about to fire, which a
+ * bare DOM removal would leave running on orphaned nodes.
+ */
 export function dismissAll(region?: HTMLElement): void {
   const target =
     region instanceof HTMLElement
       ? region
       : document.querySelector("[data-sq-toasts]");
   if (!(target instanceof HTMLElement)) return;
-  for (const toast of target.querySelectorAll(".sq-toast")) {
-    toast.remove();
+  for (const [handle, toastRegion] of [...liveToasts]) {
+    if (toastRegion === target) handle.dismiss();
   }
 }

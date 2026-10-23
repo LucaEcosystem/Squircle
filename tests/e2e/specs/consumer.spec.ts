@@ -1,16 +1,18 @@
 /**
- * Clean consumer-project verification (Stage 6).
+ * Clean consumer-project verification.
  *
  * Installs the PACKED `squircle` tarball with plain `npm` (not pnpm,
- * not the workspace) into project-specific copies of a shop fixture,
- * then proves the public entry points work from a project that knows
- * nothing about the monorepo: tarball contents, Node ESM resolution via
- * the exports map, browser behavior over HTTP, direct file:// behavior,
- * consumer token/component overrides, and trimming the PACKAGED css.
+ * not the workspace) into a shop fixture, then proves the public entry
+ * points work from a project that knows nothing about the monorepo:
+ * tarball contents, Node ESM resolution via the exports map, browser
+ * behavior over HTTP, direct file:// behavior, consumer token/component
+ * overrides, and trimming the PACKAGED css.
  *
- * Serial within a file; each project installs into its own fixture
- * copy with its own npm cache so parallel projects don't contend on
- * npm's cache lock or on a shared node_modules.
+ * Chromium only. The pack/install/trim pipeline is browser-independent,
+ * and artifacts written into the shared fixture (node_modules,
+ * squircle.trimmed.css, trim-report.json) would contend across engines;
+ * engine-specific behavior is covered exhaustively by the main specs.
+ * Serial within a file: later tests consume earlier steps' outputs.
  */
 
 import { execFileSync } from "node:child_process";
@@ -20,21 +22,16 @@ import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 
-/**
- * Playwright 1.64 no longer exposes `testInfo` as a test-callback fixture
- * parameter. Resolve the active project name from the per-project shop
- * fixture directory that each Playwright project runs against — the shop
- * copy used is selected by the `--project` flag at invocation time, not
- * inside the test callback, so a static reference per spec file is the
- * portable substitute.
- */
-const SHOP_PROJECT = "chromium";
+test.skip(
+  ({ browserName }) => browserName !== "chromium",
+  "Packaged-artifact verification is asserted on Chromium only",
+);
 
 test.describe.configure({ mode: "serial" });
 
 const root = fileURLToPath(new URL("../../../", import.meta.url));
-const shopFor = (projectName: string) =>
-  join(root, "fixtures", "consumers", `shop-${projectName}`);
+const shop = join(root, "fixtures", "consumers", "shop-chromium");
+const publicPackageJson = join(root, "packages", "squircle", "package.json");
 
 /**
  * Resolves `node`/`npm`/`corepack` to their absolute path so the spec
@@ -58,9 +55,8 @@ function sh(cmd: string, args: string[], cwd: string): string {
 
 test.describe("consumer install from packed tarball", () => {
   test("packs, installs with npm, and resolves the exports map", async () => {
-    const projectName = SHOP_PROJECT;
-    const shop = shopFor(projectName);
-    const installed = join(shop, "node_modules", "squircle");
+    const version = JSON.parse(readFileSync(publicPackageJson, "utf8")).version;
+    const installed = join(shop, "node_modules", "@luca-ecosystem", "squircle");
     const tmp = mkdtempSync(join(tmpdir(), "sq-consumer-"));
     // Pack the public package exactly as the registry would receive it.
     const packOut = sh(
@@ -68,8 +64,9 @@ test.describe("consumer install from packed tarball", () => {
       ["pnpm", "--filter", "squircle", "pack", "--pack-destination", tmp],
       root,
     );
-    expect(packOut).toMatch(/luca-ecosystem-squircle-1\.0\.0\.tgz/);
-    const tarball = join(tmp, "luca-ecosystem-squircle-1.0.0.tgz");
+    const tarballName = `luca-ecosystem-squircle-${version}.tgz`;
+    expect(packOut).toContain(tarballName);
+    const tarball = join(tmp, tarballName);
     expect(existsSync(tarball)).toBe(true);
 
     // Packed contents: dist + README + package.json. No sources, no
@@ -84,22 +81,30 @@ test.describe("consumer install from packed tarball", () => {
     expect(files.some((f) => f.includes("/src/"))).toBe(false);
     expect(files.some((f) => f.endsWith("build.mjs"))).toBe(false);
 
-    // Clean-room install with npm (proves manager independence). Each
-    // project installs into its own fixture copy with its own npm
-    // cache, so parallel projects don't contend on the shared cache
-    // lock or a shared node_modules.
+    // Clean-room install with npm (proves manager independence).
+    // --no-save/--package-lock=false keep the committed fixture pristine:
+    // the tarball under test is installed explicitly, never declared.
     rmSync(join(shop, "node_modules"), { recursive: true, force: true });
-    const cacheDir = join(tmpdir(), `sq-npm-cache-${projectName}`);
+    const cacheDir = join(tmpdir(), "sq-npm-cache-chromium");
     sh(
       "npm",
-      ["install", "--cache", cacheDir, "--no-audit", "--no-fund", tarball],
+      [
+        "install",
+        "--cache",
+        cacheDir,
+        "--no-audit",
+        "--no-fund",
+        "--no-save",
+        "--package-lock=false",
+        tarball,
+      ],
       shop,
     );
     const manifest = JSON.parse(
       readFileSync(join(installed, "package.json"), "utf8"),
     );
     expect(manifest.name).toBe("@luca-ecosystem/squircle");
-    expect(manifest.version).toBe("1.0.0");
+    expect(manifest.version).toBe(version);
     expect(manifest.license).toBe("MIT");
     for (const artifact of [
       "dist/squircle.min.css",
@@ -116,8 +121,6 @@ test.describe("consumer install from packed tarball", () => {
   });
 
   test("Node resolves bare '@luca-ecosystem/squircle' through the exports map", async () => {
-    const projectName = SHOP_PROJECT;
-    const shop = shopFor(projectName);
     const out = sh(
       "node",
       [
@@ -133,7 +136,6 @@ test.describe("consumer install from packed tarball", () => {
 
 test.describe("consumer page over HTTP (installed package)", () => {
   test.beforeEach(async ({ page }) => {
-    const shop = shopFor(SHOP_PROJECT);
     await page.goto(`/${shop.slice(root.length)}/index.html`);
     await page.bringToFront();
   });
@@ -210,7 +212,6 @@ test.describe("consumer page over HTTP (installed package)", () => {
   }: {
     page: Page;
   }) => {
-    const shop = shopFor("chromium");
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(`/${shop.slice(root.length)}/module.html`);
@@ -238,7 +239,7 @@ test.describe("consumer direct file:// (classic path)", () => {
   }) => {
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
-    await page.goto(`file://${shopFor("chromium")}/index.html`);
+    await page.goto(`file://${shop}/index.html`);
     await expect(page.locator("body")).toHaveCSS(
       "background-color",
       "rgb(19, 30, 51)",
@@ -255,8 +256,6 @@ test.describe("consumer direct file:// (classic path)", () => {
 
 test.describe("consumer trimming (packaged CSS)", () => {
   test("used, safelisted, and structural styles survive", async () => {
-    const projectName = SHOP_PROJECT;
-    const shop = shopFor(projectName);
     const cli = join(root, "packages", "build-tools", "dist", "cli.js");
     execFileSync(
       "node",

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panels &amp; cards — Squircle docs</title>
+    <meta name="description" content="Purpose:  group related content. Panel = flat bordered surface for" />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Panels &amp; cards</h1>
+      <p class="sq-lead">Purpose:  group related content. Panel = flat bordered surface for</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: group related content. Panel = flat bordered surface for sections and forms. Card = elevated + shadowed for peer-level items (listings, stats, previews). Same geometry, different altitude.</p>
+<h2 id="usage">Usage</h2>
+<pre tabindex="0" aria-label="Example code">&lt;section class=&quot;sq-panel&quot; aria-labelledby=&quot;billing-title&quot;&gt;
+  &lt;div class=&quot;sq-panel__header&quot;&gt;
+    &lt;h2 class=&quot;sq-heading--3&quot; id=&quot;billing-title&quot;&gt;Billing&lt;/h2&gt;
+    &lt;p class=&quot;sq-text sq-muted&quot;&gt;
+      Invoices land here on the first of the month.
+    &lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;sq-panel__body&quot;&gt;
+    &lt;div class=&quot;sq-panel&quot;&gt;
+      &lt;p class=&quot;sq-text&quot;&gt;Nested content carves inward automatically.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;sq-panel__footer&quot;&gt;
+    &lt;button class=&quot;sq-button sq-button--primary&quot; type=&quot;button&quot;&gt;Save&lt;/button&gt;
+    &lt;button class=&quot;sq-button sq-button--tertiary&quot; type=&quot;button&quot;&gt;Cancel&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;article class=&quot;sq-card&quot;&gt;
+  &lt;h3 class=&quot;sq-heading--4&quot;&gt;Turnaround 6.2h&lt;/h3&gt;
+  &lt;p class=&quot;sq-text sq-muted&quot;&gt;Fleet average, trailing 7 days.&lt;/p&gt;
+&lt;/article&gt;</pre>
+<h2 id="variants">Variants</h2>
+<div class="sq-table-scroll" role="region" tabindex="0" aria-label="Data table"><table class="sq-table"><thead><tr><th scope="col">Class</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>sq-panel</code></td><td>Default flat surface.</td></tr><tr><td><code>sq-panel--sunken</code></td><td>Inset regions (code wells, read-only previews).</td></tr><tr><td><code>sq-panel--elevated</code></td><td>Panel that must float without becoming a card.</td></tr><tr><td><code>sq-panel--large</code></td><td>Roomier padding for major sections.</td></tr><tr><td><code>sq-card</code></td><td>Elevated peer item.</td></tr><tr><td><code>sq-card--interactive</code></td><td>Clickable card (see stretched link below).</td></tr></tbody></table></div>
+<p>Header/body/footer sections are optional and composable — use any subset. The header carries a divider; the footer wraps actions with real gaps.</p>
+<h2 id="nesting">Nesting</h2>
+<p><code>.sq-panel .sq-panel</code> steps down one radius grade and one elevation automatically. Never hand-tune nested radii; never stack more than two deep (restructure instead — depth is a smell).</p>
+<h2 id="interactive-cards">Interactive cards</h2>
+<p>One link per card, stretched over the surface, one tab stop:</p>
+<pre tabindex="0" aria-label="Example code">&lt;article class=&quot;sq-card sq-card--interactive&quot;&gt;
+  &lt;h3 class=&quot;sq-heading--4&quot;&gt;The 64-pixel rule&lt;/h3&gt;
+  &lt;p class=&quot;sq-text sq-muted&quot;&gt;Section rhythm should be a token.&lt;/p&gt;
+  &lt;a class=&quot;sq-stretched-link&quot; href=&quot;/essays/64px&quot;&gt;Read the essay&lt;/a&gt;
+&lt;/article&gt;</pre>
+<p>The card lifts on hover (settles under reduced motion) and rings on <code>focus-within</code> via the global focus rule. Never nest interactive controls inside a stretched-link card — one action per surface.</p>
+<h2 id="disclosure-collapsible-surfaces">Disclosure (collapsible surfaces)</h2>
+<p>Native <code>&lt;details&gt;</code>/<code>&lt;summary&gt;</code> — no JavaScript, platform keyboard support, state in the <code>open</code> attribute:</p>
+<pre tabindex="0" aria-label="Example code">&lt;details class=&quot;sq-disclosure&quot; open&gt;
+  &lt;summary&gt;When do exports run?&lt;/summary&gt;
+  &lt;div class=&quot;sq-disclosure__content&quot;&gt;
+    &lt;p class=&quot;sq-text&quot;&gt;Nightly at 02:00 UTC, plus on demand.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/details&gt;</pre>
+<p>Summary text names the section (always visible, always a complete label); content grids with room. The accent chevron rotates on open (static under reduced motion). This resolves the Stage 3 &quot;no collapsible surfaces&quot; limitation: single-open accordion groups remain out of scope (use separate disclosures — forcing exclusivity needs a custom system native HTML deliberately avoids).</p>
+<h2 id="surface-hierarchy">Surface hierarchy</h2>
+<p>Page (deepest) → panel → nested panel / card → overlay (dialogs, Stage 4). If everything is elevated, nothing is: default to flat panels, promote to cards only for peer groups that must separate from the page. Bright accents never fill large surfaces.</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li>Panels grouping a topic get a heading (<code>aria-labelledby</code> where the</li></ul>
+<p>heading is the label). Decorative wrappers stay dumb <code>&lt;div&gt;</code>s.</p>
+<ul><li>Interactive cards keep exactly one link; the visible link text is the</li></ul>
+<p>accessible name — no <code>aria-label</code> needed, none wanted.</p>
+<ul><li>Dividers (<code>&lt;hr class=&quot;sq-divider&quot;&gt;</code>) are native separators; vertical</li></ul>
+<p>dividers are <code>aria-hidden</code> presentation.</p>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>Surfaces, borders, dividers, and shadows are tokens; the navy ramp re-maps under Ocean without markup changes. Elevation must remain visible in every theme (shadow + border both shift, never just one).</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li>Card for a whole page section — use a panel; cards are peers.</li><li>Three levels of nesting — restructure.</li><li>Buttons inside stretched-link cards — nested interactives break</li></ul>
+<p>keyboard and screen-reader users alike.</p>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>Single-open accordion groups (use separate disclosures instead).</li><li><code>sq-card--interactive</code> lift is hover/keyboard-focus driven; touch</li></ul>
+<p>users get the link with no lift, which is correct.</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

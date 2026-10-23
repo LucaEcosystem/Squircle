@@ -14,7 +14,7 @@
  * Fails loudly on missing inputs instead of shipping a partial package.
  */
 
-import { copyFileSync, cpSync, mkdirSync, existsSync } from "node:fs";
+import { copyFileSync, cpSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -58,6 +58,9 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
+// Start from an empty dist: files removed upstream must not linger while
+// wildcard existence checks still pass against stale leftovers.
+rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 for (const [from, to] of copies) {
   copyFileSync(from, path.join(dist, to));

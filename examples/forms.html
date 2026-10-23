@@ -111,6 +111,186 @@
               </div>
 
               <div class="sq-field">
+                <label for="f-currency">Billing currency</label>
+                <div class="sq-select">
+                  <select class="sq-input" id="f-currency" name="currency">
+                    <option value="usd" selected>USD — US Dollar</option>
+                    <option value="eur">EUR — Euro</option>
+                    <option value="sek">SEK — Swedish Krona</option>
+                    <option value="jpy">JPY — Japanese Yen</option>
+                  </select>
+                </div>
+                <p class="sq-field__help">
+                  The dressed select: painted indicator, native behavior.
+                </p>
+              </div>
+
+              <div class="sq-field">
+                <label for="f-country">Country</label>
+                <div class="sq-combobox">
+                  <input
+                    class="sq-input"
+                    id="f-country"
+                    name="country"
+                    type="text"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-controls="f-country-list"
+                    aria-autocomplete="list"
+                    autocomplete="off"
+                    data-sq-combobox
+                    placeholder="Find your country…"
+                  />
+                  <ul
+                    class="sq-combobox__list"
+                    id="f-country-list"
+                    role="listbox"
+                    aria-label="Countries"
+                    hidden
+                  >
+                    <li
+                      class="sq-combobox__option"
+                      role="option"
+                      data-value="de"
+                    >
+                      Germany
+                    </li>
+                    <li
+                      class="sq-combobox__option"
+                      role="option"
+                      data-value="jp"
+                    >
+                      Japan
+                    </li>
+                    <li
+                      class="sq-combobox__option"
+                      role="option"
+                      data-value="mx"
+                    >
+                      Mexico
+                    </li>
+                    <li
+                      class="sq-combobox__option"
+                      role="option"
+                      data-value="se"
+                    >
+                      Sweden
+                    </li>
+                    <li
+                      class="sq-combobox__option"
+                      role="option"
+                      data-value="us"
+                    >
+                      United States
+                    </li>
+                    <li class="sq-combobox__empty" hidden>
+                      No countries match.
+                    </li>
+                  </ul>
+                </div>
+                <p class="sq-field__help">
+                  Typeahead with the list panel — arrow through, Enter commits.
+                </p>
+              </div>
+
+              <fieldset class="sq-fieldset">
+                <legend>Brand assets</legend>
+                <p class="sq-fieldset__help">
+                  Pick files — or drop them on the zone. Both routes end at the
+                  same input.
+                </p>
+                <label class="sq-file" data-sq-file>
+                  <input
+                    class="sq-file__input"
+                    id="f-assets"
+                    name="assets"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                  />
+                  <span class="sq-file__zone">
+                    <span class="sq-file__icon" aria-hidden="true">
+                      <svg
+                        class="sq-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        focusable="false"
+                      >
+                        <path d="M12 15V4" />
+                        <path d="m7 8 5-5 5 5" />
+                        <path d="M5 20h14" />
+                      </svg>
+                    </span>
+                    <span class="sq-file__title"
+                      >Choose files or drop them</span
+                    >
+                    <span class="sq-file__hint">
+                      PNG, JPEG, SVG — up to what your network allows.
+                    </span>
+                  </span>
+                </label>
+              </fieldset>
+
+              <fieldset class="sq-fieldset">
+                <legend>Rate your onboarding experience</legend>
+                <div class="sq-rating" id="f-rating">
+                  <label class="sq-rating__star">
+                    <input
+                      class="sq-rating__input"
+                      type="radio"
+                      name="rating"
+                      value="5"
+                    />
+                    <span class="sq-sr-only">5 stars</span>
+                  </label>
+                  <label class="sq-rating__star">
+                    <input
+                      class="sq-rating__input"
+                      type="radio"
+                      name="rating"
+                      value="4"
+                    />
+                    <span class="sq-sr-only">4 stars</span>
+                  </label>
+                  <label class="sq-rating__star">
+                    <input
+                      class="sq-rating__input"
+                      type="radio"
+                      name="rating"
+                      value="3"
+                    />
+                    <span class="sq-sr-only">3 stars</span>
+                  </label>
+                  <label class="sq-rating__star">
+                    <input
+                      class="sq-rating__input"
+                      type="radio"
+                      name="rating"
+                      value="2"
+                    />
+                    <span class="sq-sr-only">2 stars</span>
+                  </label>
+                  <label class="sq-rating__star">
+                    <input
+                      class="sq-rating__input"
+                      type="radio"
+                      name="rating"
+                      value="1"
+                      checked
+                    />
+                    <span class="sq-sr-only">1 star</span>
+                  </label>
+                </div>
+                <p class="sq-field__help">
+                  Arrow keys move; the leftmost focusable option is one star.
+                </p>
+              </fieldset>
+
+              <div class="sq-field">
                 <label for="f-bio">Project notes</label>
                 <textarea
                   class="sq-input"
@@ -298,6 +478,7 @@
       (function () {
         var form = document.getElementById("signup-form");
         Squircle.enhanceForm(form);
+        Squircle.init();
         // Reveal pre-rendered messages when native validation fires, so the
         // associated text (not just the bubble) carries the meaning. The
         // `submit` event does NOT fire while validation blocks submission,

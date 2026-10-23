@@ -118,11 +118,88 @@
                   </div>
                   <div class="sq-field">
                     <label for="ws-tz">Home timezone</label>
-                    <select class="sq-input" id="ws-tz" name="timezone">
-                      <option selected>UTC (recommended for fleets)</option>
-                      <option>Local port time</option>
-                    </select>
+                    <div class="sq-select">
+                      <select class="sq-input" id="ws-tz" name="timezone">
+                        <option selected>UTC (recommended for fleets)</option>
+                        <option>Local port time</option>
+                      </select>
+                    </div>
                   </div>
+                  <div class="sq-field">
+                    <p class="sq-field__help" id="ws-tags-help">
+                      Workspace tags — the removable ones go when clicked.
+                    </p>
+                    <div
+                      class="sq-chips"
+                      id="ws-chips"
+                      aria-describedby="ws-tags-help"
+                    >
+                      <span class="sq-chip"
+                        ><span class="sq-chip__text">berths</span></span
+                      >
+                      <span class="sq-chip"
+                        ><span class="sq-chip__text">crews</span></span
+                      >
+                      <span class="sq-chip sq-chip--info"
+                        ><span class="sq-chip__text">ledgers</span></span
+                      >
+                    </div>
+                  </div>
+                  <fieldset class="sq-fieldset">
+                    <legend>Rate this workspace demo</legend>
+                    <div class="sq-rating" id="ws-rating">
+                      <label class="sq-rating__star">
+                        <input
+                          class="sq-rating__input"
+                          type="radio"
+                          name="ws-rating"
+                          value="5"
+                        />
+                        <span class="sq-sr-only">5 of 5</span>
+                      </label>
+                      <label class="sq-rating__star">
+                        <input
+                          class="sq-rating__input"
+                          type="radio"
+                          name="ws-rating"
+                          value="4"
+                        />
+                        <span class="sq-sr-only">4 of 5</span>
+                      </label>
+                      <label class="sq-rating__star">
+                        <input
+                          class="sq-rating__input"
+                          type="radio"
+                          name="ws-rating"
+                          value="3"
+                          checked
+                        />
+                        <span class="sq-sr-only">3 of 5</span>
+                      </label>
+                      <label class="sq-rating__star">
+                        <input
+                          class="sq-rating__input"
+                          type="radio"
+                          name="ws-rating"
+                          value="2"
+                        />
+                        <span class="sq-sr-only">2 of 5</span>
+                      </label>
+                      <label class="sq-rating__star">
+                        <input
+                          class="sq-rating__input"
+                          type="radio"
+                          name="ws-rating"
+                          value="1"
+                        />
+                        <span class="sq-sr-only">1 of 5</span>
+                      </label>
+                    </div>
+                    <p class="sq-fieldset__help">
+                      Radios underneath — arrows pick 1 to 5, labels say what
+                      they choose.
+                    </p>
+                  </fieldset>
                   <div class="sq-cluster">
                     <button class="sq-button sq-button--primary" type="submit">
                       Save general
@@ -273,6 +350,14 @@
             );
           });
       })();
+      document.addEventListener("DOMContentLoaded", function () {
+        var chips = document.getElementById("ws-chips");
+        chips.addEventListener("click", function (event) {
+          if (event.target.classList.contains("sq-chip__remove")) {
+            event.target.closest(".sq-chip").remove();
+          }
+        });
+      });
     </script>
   </body>
 </html>

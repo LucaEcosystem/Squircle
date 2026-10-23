@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" data-sq-theme="luca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Data display — Squircle docs</title>
+    <meta name="description" content="Purpose:  present structured information with native semantics intact." />
+    <link rel="stylesheet" href="assets/squircle.css" />
+    <script src="assets/squircle-runtime.js"></script>
+    <script>Squircle.initTheme();</script>
+  </head>
+  <body>
+    <a class="sq-skip-link" href="#docs-main">Skip to content</a>
+    <header class="sq-navbar">
+      <div class="sq-container sq-navbar__inner">
+        <a class="sq-navbar__brand" href="index.html">Squircle</a>
+        <a class="sq-button sq-button--tertiary" href="index.html">Index</a>
+      </div>
+    </header>
+    <main id="docs-main" class="sq-py-lg">
+      <div class="sq-container--wide sq-px-md sq-with-sidebar">
+        <nav class="sq-sidebar sq-sidebar--sticky" aria-label="Component docs">
+    <p class="sq-sidebar__title">Component docs</p>
+    <ul class="sq-nav sq-nav--vertical"><li><a class="sq-nav__link" href="contract.html">Component contract</a></li><li><a class="sq-nav__link" href="buttons.html">Buttons</a></li><li><a class="sq-nav__link" href="forms.html">Forms & inputs</a></li><li><a class="sq-nav__link" href="navigation.html">Navigation</a></li><li><a class="sq-nav__link" href="overlays.html">Overlays</a></li><li><a class="sq-nav__link" href="feedback.html">Feedback</a></li><li><a class="sq-nav__link" href="data.html">Data display</a></li><li><a class="sq-nav__link" href="media.html">Media</a></li><li><a class="sq-nav__link" href="typography.html">Typography</a></li><li><a class="sq-nav__link" href="links.html">Links</a></li><li><a class="sq-nav__link" href="layout.html">Layout primitives</a></li><li><a class="sq-nav__link" href="panels-cards.html">Panels & cards</a></li><li><a class="sq-nav__link" href="tabs.html">Tabs</a></li></ul>
+  </nav>
+        <main id="doc-main" class="sq-stack--loose sq-stack">
+    <div class="sq-stack">
+      <h1>Data display</h1>
+      <p class="sq-lead">Purpose:  present structured information with native semantics intact.</p>
+    </div>
+<article class="sq-stack" aria-labelledby="doc-main"><p>Purpose: present structured information with native semantics intact. One API per purpose — no overlapping table/list/card systems.</p>
+<h2 id="tables">Tables</h2>
+<p>Style a real <code>&lt;table&gt;</code>. <code>thead</code>/<code>tbody</code>, <code>th scope</code>, <code>caption</code> for context. The scroll wrapper (not reflowed divs) carries narrow screens:</p>
+<pre tabindex="0" aria-label="Example code">&lt;div
+  class=&quot;sq-table-scroll&quot;
+  role=&quot;region&quot;
+  aria-labelledby=&quot;fleet-caption&quot;
+  tabindex=&quot;0&quot;
+&gt;
+  &lt;table class=&quot;sq-table&quot;&gt;
+    &lt;caption id=&quot;fleet-caption&quot;&gt;
+      Berth schedule, week 42
+    &lt;/caption&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th scope=&quot;col&quot;&gt;Vessel&lt;/th&gt;
+        &lt;th scope=&quot;col&quot;&gt;Berth&lt;/th&gt;
+        &lt;th scope=&quot;col&quot; class=&quot;sq-table__number&quot;&gt;TEU&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;th scope=&quot;row&quot;&gt;Meridian Star&lt;/th&gt;
+        &lt;td&gt;07&lt;/td&gt;
+        &lt;td class=&quot;sq-table__number&quot;&gt;4,200&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</pre>
+<ul><li><code>tabindex=&quot;0&quot;</code> on the scroll region makes overflow keyboard-reachable</li></ul>
+<p>(scroll containers are focusable only when focusable — platform rule).</p>
+<ul><li><code>sq-table--striped</code> is opt-in zebra (often visual noise; default is</li></ul>
+<p>hover-highlight only).</p>
+<ul><li>Numbers right-align with tabular figures (<code>sq-table__number</code>).</li><li>Cells wrap (<code>overflow-wrap: anywhere</code>); headers stay nowrap. Minimum</li></ul>
+<p>table width (36rem) triggers the scroll wrapper instead of squeezing.</p>
+<h2 id="description-lists">Description lists</h2>
+<pre tabindex="0" aria-label="Example code">&lt;dl class=&quot;sq-datalist&quot;&gt;
+  &lt;div&gt;
+    &lt;dt&gt;Registry&lt;/dt&gt;
+    &lt;dd&gt;Monrovia — IMO 9 812 044&lt;/dd&gt;
+  &lt;/div&gt;
+&lt;/dl&gt;</pre>
+<p><code>div</code> wrappers inside <code>dl</code> are valid HTML and carry the row dividers. Terms are secondary, definitions primary — hierarchy without headings.</p>
+<h2 id="avatars">Avatars</h2>
+<pre tabindex="0" aria-label="Example code">&lt;span class=&quot;sq-avatar&quot; role=&quot;img&quot; aria-label=&quot;Ada Lovelace&quot;&gt;AL&lt;/span&gt;
+&lt;span class=&quot;sq-avatar sq-avatar--large&quot;
+  &gt;&lt;img src=&quot;ada.jpg&quot; alt=&quot;Ada Lovelace&quot;
+/&gt;&lt;/span&gt;</pre>
+<p>Initials are real text (announced, localizable); images crop with <code>alt</code> naming the person. Sizes: small 32px, medium 48px, large 64px. In a labeled context (message author named beside it) the avatar is decorative — no <code>role=&quot;img&quot;</code> needed.</p>
+<h2 id="metrics">Metrics</h2>
+<pre tabindex="0" aria-label="Example code">&lt;div class=&quot;sq-metric&quot;&gt;
+  &lt;p class=&quot;sq-metric__value&quot;&gt;94%&lt;/p&gt;
+  &lt;p class=&quot;sq-metric__label&quot;&gt;On schedule, trailing 7 days&lt;/p&gt;
+  &lt;p class=&quot;sq-metric__delta sq-metric__delta--up&quot;&gt;↑ 2 points vs last week&lt;/p&gt;
+&lt;/div&gt;</pre>
+<p>Fluid display numerals, tabular figures, deltas pair arrows with words (direction never travels alone; color never travels alone).</p>
+<h2 id="timeline-activity-feed">Timeline (activity feed)</h2>
+<pre tabindex="0" aria-label="Example code">&lt;ol class=&quot;sq-timeline&quot;&gt;
+  &lt;li class=&quot;sq-timeline__entry&quot;&gt;
+    &lt;div class=&quot;sq-timeline__marker&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;sq-timeline__content&quot;&gt;
+      &lt;time class=&quot;sq-timeline__time&quot; datetime=&quot;2026-10-23T09:41:00+02:00&quot;
+        &gt;Today, 09:41&lt;/time
+      &gt;
+      &lt;p class=&quot;sq-timeline__title&quot;&gt;Deploy succeeded&lt;/p&gt;
+      &lt;p class=&quot;sq-timeline__detail&quot;&gt;
+        Release candidate 3 shipped to production.
+      &lt;/p&gt;
+      &lt;div class=&quot;sq-timeline__meta&quot;&gt;
+        &lt;span class=&quot;sq-chip sq-chip--success&quot;
+          &gt;&lt;span class=&quot;sq-chip__text&quot;&gt;production&lt;/span&gt;&lt;/span
+        &gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li class=&quot;sq-timeline__entry sq-timeline__entry--muted&quot;&gt;
+    &lt;div class=&quot;sq-timeline__marker&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;sq-timeline__content&quot;&gt;
+      &lt;time class=&quot;sq-timeline__time&quot; datetime=&quot;2026-10-22T16:20:00+02:00&quot;
+        &gt;Yesterday, 16:20&lt;/time
+      &gt;
+      &lt;p class=&quot;sq-timeline__title&quot;&gt;Rollback rehearsal&lt;/p&gt;
+      &lt;p class=&quot;sq-timeline__detail&quot;&gt;Staged the previous candidate.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</pre>
+<p>The rail is drawn between entries by CSS — never in markup. Content is plain flow: <code>time</code> first (machine datetime, human text), then title, detail, and any meta (chips from FEEDBACK.md compose naturally). The default marker fills with the accent; <code>--muted</code> entries get a hollow marker for planned/pending events.</p>
+<h2 id="accessibility">Accessibility</h2>
+<ul><li>Table headers scope correctly; captions name the table; scroll</li></ul>
+<p>regions are labeled + focusable.</p>
+<ul><li>Never rebuild tables from divs for &quot;responsive&quot; reasons — the</li></ul>
+<p>scroll wrapper preserves semantics AND narrow screens.</p>
+<ul><li>Avatars: named when alone, decorative when redundant.</li><li>Metric deltas announce as text (&quot;up 2 points&quot;), not as color.</li></ul>
+<h2 id="theme-behavior">Theme behavior</h2>
+<p>Header wash, row dividers, hover, avatar surface, and delta tones are tokens; both themes were contrast-checked including secondary text on header wash.</p>
+<h2 id="customization">Customization</h2>
+<p>Override <code>--sq-table-*</code>, <code>--sq-avatar-*</code> or restyle later. Keep the scroll wrapper's border/radius paired — a borderless scroll region reads as a broken table.</p>
+<h2 id="responsive-behavior">Responsive behavior</h2>
+<p>Tables scroll horizontally in their wrapper (page never scrolls sideways); datalists stack; metrics reflow in grids. At 360px cells wrap, numbers stay tabular, captions stay readable.</p>
+<h2 id="common-mistakes">Common mistakes</h2>
+<ul><li>Div-tables for responsiveness — semantics destroyed for zero gain.</li><li>Scroll region without <code>tabindex</code> — keyboard users cannot reach the overflow.</li><li><code>th</code> without <code>scope</code> — association becomes guesswork.</li><li>Missing captions (&quot;the table below&quot;) — name it.</li><li>Zebra striping + hover + selected + sorted all at once — pick one emphasis.</li><li>Timeline rail drawn as a div/character run — it is CSS; entries stay</li></ul>
+<p>plain list items.</p>
+<ul><li>Timeline as fake headings-of-events without <code>time</code> — timestamps</li></ul>
+<p>deserve machine-readable datetimes.</p>
+<h2 id="tested-limitations">Tested limitations</h2>
+<ul><li>No sortable-column behavior (buttons in headers + JS sorting are</li></ul>
+<p>application logic; the styles support them when added).</p>
+<ul><li>No virtualized tables (1.1+ candidate, documented exclusion).</li><li>Column pinning (<code>position: sticky</code> cells) is page CSS, untested.</li><li>The timeline does not announce marker colors or kinds — semantics</li></ul>
+<p>belong in text (use the chip or <code>--muted</code> with a text label).</p></article>
+  </main>
+      </div>
+    </main>
+    <script>Squircle.init();</script>
+  </body>
+</html>

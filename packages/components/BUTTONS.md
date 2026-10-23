@@ -98,10 +98,12 @@ Reduced motion freezes the spin; the busy label still communicates.
 
 ## Theme behavior
 
-Fills are variant defaults (primary keeps its accent fill under Ocean —
-the fill IS the variant); text, radius, spacing, and ring follow the
-active theme. Verified under Luca and Ocean, including focus-ring
-contrast.
+A theme may retune semantic tokens; fills derive from tokens, so they
+follow the retune — Ocean retunes `--sq-color-accent`, and primary fills
+ride along (that is one override retuning the surface). Tokens the theme
+does not retune keep their values: danger stays red under Ocean. Text,
+radius, spacing, and ring follow the active theme. Verified under Luca
+and Ocean, including focus-ring contrast.
 
 ## Customization
 

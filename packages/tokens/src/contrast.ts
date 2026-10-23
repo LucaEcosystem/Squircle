@@ -1,11 +1,56 @@
 /**
- * WCAG 2.2 relative-luminance and contrast-ratio helpers.
+ * WCAG 2.2 relative-luminance and contrast-ratio helpers, plus the
+ * canonical pair list both validators enforce the AA contrast policy
+ * with.
  *
- * Pure functions over hex colors. Used by token/theme tests to enforce the
- * contrast policy, and by `@squircle/themes` to validate custom themes.
- * Supports `#rgb`, `#rrggbb`, and `#rrggbbaa` (alpha is composited over
- * the supplied background, defaulting to opaque).
+ * Pure functions over hex colors. Used by token/theme tests to enforce
+ * the contrast policy, and by `@squircle/themes` to validate custom
+ * themes. Supports `#rgb`, `#rrggbb`, and `#rrggbbaa` (alpha is
+ * composited over the supplied background, defaulting to opaque).
  */
+
+import type { Semantic } from "./semantic.js";
+
+/** A foreground/background pair, keyed by `semantic.color` names. */
+export interface ContrastPair {
+  readonly fg: keyof Semantic["color"];
+  readonly bg: keyof Semantic["color"];
+}
+
+/**
+ * Canonical WCAG 2.2 AA (4.5:1) pairs — the single shared list the Luca
+ * token suite and `@squircle/themes` custom-theme validation both
+ * iterate. Resolve keys to CSS variable names with
+ * `tokenVarName("color", [key])`. Muted text is asserted on every
+ * surface tier (axe once caught it below 4.5:1 on elevated cards); the
+ * built-in palette additionally pins muted on surfaceOverlay in the
+ * tokens suite — custom themes retune both sides, so that pairing is
+ * not canonical.
+ */
+export const aaContrastPairs: readonly ContrastPair[] = [
+  { fg: "textPrimary", bg: "background" },
+  { fg: "textSecondary", bg: "background" },
+  { fg: "textMuted", bg: "background" },
+  { fg: "textPrimary", bg: "surface" },
+  { fg: "textSecondary", bg: "surface" },
+  { fg: "textMuted", bg: "surface" },
+  { fg: "textPrimary", bg: "surfaceElevated" },
+  { fg: "textSecondary", bg: "surfaceElevated" },
+  { fg: "textMuted", bg: "surfaceElevated" },
+  { fg: "textPrimary", bg: "backgroundSunken" },
+  { fg: "link", bg: "background" },
+  { fg: "linkHover", bg: "background" },
+  { fg: "accentBright", bg: "background" },
+  { fg: "successText", bg: "background" },
+  { fg: "infoText", bg: "background" },
+  { fg: "warningText", bg: "background" },
+  { fg: "errorText", bg: "background" },
+  { fg: "accentContrast", bg: "accent" },
+  { fg: "successContrast", bg: "success" },
+  { fg: "infoContrast", bg: "info" },
+  { fg: "warningContrast", bg: "warning" },
+  { fg: "errorContrast", bg: "error" },
+];
 
 function channels(hex: string): [number, number, number, number] {
   const h = hex.replace(/^#/, "");

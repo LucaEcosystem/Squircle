@@ -257,24 +257,6 @@
 .sq-mb-xl {
   margin-bottom: var(--sq-space-xl);
 }
-.sq-ml-0 {
-  margin-left: 0;
-}
-.sq-ml-2xs {
-  margin-left: var(--sq-space-2xs);
-}
-.sq-ml-xs {
-  margin-left: var(--sq-space-xs);
-}
-.sq-ml-sm {
-  margin-left: var(--sq-space-sm);
-}
-.sq-ml-md {
-  margin-left: var(--sq-space-md);
-}
-.sq-ml-lg {
-  margin-left: var(--sq-space-lg);
-}
 .sq-mr-0 {
   margin-right: 0;
 }
@@ -891,7 +873,7 @@
 .sq-skip-link {
   position: absolute;
   top: var(--sq-space-sm);
-  left: var(--sq-space-sm);
+  inset-inline-start: var(--sq-space-sm);
   z-index: var(--sq-z-index-tooltip);
   padding: var(--sq-space-xs) var(--sq-space-sm);
   background-color: var(--sq-color-accent);
