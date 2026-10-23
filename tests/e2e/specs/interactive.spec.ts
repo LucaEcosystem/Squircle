@@ -163,10 +163,15 @@ test("popover anchors, flips, and light-dismisses", async ({ page }) => {
 
 test("tooltip shows on focus and hides on Escape", async ({ page }) => {
   const trigger = page.locator("[data-sq-tooltip]");
-  // Scroll first: the runtime hides tooltips on any scroll, so focusing
-  // an off-screen element would scroll into view, scroll-hide the tip,
-  // and clear aria-describedby before the assertions below.
-  await trigger.scrollIntoViewIfNeeded();
+  // The runtime hides tooltips on any scroll (documented contract), so
+  // every scroll must settle before focusing: center the trigger, wait
+  // for it to be in view, then focus — focus itself must not scroll.
+  await page.evaluate(() => {
+    document
+      .querySelector("[data-sq-tooltip]")
+      ?.scrollIntoView({ block: "center", behavior: "instant" });
+  });
+  await expect(trigger).toBeInViewport({ timeout: 1000 });
   await trigger.focus();
   const tip = page.locator("#sq-tooltip");
   await expect(tip).toBeVisible();

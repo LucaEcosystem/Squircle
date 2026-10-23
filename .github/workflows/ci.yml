@@ -108,7 +108,7 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          registry: npm
+          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -126,9 +126,8 @@ jobs:
             exit 1
           fi
 
-      - name: Publish to npm
-        working-directory: packages/squircle
-        run: npm publish --access public
+      - name: Publish to npm (all public packages)
+        run: pnpm changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
